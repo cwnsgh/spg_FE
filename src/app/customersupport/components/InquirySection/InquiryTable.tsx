@@ -132,3 +132,4 @@ export default function InquiryTable({ inquiryType }: InquiryTableProps) {
     </div>
   );
 }
+
