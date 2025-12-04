@@ -20,6 +20,7 @@
 import { Suspense } from "react";
 import HeroBanner from "../components/HeroBanner";
 import SupportTabs from "./components/SupportTabs";
+import customerSupportBanner from "../../assets/customersupport_banner.png";
 import styles from "./page.module.css";
 
 export default function CustomerSupport() {
@@ -37,6 +38,7 @@ export default function CustomerSupport() {
       <Suspense fallback={<div>Loading...</div>}>
         <HeroBanner
           title="고객지원"
+          backgroundImage={customerSupportBanner.src}
           tabs={supportTabs}
           useUrlParams={true}
           urlParamKey="tab"
