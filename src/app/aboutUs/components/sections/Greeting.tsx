@@ -25,9 +25,7 @@ export default function Greeting() {
               최우선으로 생각하며, 최고 품질의 제품을 제공하기 위해 노력하고
               있습니다.
             </p>
-            <p>
-              앞으로도 고객 여러분의 신뢰에 보답하겠습니다. 감사합니다.
-            </p>
+            <p>앞으로도 고객 여러분의 신뢰에 보답하겠습니다. 감사합니다.</p>
             <p className={styles.signature}>에스피지 대표이사 여행길</p>
           </div>
         </div>
@@ -35,5 +33,3 @@ export default function Greeting() {
     </div>
   );
 }
-
-

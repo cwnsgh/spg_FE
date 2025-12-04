@@ -7,10 +7,7 @@ interface NetworkMapProps {
   subType: "branches" | "agents";
 }
 
-export default function NetworkMap({
-  businessType,
-  subType,
-}: NetworkMapProps) {
+export default function NetworkMap({ businessType, subType }: NetworkMapProps) {
   return (
     <div className={styles.mapContainer}>
       <div className={styles.map}>
@@ -25,5 +22,3 @@ export default function NetworkMap({
     </div>
   );
 }
-
-

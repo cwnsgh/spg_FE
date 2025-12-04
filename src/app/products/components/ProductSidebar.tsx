@@ -1,11 +1,11 @@
 /**
  * ProductSidebar 컴포넌트
- * 
+ *
  * 제품소개 페이지의 왼쪽 사이드바입니다.
  * 기능:
  * 1. 제품 카테고리 탭: KSH REDUCER / KSR REDUCER 전환
  * 2. 접을 수 있는 섹션들: 작동원리, 형식찾기, 기술자료
- * 
+ *
  * 상태 관리:
  * - activeTab: 현재 선택된 제품 타입 (KSH 또는 KSR)
  * - expandedSections: 각 섹션의 열림/닫힘 상태
@@ -18,12 +18,12 @@ import styles from "./ProductSidebar.module.css";
 export default function ProductSidebar() {
   // 현재 선택된 제품 타입 (KSH 또는 KSR)
   const [activeTab, setActiveTab] = useState<"ksh" | "ksr">("ksh");
-  
+
   // 각 접을 수 있는 섹션의 열림/닫힘 상태
   const [expandedSections, setExpandedSections] = useState<{
-    principle: boolean;  // 작동원리
-    findType: boolean;   // 형식찾기
-    technical: boolean;  // 기술자료
+    principle: boolean; // 작동원리
+    findType: boolean; // 형식찾기
+    technical: boolean; // 기술자료
   }>({
     principle: false,
     findType: false,
@@ -127,4 +127,3 @@ export default function ProductSidebar() {
     </div>
   );
 }
-

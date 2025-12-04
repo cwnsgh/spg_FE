@@ -1,9 +1,9 @@
 /**
  * HeroBanner 컴포넌트
- * 
+ *
  * 모든 페이지에서 사용하는 공통 히어로 배너입니다.
  * Props로 페이지별 차이점을 전달받아 렌더링합니다.
- * 
+ *
  * 지원하는 기능:
  * - title: 페이지 제목 (필수)
  * - categoryLinks: 제품 카테고리 링크 (제품소개 페이지용)
@@ -155,5 +155,3 @@ export default function HeroBanner({
     </div>
   );
 }
-
-
