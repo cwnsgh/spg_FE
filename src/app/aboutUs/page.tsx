@@ -17,12 +17,13 @@
 import { useState } from "react";
 import HeroBanner from "../components/HeroBanner";
 import AboutTabs from "./components/AboutTabs";
+import aboutUsBanner from "../../assets/aboutus_banner.png";
 import styles from "./page.module.css";
 
 export default function AboutUs() {
   // 회사소개 서브 탭 목록
   const aboutTabs = [
-    { label: "연혁", value: 0 },
+    { label: "인사말", value: 0 },
     { label: "경영이념 및 비전", value: 1 },
     { label: "회사연혁", value: 2 },
     { label: "채용정보", value: 3 },
@@ -33,14 +34,20 @@ export default function AboutUs() {
   // 현재 선택된 탭 상태
   const [activeTab, setActiveTab] = useState(0);
 
+  // 탭 변경 핸들러 (타입 호환성을 위해)
+  const handleTabChange = (tab: string | number) => {
+    setActiveTab(tab as number);
+  };
+
   return (
     <main className={styles.main}>
       {/* 상단 히어로 배너: 페이지 타이틀 + 서브 탭들 */}
       <HeroBanner
         title="회사소개"
+        backgroundImage={aboutUsBanner.src}
         tabs={aboutTabs}
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
       />
 
       {/* 메인 콘텐츠 영역: 선택된 탭에 따른 섹션 표시 */}

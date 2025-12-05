@@ -6,7 +6,7 @@
  * - HeroBanner에서 선택된 탭에 따라 해당 섹션 표시
  *
  * 탭 인덱스와 섹션 매핑:
- * - 0: 연혁 (History)
+ * - 0: 인사말 (Greeting)
  * - 1: 경영이념 및 비전 (Vision)
  * - 2: 회사연혁 (CompanyHistory)
  * - 3: 채용정보 (Recruitment)
@@ -40,7 +40,7 @@ export default function AboutTabs({ activeTab = 0 }: AboutTabsProps) {
   const renderContent = () => {
     switch (activeTab) {
       case 0:
-        return <History />; // 연혁
+        return <Greeting />; // 인사말
       case 1:
         return <Vision />; // 경영이념 및 비전
       case 2:

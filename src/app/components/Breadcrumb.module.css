@@ -1,0 +1,39 @@
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #000000;
+  justify-content: end;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.homeIcon {
+  font-size: 1rem;
+}
+
+.link {
+  color: #000000;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.link:hover {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.current {
+  color: #000000;
+  font-weight: 500;
+}
+
+.separator {
+  color: #a3a3a3;
+  margin: 0 0.25rem;
+}

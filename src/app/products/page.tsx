@@ -17,6 +17,7 @@ import { useState, useMemo } from "react";
 import HeroBanner from "../components/HeroBanner";
 import ProductSidebar from "./components/ProductSidebar";
 import ProductGrid from "./components/ProductGrid";
+import productBanner from "../../assets/product_banner.png";
 import styles from "./page.module.css";
 
 // TODO: 실제 API에서 데이터를 가져오도록 변경 필요
@@ -102,6 +103,7 @@ export default function Products() {
       {/* 상단 히어로 배너: 페이지 타이틀 + 제품 카테고리 탭 */}
       <HeroBanner
         title="제품소개"
+        backgroundImage={productBanner.src}
         tabs={categoryTabs}
         activeTab={activeCategory}
         onTabChange={handleCategoryChange}

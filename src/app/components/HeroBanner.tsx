@@ -31,6 +31,7 @@ export interface TabItem {
 
 interface HeroBannerProps {
   title: string; // 페이지 제목 (필수)
+  backgroundImage?: string; // 배경 이미지 경로 (선택적, 없으면 기본 그라데이션)
   categoryLinks?: string[]; // 제품 카테고리 링크 (제품소개 페이지용)
   breadcrumb?: BreadcrumbItem[]; // 브레드크럼 (마케팅 페이지용)
   tabs?: TabItem[]; // 서브 탭 (고객지원, 회사소개 페이지용)
@@ -43,6 +44,7 @@ interface HeroBannerProps {
 
 export default function HeroBanner({
   title,
+  backgroundImage,
   categoryLinks,
   breadcrumb,
   tabs,
@@ -99,59 +101,72 @@ export default function HeroBanner({
 
   return (
     <div className={styles.heroBanner}>
+      {/* 상단 영역: 타이틀과 탭 (200px 높이, 흰색 배경) */}
       <div className={styles.heroContent}>
-        <h1 className={styles.title}>{title}</h1>
+        <div className={styles.heroContentInner}>
+          <h1 className={styles.title}>{title}</h1>
 
-        {/* 제품 카테고리 링크 (제품소개 페이지용) */}
-        {categoryLinks && categoryLinks.length > 0 && (
-          <div className={styles.categoryLinks}>
-            {categoryLinks.map((category, index) => (
-              <Link key={index} href={`/products?category=${category}`}>
-                {category}
-              </Link>
-            ))}
-          </div>
-        )}
+          {/* 제품 카테고리 링크 (제품소개 페이지용) */}
+          {categoryLinks && categoryLinks.length > 0 && (
+            <div className={styles.categoryLinks}>
+              {categoryLinks.map((category, index) => (
+                <Link key={index} href={`/products?category=${category}`}>
+                  {category}
+                </Link>
+              ))}
+            </div>
+          )}
 
-        {/* 브레드크럼 (마케팅 페이지용) */}
-        {breadcrumb && breadcrumb.length > 0 && (
-          <div className={styles.breadcrumb}>
-            {breadcrumb.map((item, index) => (
-              <span key={index}>
-                {item.href ? (
-                  <Link href={item.href}>{item.label}</Link>
-                ) : (
-                  <span>{item.label}</span>
-                )}
-                {index < breadcrumb.length - 1 && <span> &gt; </span>}
-              </span>
-            ))}
-          </div>
-        )}
+          {/* 브레드크럼 (마케팅 페이지용) */}
+          {breadcrumb && breadcrumb.length > 0 && (
+            <div className={styles.breadcrumb}>
+              {breadcrumb.map((item, index) => (
+                <span key={index}>
+                  {item.href ? (
+                    <Link href={item.href}>{item.label}</Link>
+                  ) : (
+                    <span>{item.label}</span>
+                  )}
+                  {index < breadcrumb.length - 1 && <span> &gt; </span>}
+                </span>
+              ))}
+            </div>
+          )}
 
-        {/* 서브 탭 (고객지원, 회사소개 페이지용) */}
-        {tabs && tabs.length > 0 && (
-          <div className={styles.tabs}>
-            {tabs.map((tab, index) => {
-              const tabValue = tab.value;
-              const isActive =
-                typeof activeTab === "number"
-                  ? activeTab === tabValue
-                  : String(activeTab) === String(tabValue);
+          {/* 서브 탭 (고객지원, 회사소개 페이지용) */}
+          {tabs && tabs.length > 0 && (
+            <div className={styles.tabs}>
+              {tabs.map((tab, index) => {
+                const tabValue = tab.value;
+                const isActive =
+                  typeof activeTab === "number"
+                    ? activeTab === tabValue
+                    : String(activeTab) === String(tabValue);
 
-              return (
-                <button
-                  key={index}
-                  className={`${styles.tab} ${isActive ? styles.active : ""}`}
-                  onClick={() => handleTabChange(tabValue)}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        )}
+                return (
+                  <button
+                    key={index}
+                    className={`${styles.tab} ${isActive ? styles.active : ""}`}
+                    onClick={() => handleTabChange(tabValue)}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* 하단 영역: 배경 이미지 (500px 높이) */}
+      {backgroundImage && (
+        <div
+          className={styles.heroImage}
+          style={{
+            backgroundImage: `url(${backgroundImage})`,
+          }}
+        />
+      )}
     </div>
   );
 }
