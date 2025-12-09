@@ -8,13 +8,18 @@
  *    - 각 탭별로 별도의 섹션 컴포넌트가 있음
  *    - 예: Greeting (인사말), History (연혁), Vision (경영이념) 등
  *
- * 상태 관리:
- * - useState를 사용하여 같은 페이지 내에서 탭 전환
- * - 탭 변경 시 해당 섹션 컴포넌트만 렌더링
+ * URL 쿼리 파라미터 지원:
+ * - /aboutUs?tab=0 → 인사말 탭으로 이동
+ * - /aboutUs?tab=1 → 경영이념 및 비전 탭으로 이동
+ * - /aboutUs?tab=2 → 회사연혁 탭으로 이동
+ * - /aboutUs?tab=3 → 채용정보 탭으로 이동
+ * - /aboutUs?tab=4 → 찾아오시는 길 탭으로 이동
+ * - /aboutUs?tab=5 → 윤리경영 탭으로 이동
+ *
+ * Suspense 사용 이유:
+ * - HeroBanner에서 useSearchParams()를 사용하므로 Suspense로 감싸야 함
  */
-"use client";
-
-import { useState } from "react";
+import { Suspense } from "react";
 import HeroBanner from "../components/HeroBanner";
 import AboutTabs from "./components/AboutTabs";
 import aboutUsBanner from "../../assets/aboutus_banner.png";
@@ -31,28 +36,26 @@ export default function AboutUs() {
     { label: "윤리경영", value: 5 },
   ];
 
-  // 현재 선택된 탭 상태
-  const [activeTab, setActiveTab] = useState(0);
-
-  // 탭 변경 핸들러 (타입 호환성을 위해)
-  const handleTabChange = (tab: string | number) => {
-    setActiveTab(tab as number);
-  };
-
   return (
     <main className={styles.main}>
       {/* 상단 히어로 배너: 페이지 타이틀 + 서브 탭들 */}
-      <HeroBanner
-        title="회사소개"
-        backgroundImage={aboutUsBanner.src}
-        tabs={aboutTabs}
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-      />
+      {/* useSearchParams 사용으로 인해 Suspense 필요 */}
+      <Suspense fallback={<div>Loading...</div>}>
+        <HeroBanner
+          title="회사소개"
+          backgroundImage={aboutUsBanner.src}
+          tabs={aboutTabs}
+          useUrlParams={true}
+          urlParamKey="tab"
+          basePath="/aboutUs"
+        />
+      </Suspense>
 
       {/* 메인 콘텐츠 영역: 선택된 탭에 따른 섹션 표시 */}
       <div className={styles.content}>
-        <AboutTabs activeTab={activeTab} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <AboutTabs />
+        </Suspense>
       </div>
     </main>
   );

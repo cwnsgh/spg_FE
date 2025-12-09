@@ -1,0 +1,139 @@
+/* 헤더 */
+.header {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 99999;
+}
+
+.logo {
+  width: 12.5rem;
+}
+
+.logo img {
+  filter: brightness(0) invert(1);
+}
+
+.leftArea {
+  display: flex;
+  align-items: center;
+  gap: 6.6rem;
+}
+
+.rightArea {
+  display: flex;
+  align-items: center;
+  gap: 3.3rem;
+}
+
+.askPrd {
+  width: 120px;
+  height: 38px;
+  text-align: center;
+  line-height: 38px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  background: linear-gradient(70deg, #112a5f 0%, #1f68ab 45%, #3c515b 100%);
+  border-radius: 50px;
+}
+
+.searchBox {
+  /* search-box 스타일 */
+}
+
+.searchBtn {
+  width: 2.5rem;
+  cursor: pointer;
+}
+
+.searchBtn img {
+  filter: invert(1);
+}
+
+.hamBtn {
+  width: 2.8rem;
+  height: 2.8rem;
+  position: relative;
+  cursor: pointer;
+  z-index: 100000;
+}
+
+.hamBtn span {
+  width: 100%;
+  height: 2px;
+  display: block;
+  background: #fff;
+  position: absolute;
+  transition: all 0.3s ease;
+}
+
+.hamBtn span:nth-child(1) {
+  left: 0;
+  top: 11px;
+}
+
+.hamBtn span:nth-child(2) {
+  left: 0;
+  top: 16px;
+}
+
+/* 헤더 상태별 스타일 - 스크롤 시 흰배경 */
+.scrolled {
+  background-color: #fff;
+}
+
+.scrolled .logo img {
+  filter: none;
+}
+
+.scrolled .searchBtn img {
+  filter: invert(0);
+}
+
+.scrolled .hamBtn span {
+  background: #000;
+}
+
+.scrolled .leftArea :global(.gnb > li > a) {
+  color: #000;
+}
+
+/* 헤더 상태별 스타일 - 햄버거 메뉴 오픈 */
+.menuOpen {
+  backdrop-filter: blur(30px);
+  background: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menuOpen .logo img {
+  filter: brightness(0) invert(1);
+}
+
+.menuOpen .searchBtn img {
+  filter: invert(1);
+}
+
+.menuOpen .hamBtn span {
+  background: #fff;
+}
+
+.menuOpen .hamBtn span:nth-child(1) {
+  top: 14px;
+  transform: rotate(45deg);
+}
+
+.menuOpen .hamBtn span:nth-child(2) {
+  top: 14px;
+  transform: rotate(-45deg);
+}
+
+.menuOpen .leftArea :global(.gnb) {
+  display: none;
+}

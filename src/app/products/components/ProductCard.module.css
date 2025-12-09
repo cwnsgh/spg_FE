@@ -40,19 +40,19 @@
 }
 
 .content {
-  padding: 1rem;
+  padding: 1.5rem;
   flex: 1;
 }
 
 .koreanTitle {
-  font-size: 1rem;
+  font-size: 1.6rem;
   font-weight: 600;
   color: #1f2937;
   margin: 0 0 0.5rem 0;
 }
 
 .englishTitle {
-  font-size: 0.875rem;
+  font-size: 1.4rem;
   color: #6b7280;
   margin: 0;
 }

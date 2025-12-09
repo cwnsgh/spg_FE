@@ -1,0 +1,70 @@
+.gnb {
+  display: flex;
+  align-items: center;
+}
+
+.gnb li {
+  position: relative;
+}
+
+.gnb > li > a {
+  color: #fff;
+  padding: 25px 3.7rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 100px;
+}
+
+/* 스크롤 시 글자색 변경 */
+.gnb.scrolled > li > a {
+  color: #000;
+}
+
+.subMenu {
+  position: absolute;
+  top: 99px;
+  left: 0;
+  display: none;
+  min-width: 300px;
+  background: #fff;
+  padding: 15px 0;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.gnb li:hover .subMenu {
+  display: block;
+}
+
+.subMenu li {
+  display: block;
+}
+
+.subMenu li a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 17px 35px 17px 40px;
+  line-height: 1;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #000;
+}
+
+.subMenu li a::after {
+  content: "";
+  background: url("/images/icon/arrow_04.png") no-repeat;
+  width: 0.8rem;
+  display: block;
+  filter: invert(0.5);
+  aspect-ratio: 7/11;
+  background-position: center;
+  background-size: contain;
+}
+
+.subMenu li a:hover {
+  background-color: #f5f5f5;
+}
+
+/* 스크롤 시 색상 변경은 Header.module.css에서 처리 */
+

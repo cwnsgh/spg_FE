@@ -3,7 +3,7 @@
  *
  * Next.js의 루트 레이아웃입니다. 모든 페이지에 공통으로 적용됩니다.
  * 구조:
- * 1. Navigation: 상단 네비게이션 바 (모든 페이지에 표시)
+ * 1. Header: 상단 헤더 (모든 페이지에 표시)
  * 2. {children}: 각 페이지의 콘텐츠 (동적으로 변경됨)
  * 3. Footer: 하단 푸터 (모든 페이지에 표시)
  *
@@ -13,8 +13,8 @@
  */
 import type { Metadata } from "next";
 import "./globals.css";
-import Navigation from "./components/Navigation";
-import Footer from "./components/Footer";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 
 export const metadata: Metadata = {
   title: "SPG Site",
@@ -29,8 +29,8 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        {/* 상단 네비게이션 바 (공통) */}
-        <Navigation />
+        {/* 상단 헤더 (공통) */}
+        <Header />
 
         {/* 각 페이지의 콘텐츠 (동적) */}
         {children}

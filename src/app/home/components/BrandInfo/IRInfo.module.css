@@ -1,0 +1,221 @@
+/* IR 정보 */
+.ir {
+  /* ir 컨테이너 */
+}
+
+.topTxt {
+  margin-bottom: 55px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 var(--layout-side-pc);
+}
+
+.topTxt h2 {
+  font-size: 4.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.topTxt h2 span {
+  font-size: 3rem;
+  font-weight: 600;
+  line-height: 1;
+  display: block;
+  margin-bottom: 40px;
+}
+
+.topTxt p {
+  font-size: 2.2rem;
+  line-height: 1.5;
+  padding-bottom: 5px;
+  color: #bbb;
+}
+
+.btmContents {
+  display: flex;
+  padding: 0 var(--layout-side-pc);
+  gap: 30px;
+}
+
+.btmContents a {
+  background: #fff;
+  border-radius: 20px;
+  padding: 85px 70px;
+  transition: all 0.2s;
+}
+
+.btmContents a.off {
+  opacity: 0.5;
+}
+
+.btmContents a:hover .title .moreView {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: transparent;
+}
+
+.btmContents a:hover .title .moreView img {
+  filter: brightness(0) invert(1);
+}
+
+.stockInfo {
+  width: 50%;
+  flex-shrink: 0;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 45px;
+}
+
+.title * {
+  color: #0a2b6a;
+}
+
+.title h3 {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.title h3 .eg {
+  margin-top: 10px;
+  display: block;
+  font-weight: 500;
+  font-size: 1.8rem;
+  letter-spacing: -0.02em;
+}
+
+.moreView {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+}
+
+.moreView img {
+  width: 16px;
+  filter: invert(0.7);
+  transition: all 0.3s;
+}
+
+.detail * {
+  color: #000;
+}
+
+.stockInfo .title {
+  margin-bottom: 80px;
+}
+
+.detail {
+  display: flex;
+}
+
+.currInfo {
+  width: 40%;
+  border-right: 1px solid #ccc;
+}
+
+.currInfo h4 {
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin-bottom: 3px;
+}
+
+.currInfo h4 .eg {
+  margin-left: 10px;
+  color: #ccc;
+  font-size: 1.3rem;
+}
+
+.priceWrap {
+  font-size: 1.8rem;
+  font-weight: 300;
+}
+
+.currPrice {
+  font-size: 5rem;
+  font-weight: 600;
+  margin-right: 15px;
+  line-height: 1;
+}
+
+.detail ul {
+  width: 60%;
+  display: flex;
+  gap: 10%;
+  justify-content: center;
+}
+
+.detail ul li h4 {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.detail ul li h4 .eg {
+  font-size: 1.3rem;
+  display: block;
+  line-height: 1;
+  margin-top: 5px;
+}
+
+.detail ul li p {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-top: 15px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.financialInfo {
+  width: calc((50% - 30px) / 2);
+}
+
+.financialInfo .detail {
+  display: flex;
+  flex-flow: wrap;
+  row-gap: 1.5rem;
+}
+
+.financialInfo .detail dt {
+  width: 70%;
+  font-size: 1.8rem;
+}
+
+.financialInfo .detail dt .eg {
+  font-size: 1.3rem;
+  display: inline-block;
+  margin-left: 18px;
+  color: #ccc;
+}
+
+.financialInfo .detail dd {
+  width: 30%;
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+.irInfo {
+  width: calc((50% - 30px) / 2);
+}
+
+.boardItem h4 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 3rem;
+}
+
+.date {
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #888;
+  letter-spacing: -0.08rem;
+  margin-top: -0.4rem;
+}
+
