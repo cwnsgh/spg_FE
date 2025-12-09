@@ -13,7 +13,7 @@
  */
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, Suspense } from "react";
 import HeroBanner from "../components/HeroBanner";
 import ProductSidebar from "./components/ProductSidebar";
 import ProductGrid from "./components/ProductGrid";
@@ -101,13 +101,16 @@ export default function Products() {
   return (
     <main className={styles.main}>
       {/* 상단 히어로 배너: 페이지 타이틀 + 제품 카테고리 탭 */}
-      <HeroBanner
-        title="제품소개"
-        backgroundImage={productBanner.src}
-        tabs={categoryTabs}
-        activeTab={activeCategory}
-        onTabChange={handleCategoryChange}
-      />
+      {/* useSearchParams 사용으로 인해 Suspense 필요 */}
+      <Suspense fallback={<div>Loading...</div>}>
+        <HeroBanner
+          title="제품소개"
+          backgroundImage={productBanner.src}
+          tabs={categoryTabs}
+          activeTab={activeCategory}
+          onTabChange={handleCategoryChange}
+        />
+      </Suspense>
 
       {/* 메인 콘텐츠 영역: 사이드바 + 제품 그리드 */}
       <div className={styles.content}>

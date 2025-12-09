@@ -47,8 +47,11 @@ export default function CustomerSupport() {
       </Suspense>
 
       {/* 메인 콘텐츠 영역: 선택된 탭에 따른 콘텐츠 표시 */}
+      {/* SupportTabs에서도 useSearchParams 사용으로 인해 Suspense 필요 */}
       <div className={styles.content}>
-        <SupportTabs />
+        <Suspense fallback={<div>Loading...</div>}>
+          <SupportTabs />
+        </Suspense>
       </div>
     </main>
   );
