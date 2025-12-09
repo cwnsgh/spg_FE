@@ -14,19 +14,25 @@ export default function InquiryTypeTabs({
   return (
     <div className={styles.container}>
       <button
-        className={`${styles.tab} ${activeType === "product" ? styles.active : ""}`}
+        className={`${styles.tab} ${
+          activeType === "product" ? styles.active : ""
+        }`}
         onClick={() => onTypeChange("product")}
       >
         제품문의
       </button>
       <button
-        className={`${styles.tab} ${activeType === "technical" ? styles.active : ""}`}
+        className={`${styles.tab} ${
+          activeType === "technical" ? styles.active : ""
+        }`}
         onClick={() => onTypeChange("technical")}
       >
         기술지원
       </button>
       <button
-        className={`${styles.tab} ${activeType === "quality" ? styles.active : ""}`}
+        className={`${styles.tab} ${
+          activeType === "quality" ? styles.active : ""
+        }`}
         onClick={() => onTypeChange("quality")}
       >
         품질 & AS
@@ -34,4 +40,3 @@ export default function InquiryTypeTabs({
     </div>
   );
 }
-

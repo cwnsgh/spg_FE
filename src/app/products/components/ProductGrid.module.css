@@ -23,7 +23,7 @@
   color: #374151;
   border-radius: 0.375rem;
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: 1.2rem;
   transition: all 0.2s;
   min-width: 40px;
 }
@@ -57,4 +57,3 @@
     gap: 1rem;
   }
 }
-

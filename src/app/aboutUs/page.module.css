@@ -1,14 +1,13 @@
 .main {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 .content {
-  max-width: 1280px;
   width: 100%;
   margin: 0 auto;
-  padding: 3rem 2rem;
+  padding: 3rem 60px;
+  background-color: rgb(255, 255, 255);
 }
 
 @media (max-width: 768px) {
@@ -16,4 +15,3 @@
     padding: 2rem 1rem;
   }
 }
-

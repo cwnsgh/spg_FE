@@ -25,10 +25,7 @@ export default function GlobalNetwork() {
         onSubTypeChange={setActiveSubType}
       />
 
-      <NetworkMap
-        businessType={activeBusinessType}
-        subType={activeSubType}
-      />
+      <NetworkMap businessType={activeBusinessType} subType={activeSubType} />
 
       <BusinessLocationList
         businessType={activeBusinessType}
@@ -37,4 +34,3 @@ export default function GlobalNetwork() {
     </div>
   );
 }
-

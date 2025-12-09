@@ -1,12 +1,15 @@
-import styles from "./page.module.css";
+import MainBanner from "./home/components/MainBanner/MainBanner";
+import ProductIntro from "./home/components/ProductIntro/ProductIntro";
+import CategoryMenu from "./home/components/CategoryMenu/CategoryMenu";
+import BrandInfo from "./home/components/BrandInfo/BrandInfo";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <div className={styles.content}>
-        <h1 className={styles.title}>SPG 사이트에 오신 것을 환영합니다</h1>
-        <p className={styles.description}></p>
-      </div>
+    <main>
+      <MainBanner />
+      <ProductIntro />
+      <CategoryMenu />
+      <BrandInfo />
     </main>
   );
 }

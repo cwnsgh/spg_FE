@@ -3,16 +3,160 @@
   padding: 2rem 0;
 }
 
+.content {
+  display: flex;
+  gap: 4rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* 왼쪽 사이드바 */
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.periodNav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.periodButton {
+  padding: 1rem 1.5rem;
+  background-color: #f3f4f6;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: left;
+}
+
+.periodButton:hover {
+  background-color: #e5e7eb;
+  color: #000000;
+}
+
+.periodButton.active {
+  background: linear-gradient(135deg, #0a2b6a 0%, #1a3d7a 100%);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* 오른쪽 메인 콘텐츠 */
+.mainContent {
+  flex: 1;
+  min-width: 0;
+}
+
 .title {
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 2rem;
-}
-
-.placeholder {
+  color: #000000;
+  margin-bottom: 3rem;
   text-align: center;
-  color: #6b7280;
-  padding: 3rem;
 }
 
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.period {
+  margin-bottom: 3rem;
+}
+
+.decade {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.events {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.event {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.year {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0a2b6a;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.description {
+  font-size: 1.6rem;
+  line-height: 1.8;
+  color: #374151;
+  margin: 0;
+  flex: 1;
+}
+
+@media (max-width: 1024px) {
+  .content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .periodNav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .periodButton {
+    flex: 1;
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 0;
+  }
+
+  .content {
+    padding: 0 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .decade {
+    font-size: 1.8rem;
+  }
+
+  .year {
+    font-size: 1.4rem;
+    min-width: 60px;
+  }
+
+  .description {
+    font-size: 1.4rem;
+  }
+
+  .event {
+    gap: 1rem;
+  }
+}

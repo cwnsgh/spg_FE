@@ -14,6 +14,7 @@
  */
 import HeroBanner from "../components/HeroBanner";
 import MainTabs from "./components/MainTabs";
+import marketingBanner from "../../assets/marketing_banner.png";
 import styles from "./page.module.css";
 
 export default function Marketing() {
@@ -23,7 +24,11 @@ export default function Marketing() {
   return (
     <main className={styles.main}>
       {/* 상단 히어로 배너: 페이지 타이틀 + 브레드크럼 */}
-      <HeroBanner title="마케팅" breadcrumb={breadcrumb} />
+      <HeroBanner
+        title="마케팅"
+        backgroundImage={marketingBanner.src}
+        breadcrumb={breadcrumb}
+      />
 
       {/* 메인 콘텐츠 영역: 탭 네비게이션 + 콘텐츠 */}
       <div className={styles.content}>
