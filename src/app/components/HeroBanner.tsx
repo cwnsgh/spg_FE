@@ -73,13 +73,16 @@ export default function HeroBanner({
 
   // URL 파라미터 동기화
   useEffect(() => {
-    if (useUrlParams && searchParams) {
+    if (useUrlParams && searchParams && tabs) {
       const tab = searchParams.get(urlParamKey);
-      if (tab && tabs) {
+      if (tab) {
         const foundTab = tabs.find((t) => String(t.value) === tab);
         if (foundTab) {
           setInternalActiveTab(foundTab.value);
         }
+      } else if (tabs.length > 0) {
+        // URL에 tab 파라미터가 없으면 첫 번째 탭을 기본값으로 설정
+        setInternalActiveTab(tabs[0].value);
       }
     }
   }, [searchParams, useUrlParams, urlParamKey, tabs]);

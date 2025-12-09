@@ -1,17 +1,17 @@
 .container {
   width: 100%;
   background-color: #ffffff;
-  padding: 2rem 0;
+  padding: 3rem 0;
 }
 
 .content {
-  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 2rem;
 }
 
 .title {
-  font-size: 48px;
+  font-size: 56px;
   font-weight: 700;
   color: #1f2937;
   margin: 1.5rem 0 3rem 0;
@@ -41,10 +41,10 @@
 
 .textContent {
   display: flex;
-  gap: 3rem;
-  width: 100%;
-  max-width: 1000px;
+  gap: 4rem;
+  width: 90%;
   align-items: flex-start;
+  padding-top: 80px;
 }
 
 .leftColumn {
@@ -53,21 +53,32 @@
 
 .rightColumn {
   flex: 1;
-  font-size: 0.95rem;
-  line-height: 1.8;
-  color: #4b5563;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+  color: #000000;
+  letter-spacing: -0.02em;
 }
 
 .introText {
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 1.8;
-  color: #1f2937;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 48px;
+  color: #000000;
   margin: 0.5rem 0;
+  letter-spacing: -0.03em;
+}
+
+.gradientText {
+  background: linear-gradient(-34deg, #86bee7, #0a2b6a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
 }
 
 .rightColumn p {
-  margin: 1rem 0;
+  margin: 28px 0;
 }
 
 .thankYou {
@@ -78,8 +89,10 @@
 .signature {
   text-align: right;
   margin-top: 1rem;
+  font-size: 22px;
   font-weight: 500;
   color: #1f2937;
+  letter-spacing: -0.02em;
 }
 
 @media (max-width: 768px) {

@@ -1,0 +1,83 @@
+/* 푸터 */
+.footer {
+  padding: 100px var(--layout-side-pc);
+  background-color: #ffffff;
+}
+
+.topArea {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 45px;
+  border-bottom: 1px solid #ccc;
+}
+
+.infoWrap {
+  /* info-wrap */
+}
+
+.fooLogo {
+  width: 186px;
+  margin-bottom: 47px;
+}
+
+.fooLogo img {
+  filter: brightness(0);
+  opacity: 0.8;
+}
+
+.info {
+  /* info */
+}
+
+.companyName {
+  color: #878787;
+  font-size: 1.8rem;
+  line-height: 1;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.info address {
+  line-height: 1.6;
+}
+
+.info address span {
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-right: 2.4rem;
+}
+
+.fnb {
+  display: flex;
+  flex-flow: column;
+  gap: 24px;
+}
+
+.fnb li a {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.btmArea {
+  padding-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btmArea ul {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btmArea ul li a {
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.copyright {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #878787;
+}
