@@ -126,12 +126,12 @@
 .tab.active::before {
   content: "";
   position: absolute;
-  left: -12px;
-  top: 50%;
+  right:-10px;
+  top: 0px;
   transform: translateY(-50%);
   width: 4px;
   height: 4px;
-  background-color: #112e64;
+  background-color: #1f0779;
   border-radius: 0;
 }
 
