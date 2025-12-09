@@ -16,7 +16,7 @@ import { Navigation } from "swiper/modules";
 // @ts-ignore
 import type { Swiper as SwiperType } from "swiper";
 import { productData } from "@/data/productData";
-import { ProductData } from "../../../types";
+import { ProductData } from "@/types";
 import "swiper/css";
 import styles from "./ProductIntro.module.css";
 

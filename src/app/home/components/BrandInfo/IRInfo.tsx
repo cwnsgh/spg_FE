@@ -3,12 +3,12 @@
  * - 주가정보, 재무제표, IR정보 카드
  * - 호버 시 다른 카드에 off 클래스 추가
  */
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { stockInfo, financialInfo, irInfo } from '@/data/irData';
-import styles from './IRInfo.module.css';
+import React, { useState } from "react";
+import Link from "next/link";
+import { stockInfo, financialInfo, irInfo } from "@/data/irData";
+import styles from "./IRInfo.module.css";
 
 const IRInfo: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -29,7 +29,8 @@ const IRInfo: React.FC = () => {
           정밀감속기 전문기업으로서 성장하겠습니다.
         </h2>
         <p className="eg-font">
-          We aspire to become the world's leading company<br />
+          We aspire to become the world&apos;s leading company
+          <br />
           specializing in geared motors and precision reducers.
         </p>
       </div>
@@ -37,7 +38,7 @@ const IRInfo: React.FC = () => {
         {/* 주가정보 */}
         <Link
           href="#"
-          className={`${styles.stockInfo} ${hoveredIndex !== null && hoveredIndex !== 0 ? styles.off : ''}`}
+          className={`${styles.stockInfo} ${hoveredIndex !== null && hoveredIndex !== 0 ? styles.off : ""}`}
           onMouseEnter={() => handleMouseEnter(0)}
           onMouseLeave={handleMouseLeave}
         >
@@ -57,7 +58,10 @@ const IRInfo: React.FC = () => {
                 <span className={styles.eg}>Current Price</span>
               </h4>
               <p className={styles.priceWrap}>
-                <span className={`${styles.currPrice} eg-font`}>{stockInfo.currentPrice}</span>KRW
+                <span className={`${styles.currPrice} eg-font`}>
+                  {stockInfo.currentPrice}
+                </span>
+                KRW
               </p>
             </div>
             <ul>
@@ -80,7 +84,9 @@ const IRInfo: React.FC = () => {
                   거래량
                   <span className={styles.eg}>Trading Volume</span>
                 </h4>
-                <p className={`trading-volu eg-font`}>{stockInfo.tradingVolume}</p>
+                <p className={`trading-volu eg-font`}>
+                  {stockInfo.tradingVolume}
+                </p>
               </li>
             </ul>
           </div>
@@ -88,7 +94,7 @@ const IRInfo: React.FC = () => {
         {/* 재무제표 */}
         <Link
           href="#"
-          className={`${styles.financialInfo} ${hoveredIndex !== null && hoveredIndex !== 1 ? styles.off : ''}`}
+          className={`${styles.financialInfo} ${hoveredIndex !== null && hoveredIndex !== 1 ? styles.off : ""}`}
           onMouseEnter={() => handleMouseEnter(1)}
           onMouseLeave={handleMouseLeave}
         >
@@ -122,7 +128,7 @@ const IRInfo: React.FC = () => {
         {/* IR정보 */}
         <Link
           href="#"
-          className={`${styles.irInfo} ${hoveredIndex !== null && hoveredIndex !== 2 ? styles.off : ''}`}
+          className={`${styles.irInfo} ${hoveredIndex !== null && hoveredIndex !== 2 ? styles.off : ""}`}
           onMouseEnter={() => handleMouseEnter(2)}
           onMouseLeave={handleMouseLeave}
         >
@@ -148,4 +154,3 @@ const IRInfo: React.FC = () => {
 };
 
 export default IRInfo;
-
