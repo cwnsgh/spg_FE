@@ -49,8 +49,8 @@ export default function Customers() {
       <section className={styles.domesticClients}>
         <h2>국내</h2>
         <ul className={styles.clientsList}>
-          {domesticClients.map((client, index) => (
-            <li key={index}>
+          {domesticClients.map((client) => (
+            <li key={client.imgPath}>
               <img
                 src={client.imgPath}
                 alt={client.name}
@@ -63,8 +63,8 @@ export default function Customers() {
       <section className={styles.overseasClients}>
         <h2>해외</h2>
         <ul className={styles.clientsList}>
-          {overseasClients.map((client, index) => (
-            <li key={index}>
+          {overseasClients.map((client) => (
+            <li key={client.imgPath}>
               <img
                 src={client.imgPath}
                 alt={client.name}

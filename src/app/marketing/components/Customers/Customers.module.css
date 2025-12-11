@@ -16,7 +16,7 @@
 
 .majorClients > section ul {
   display: flex;
-  flex-flow: wrap;
+  flex-wrap: wrap;
   gap: 20px;
   list-style: none;
   padding: 0;
@@ -47,7 +47,7 @@
 
 .clientsList {
   display: flex;
-  flex-flow: wrap;
+  flex-wrap: wrap;
   gap: 20px;
   list-style: none;
   padding: 0;

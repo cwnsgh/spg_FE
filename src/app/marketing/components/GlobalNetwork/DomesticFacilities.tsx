@@ -11,7 +11,7 @@ interface Facility {
   phone: string;
   region: string;
   city: string;
-  googleMapUrl: string;
+  googleMapUrl?: string;
 }
 
 // 임시 데이터 (나중에 실제 데이터로 교체)
@@ -155,14 +155,16 @@ export default function DomesticFacilities() {
                 <h3 className={styles.facilityName}>{facility.name}</h3>
                 <p className={styles.facilityAddress}>{facility.address}</p>
                 <p className={styles.facilityPhone}>{facility.phone}</p>
-                <a
-                  href={facility.googleMapUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.facilityMapBtn}
-                >
-                  지도 보기
-                </a>
+                {facility.googleMapUrl && (
+                  <a
+                    href={facility.googleMapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.facilityMapBtn}
+                  >
+                    지도 보기
+                  </a>
+                )}
               </li>
             ))}
           </ul>

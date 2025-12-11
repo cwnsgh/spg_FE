@@ -184,10 +184,19 @@ export default function OverseasFacilities() {
   };
 
   const handleClickOutside = (e: React.MouseEvent) => {
-    if (
-      !(e.target as HTMLElement).closest(".map-marker") &&
-      !(e.target as HTMLElement).closest(".maker-popup")
-    ) {
+    const target = e.target as HTMLElement;
+
+    // 마커나 팝업 내부를 클릭한 경우가 아닌지 확인
+    const isMarkerClick = Object.values(markerRefs.current).some(
+      (marker) => marker && (marker === target || marker.contains(target))
+    );
+
+    const isPopupClick = Object.values(popupRefs.current).some(
+      (popup) => popup && (popup === target || popup.contains(target))
+    );
+
+    // 마커나 팝업이 아닌 곳을 클릭한 경우에만 팝업 닫기
+    if (!isMarkerClick && !isPopupClick) {
       setSelectedFacility(null);
     }
   };
