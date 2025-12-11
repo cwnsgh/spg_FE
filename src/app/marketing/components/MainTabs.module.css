@@ -4,33 +4,25 @@
 
 .tabs {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 3rem;
-  border-bottom: 2px solid #e5e7eb;
+  justify-content: center;
+  gap: 26.5px;
+  align-items: center;
+  margin: 0;
+  padding: 80px 0 0 0;
 }
 
 .tab {
-  padding: 1rem 2rem;
-  background: none;
+  padding: 0;
+  background: transparent;
   border: none;
-  border-bottom: 3px solid transparent;
-  color: #6b7280;
-  font-size: 1rem;
-  font-weight: 500;
+  color: #000;
+  font-size: 4.8rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
-  margin-bottom: -2px;
-}
-
-.tab:hover {
-  color: #374151;
-}
-
-.tab.active {
-  color: #3b82f6;
-  border-bottom-color: #3b82f6;
+  white-space: nowrap;
 }
 
 .content {
-  min-height: 400px;
+  width: 100%;
+  padding: 0;
 }

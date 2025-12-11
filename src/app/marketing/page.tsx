@@ -20,24 +20,21 @@ import styles from "./page.module.css";
 
 export default function Marketing() {
   // 브레드크럼 데이터
-  const breadcrumb = [{ label: "홈", href: "/" }, { label: "마케팅" }];
-
   return (
     <main className={styles.main}>
       {/* 상단 히어로 배너: 페이지 타이틀 + 브레드크럼 */}
       {/* useSearchParams 사용으로 인해 Suspense 필요 */}
       <Suspense fallback={<div>Loading...</div>}>
-        <HeroBanner
-          title="마케팅"
-          backgroundImage={marketingBanner.src}
-          breadcrumb={breadcrumb}
-        />
+        <HeroBanner title="마케팅" backgroundImage={marketingBanner.src} />
       </Suspense>
 
       {/* 메인 콘텐츠 영역: 탭 네비게이션 + 콘텐츠 */}
       <div className={styles.content}>
         {/* 메인 탭 컴포넌트 (글로벌 네트워크 / 주요고객사) */}
-        <MainTabs />
+        {/* useSearchParams 사용으로 인해 Suspense 필요 */}
+        <Suspense fallback={<div>Loading...</div>}>
+          <MainTabs />
+        </Suspense>
       </div>
     </main>
   );
