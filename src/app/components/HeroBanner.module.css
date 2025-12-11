@@ -126,7 +126,7 @@
 .tab.active::before {
   content: "";
   position: absolute;
-  right:-10px;
+  right: -10px;
   top: 0px;
   transform: translateY(-50%);
   width: 4px;
