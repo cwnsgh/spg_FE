@@ -16,13 +16,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
+import Breadcrumb, { BreadcrumbItem } from "./Breadcrumb";
 import styles from "./HeroBanner.module.css";
 
-export interface BreadcrumbItem {
-  label: string;
-  href?: string;
-}
+// BreadcrumbItem 타입은 Breadcrumb 컴포넌트에서 export하는 것을 사용
+export type { BreadcrumbItem };
 
 export interface TabItem {
   label: string;
@@ -120,22 +120,6 @@ export default function HeroBanner({
             </div>
           )}
 
-          {/* 브레드크럼 (마케팅 페이지용) */}
-          {breadcrumb && breadcrumb.length > 0 && (
-            <div className={styles.breadcrumb}>
-              {breadcrumb.map((item, index) => (
-                <span key={index}>
-                  {item.href ? (
-                    <Link href={item.href}>{item.label}</Link>
-                  ) : (
-                    <span>{item.label}</span>
-                  )}
-                  {index < breadcrumb.length - 1 && <span> &gt; </span>}
-                </span>
-              ))}
-            </div>
-          )}
-
           {/* 서브 탭 (고객지원, 회사소개 페이지용) */}
           {tabs && tabs.length > 0 && (
             <div className={styles.tabs}>
@@ -163,12 +147,16 @@ export default function HeroBanner({
 
       {/* 하단 영역: 배경 이미지 (500px 높이) */}
       {backgroundImage && (
-        <div
-          className={styles.heroImage}
-          style={{
-            backgroundImage: `url(${backgroundImage})`,
-          }}
-        />
+        <div className={styles.heroImage}>
+          <Image
+            src={backgroundImage}
+            alt="Hero banner"
+            fill
+            priority
+            className={styles.heroImageContent}
+            style={{ objectFit: "cover" }}
+          />
+        </div>
       )}
     </div>
   );

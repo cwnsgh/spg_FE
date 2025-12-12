@@ -1,22 +1,63 @@
 .main {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #fff;
 }
 
-.content {
-  max-width: 1920px;
+/* Breadcrumb 영역 */
+.breadcrumbArea {
   width: 100%;
   margin: 0 auto;
-  padding: 3rem 2rem;
+  padding: 2rem 2rem;
+  background-color: rgb(255, 255, 255);
+}
+
+/* 제품 콘텐츠 영역 (HTML의 section.products와 동일) */
+.products {
+  padding-top: 100px;
+  width: 100%;
+  background-color: #fff;
+}
+
+/* 제목 영역 */
+.titleArea {
+  padding: 0 var(--layout-side-pc-sub);
+  margin-bottom: 30px;
+}
+
+.titleArea h1 {
+  font-size: 5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.titleArea h1 .egFont {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.05rem;
+  margin-left: 2.7rem;
+}
+
+.productContent {
   display: flex;
-  gap: 3rem;
+  gap: 4.5%;
+  padding: 0 var(--layout-side-pc-sub);
+  background-color: #fff;
+}
+
+@media (max-width: 768px) {
+  .breadcrumbArea {
+    padding: 2rem 1rem;
+  }
+  .titleArea {
+    padding: 0 2rem;
+  }
 }
 
 @media (max-width: 1024px) {
-  .content {
+  .productContent {
     flex-direction: column;
-    padding: 2rem 1rem;
     gap: 2rem;
+    padding: 0 2rem;
   }
 }
