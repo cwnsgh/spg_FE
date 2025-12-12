@@ -42,10 +42,12 @@
 .heroImage {
   height: 550px;
   width: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   position: relative;
+}
+
+.heroImageContent {
+  object-fit: cover;
+  object-position: center;
 }
 
 /* 제품 카테고리 링크 스타일 */

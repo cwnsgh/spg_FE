@@ -2,12 +2,12 @@
  * 햄버거 메뉴 컴포넌트
  * - 전체 화면 모바일 메뉴
  */
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { hamburgerMenuData } from '../../../data/menuData';
-import styles from './HamburgerMenu.module.css';
+import React from "react";
+import Link from "next/link";
+import { hamburgerMenuData } from "../../../data/menuData";
+import styles from "./HamburgerMenu.module.css";
 
 interface HamburgerMenuProps {
   isOpen: boolean;
@@ -17,8 +17,17 @@ interface HamburgerMenuProps {
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
+  // 링크 클릭 시 모달 닫기 + 스크롤 최상단
+  const handleLinkClick = () => {
+    onClose();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <div className={`${styles.hamMenu} ${isOpen ? styles.active : ''}`} onClick={onClose}>
+    <div
+      className={`${styles.hamMenu} ${isOpen ? styles.active : ""}`}
+      onClick={onClose}
+    >
       <ul className={styles.hamInner} onClick={(e) => e.stopPropagation()}>
         {hamburgerMenuData.map((column, columnIndex) => (
           <li key={columnIndex} className={styles.menuColumn}>
@@ -34,18 +43,28 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
                     <ul key={groupIndex} className={styles.bigCate}>
                       {bigCateGroup.map((bigCate, bigCateIndex) => (
                         <li key={bigCateIndex}>
-                          <Link href={bigCate.href} prefetch={false}>
+                          <Link
+                            href={bigCate.href}
+                            prefetch={false}
+                            onClick={handleLinkClick}
+                          >
                             {bigCate.label}
                           </Link>
                           {bigCate.smallCategories && (
                             <ul className={styles.smallCate}>
-                              {bigCate.smallCategories.map((smallCate, smallIndex) => (
-                                <li key={smallIndex}>
-                                  <Link href={smallCate.href} prefetch={false}>
-                                    {smallCate.label}
-                                  </Link>
-                                </li>
-                              ))}
+                              {bigCate.smallCategories.map(
+                                (smallCate, smallIndex) => (
+                                  <li key={smallIndex}>
+                                    <Link
+                                      href={smallCate.href}
+                                      prefetch={false}
+                                      onClick={handleLinkClick}
+                                    >
+                                      {smallCate.label}
+                                    </Link>
+                                  </li>
+                                )
+                              )}
                             </ul>
                           )}
                         </li>
@@ -68,14 +87,23 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
                       <ul key={groupIndex} className={styles.bigCate}>
                         {bigCateGroup.map((bigCate, bigCateIndex) => (
                           <li key={bigCateIndex}>
-                            <Link href={bigCate.href}>{bigCate.label}</Link>
+                            <Link href={bigCate.href} onClick={handleLinkClick}>
+                              {bigCate.label}
+                            </Link>
                             {bigCate.smallCategories && (
                               <ul className={styles.smallCate}>
-                                {bigCate.smallCategories.map((smallCate, smallIndex) => (
-                                  <li key={smallIndex}>
-                                    <Link href={smallCate.href}>{smallCate.label}</Link>
-                                  </li>
-                                ))}
+                                {bigCate.smallCategories.map(
+                                  (smallCate, smallIndex) => (
+                                    <li key={smallIndex}>
+                                      <Link
+                                        href={smallCate.href}
+                                        onClick={handleLinkClick}
+                                      >
+                                        {smallCate.label}
+                                      </Link>
+                                    </li>
+                                  )
+                                )}
                               </ul>
                             )}
                           </li>
@@ -93,4 +121,3 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
 };
 
 export default HamburgerMenu;
-

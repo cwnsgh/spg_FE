@@ -1,26 +1,246 @@
-.container {
-  width: 100%;
+/* 게시판 영역 */
+.productInquiry {
+  padding: 0 var(--layout-side-pc-sub);
 }
 
-.title {
-  font-size: 3rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 2rem;
-}
-
-.header {
+/* 카테고리 탭 */
+.categoryTabs {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 13px;
+  margin-bottom: 50px;
+  justify-content: center;
 }
 
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.categoryTab {
+  padding: 19px 30px;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #000;
+  background: #fff;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 200px;
+  text-align: center;
+  border: 1px solid #ececec;
+  user-select: none;
+}
+
+.categoryTab:hover {
+  background: #eee;
+}
+
+.categoryTab.active {
+  color: #fff;
+  background: #333;
+  border-color: #333;
+}
+
+/* 검색 영역 */
+.searchArea {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 10%;
+  margin-bottom: 20px;
+  width: 28%;
+  border: 1px solid #ebebeb;
+  height: 46px;
+  border-radius: 50px;
+  overflow: hidden;
+  padding-left: 25px;
+  padding-right: 17px;
+}
+
+.searchSelect {
+  font-size: 1.4rem;
+  background: #fff;
+  cursor: pointer;
+  height: 100%;
+  width: 23.5%;
+  color: #666;
+  font-weight: 600;
+  border: none;
+}
+
+.searchSelect:focus {
+  border: none;
+  outline: none;
+}
+
+.searchInputWrap {
+  position: relative;
+  height: 100%;
+  width: 76.5%;
+}
+
+.searchInput {
+  width: 100%;
+  font-size: 1.4rem;
+  padding-right: 40px;
+  height: 100%;
+  font-weight: 600;
+  color: #666;
+  border: none;
+}
+
+.searchInput:focus {
+  border: none;
+  outline: none;
+}
+
+.searchBtn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background: url("/images/icon/search_ico.png") no-repeat center;
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+}
+
+/* 게시판 리스트 */
+.boardList {
+  width: 100%;
+  border-top: 2px solid #555;
+  margin-bottom: 110px;
+}
+
+.boardHeader {
+  display: grid;
+  grid-template-columns: 10% 6.5% 54% 8% 8.5% 13%;
+  padding: 20px 10px;
+  border-bottom: 1px solid #e5e5e5;
+  text-align: center;
+}
+
+.boardHeader > div {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.boardItem {
+  display: grid;
+  grid-template-columns: 10% 6.5% 54% 8% 8.5% 13%;
+  padding: 18px 10px;
+  font-size: 1.4rem;
+  color: #666;
+  border-bottom: 1px solid #e5e5e5;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.boardItem:hover {
+  background: #f9f9f9;
+}
+
+.boardItem.emptyState {
+  display: block;
+  grid-column: 1 / -1;
+  padding: 50px 10px;
+  text-align: center;
+  color: #999;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 1.6rem;
+}
+
+.boardCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.boardCell.title {
+  justify-content: flex-start;
+  cursor: pointer;
+  padding-left: 6%;
+  padding-right: 4%;
+  min-width: 0;
+}
+
+.boardCell.title > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  font-weight: inherit;
+  color: inherit;
+}
+
+.boardCell.category {
+  color: #000;
+}
+
+.statusBtn {
+  display: inline-block;
+  padding: 8px 23px;
+  font-size: 1.6rem;
+  font-weight: 500;
+  border-radius: 5px;
+}
+
+.statusBtn.completed {
+  color: #fff;
+  background: #0a2b6a;
+  border-color: #0a2b6a;
+}
+
+.statusBtn.pending {
+  color: #a3a3a3;
+  border: 1px solid #ccc;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  margin-top: 120px;
+}
+
+.paginationBtn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid transparent;
+  background: #fff;
+  font-size: 3rem;
+  color: #161616;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+
+.paginationBtn img {
+  height: 13px;
+}
+
+.paginationBtn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.paginationBtn.pageNumber {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #b2b2b2;
+}
+
+.paginationBtn.pageNumber.active {
+  color: #161616;
+  border-color: #161616;
 }
