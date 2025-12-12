@@ -10,6 +10,7 @@
  * ]} />
  */
 import Link from "next/link";
+import Image from "next/image";
 import styles from "./Breadcrumb.module.css";
 
 export interface BreadcrumbItem {
@@ -23,21 +24,29 @@ interface BreadcrumbProps {
 
 export default function Breadcrumb({ items }: BreadcrumbProps) {
   return (
-    <nav className={styles.breadcrumb}>
-      {items.map((item, index) => (
-        <span key={index} className={styles.item}>
-          {item.href ? (
-            <Link href={item.href} className={styles.link}>
-              {item.label}
-            </Link>
-          ) : (
-            <span className={styles.current}>{item.label}</span>
-          )}
-          {index < items.length - 1 && (
-            <span className={styles.separator}> &gt; </span>
-          )}
-        </span>
-      ))}
+    <nav className={styles.breadcrumb} aria-label="breadcrumb">
+      <ol>
+        {items.map((item, index) => (
+          <li key={index}>
+            {item.href ? (
+              <Link href={item.href} aria-label={item.label}>
+                {item.label === "홈" ? (
+                  <Image
+                    src="/images/icon/home_ico.png"
+                    alt="홈"
+                    width={16}
+                    height={16}
+                  />
+                ) : (
+                  item.label
+                )}
+              </Link>
+            ) : (
+              <span className={styles.current}>{item.label}</span>
+            )}
+          </li>
+        ))}
+      </ol>
     </nav>
   );
 }

@@ -1,36 +1,101 @@
+/**
+ * MainTabs 컴포넌트
+ *
+ * 마케팅 페이지의 탭 콘텐츠를 관리하는 컴포넌트입니다.
+ * 기능:
+ * - URL 쿼리 파라미터에서 현재 탭 읽기
+ * - HeroBanner에서 선택된 탭에 따라 해당 섹션 표시
+ *
+ * 탭 인덱스와 섹션 매핑:
+ * - 0: 글로벌 네트워크 (GlobalNetwork)
+ * - 1: 주요고객사 (Customers)
+ * - default: 글로벌 네트워크 (GlobalNetwork)
+ *
+ * 상태 관리:
+ * - useSearchParams로 URL 쿼리 파라미터에서 탭 인덱스 읽기
+ * - switch 문으로 해당 섹션 컴포넌트만 렌더링
+ */
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import styles from "./MainTabs.module.css";
 import GlobalNetwork from "./GlobalNetwork/GlobalNetwork";
 import Customers from "./Customers/Customers";
 
 export default function MainTabs() {
   const searchParams = useSearchParams();
-  const currentTab = searchParams.get("tab") || "global-network";
+  const router = useRouter();
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // 현재 탭에 따라 해당 텍스트만 표시
-  const isGlobalNetwork = currentTab === "global-network";
-  const isCustomers = currentTab === "customers";
+  // URL 쿼리 파라미터에서 탭 인덱스 읽기 (기본값: 0)
+  const initialTab = searchParams.get("tab");
+  const [activeTab, setActiveTab] = useState<number>(
+    initialTab ? parseInt(initialTab, 10) : 0
+  );
+
+  // 초기 로딩 시 URL에 tab 파라미터가 없으면 기본값 0으로 설정
+  useEffect(() => {
+    if (!isInitialized && !searchParams.get("tab")) {
+      router.replace("/marketing?tab=0", { scroll: false });
+      setIsInitialized(true);
+      setActiveTab(0);
+    } else if (!isInitialized) {
+      setIsInitialized(true);
+    }
+  }, [searchParams, router, isInitialized]);
+
+  // URL 쿼리 파라미터 변경 시 탭 상태 업데이트
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    const tabParam = searchParams.get("tab");
+    if (tabParam) {
+      const tab = parseInt(tabParam, 10);
+      if (!isNaN(tab) && tab >= 0 && tab <= 1) {
+        setActiveTab(tab);
+      }
+    } else {
+      setActiveTab(0);
+    }
+  }, [searchParams, isInitialized]);
+
+  // 탭 인덱스에 따라 해당 섹션 컴포넌트 반환
+  const renderContent = () => {
+    switch (activeTab) {
+      case 0:
+        return <GlobalNetwork />; // 글로벌 네트워크
+      case 1:
+        return <Customers />; // 주요고객사
+      default:
+        return <GlobalNetwork />; // 글로벌 네트워크 (기본값)
+    }
+  };
+
+  // 탭 텍스트 표시
+  const getTabLabel = () => {
+    switch (activeTab) {
+      case 0:
+        return "글로벌 네트워크";
+      case 1:
+        return "주요고객사";
+      default:
+        return "글로벌 네트워크";
+    }
+  };
 
   return (
     <div className={styles.container}>
-      {/* 탭 텍스트 링크들 - 조건부 렌더링 */}
-      <div className={styles.tabs}>
-        {isGlobalNetwork && (
-          <span className={`${styles.tab} ${styles.active}`}>
-            글로벌 네트워크
-          </span>
-        )}
-        {isCustomers && (
-          <span className={`${styles.tab} ${styles.active}`}>주요고객사</span>
-        )}
-      </div>
-
-      {/* 선택된 탭에 따른 콘텐츠 표시 */}
       <div className={styles.content}>
-        {isGlobalNetwork && <GlobalNetwork />}
-        {isCustomers && <Customers />}
+        {/* 탭 텍스트 - 현재 활성 탭만 표시 */}
+        <div className={styles.tabs}>
+          <span className={`${styles.tab} ${styles.active}`}>
+            {getTabLabel()}
+          </span>
+        </div>
+
+        {/* 선택된 탭에 따른 콘텐츠 표시 */}
+        <div className={styles.tabContent}>{renderContent()}</div>
       </div>
     </div>
   );

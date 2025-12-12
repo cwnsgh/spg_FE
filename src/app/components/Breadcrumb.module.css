@@ -1,39 +1,61 @@
 .breadcrumb {
+  margin-bottom: 0;
+  padding-right: 20px;
+  padding-top: 20px;
+}
+
+.breadcrumb ol {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 12px;
-  color: #000000;
-  justify-content: end;
+  gap: 4.5rem;
+  justify-content: flex-end;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.item {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+.breadcrumb ol li {
+  position: relative;
 }
 
-.homeIcon {
-  font-size: 1rem;
+.breadcrumb ol li * {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #161616;
 }
 
-.link {
-  color: #000000;
+.breadcrumb ol li::after {
+  content: "";
+  background: url("/images/icon/arrow_04.png") no-repeat;
+  width: 4px;
+  height: 8px;
+  display: block;
+  background-size: cover;
+  position: absolute;
+  right: -2.3rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.breadcrumb ol li:last-child::after {
+  display: none;
+}
+
+.breadcrumb ol li a {
   text-decoration: none;
   transition: color 0.2s;
 }
 
-.link:hover {
+.breadcrumb ol li a:hover {
   color: #3b82f6;
   text-decoration: underline;
 }
 
-.current {
-  color: #000000;
-  font-weight: 500;
+.breadcrumb ol li a img {
+  width: 1.6rem;
 }
 
-.separator {
-  color: #a3a3a3;
-  margin: 0 0.25rem;
+.current {
+  color: #161616;
+  font-weight: 600;
 }

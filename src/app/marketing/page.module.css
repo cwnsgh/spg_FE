@@ -1,12 +1,27 @@
 .main {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.breadcrumbArea {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0rem 60px;
   background-color: rgb(255, 255, 255);
 }
 
 .content {
   width: 100%;
   margin: 0 auto;
-  background-color: #fff;
+  padding: 0rem 60px;
+  background-color: rgb(255, 255, 255);
+}
+
+@media (max-width: 768px) {
+  .breadcrumbArea {
+    padding: 2rem 1rem;
+  }
+  .content {
+    padding: 2rem 1rem;
+  }
 }

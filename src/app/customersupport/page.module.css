@@ -1,17 +1,28 @@
 .main {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #fff;
+}
+
+/* Breadcrumb 영역 */
+.breadcrumbArea {
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 2rem;
+  background-color: rgb(255, 255, 255);
 }
 
 .content {
-  max-width: 1600px;
   width: 100%;
   margin: 0 auto;
-  padding: 3rem 2rem;
+  padding-top: 100px;
+  background-color: rgb(255, 255, 255);
 }
 
 @media (max-width: 768px) {
+  .breadcrumbArea {
+    padding: 2rem 1rem;
+  }
   .content {
     padding: 2rem 1rem;
   }

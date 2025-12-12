@@ -1,59 +1,126 @@
-.gridContainer {
+.productMain {
+  width: 75%;
+}
+
+/* 제품 그리드 */
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5%;
+  row-gap: 2%;
+}
+
+.productItem {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.3s;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.productItem:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.productImageWrap {
+  width: 100%;
+}
+
+.productImage {
+  width: 100%;
+}
+
+.productBottom {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 8% 35px 10%;
+}
+
+.productInfo {
   flex: 1;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-bottom: 3rem;
+.productName {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
 }
 
+.productNameEn {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #a3a3a3;
+}
+
+.productLinkBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16.5%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  flex-shrink: 0;
+  align-self: center;
+  position: relative;
+}
+
+.productLinkBtn::after {
+  content: "";
+  background: url("/images/icon/arrow_01.png") no-repeat;
+  width: 30%;
+  aspect-ratio: 75 / 48;
+  background-size: cover;
+  opacity: 0.3;
+}
+
+/* 페이지네이션 */
 .pagination {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 3px;
+  margin-top: 120px;
 }
 
-.pageButton {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #e5e7eb;
-  background-color: #ffffff;
-  color: #374151;
-  border-radius: 0.375rem;
+.paginationBtn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid transparent;
+  background: #fff;
+  font-size: 3rem;
+  color: #161616;
   cursor: pointer;
-  font-size: 1.2rem;
-  transition: all 0.2s;
-  min-width: 40px;
+  transition: all 0.3s;
+  border: none;
+  padding: 0;
 }
 
-.pageButton:hover:not(:disabled) {
-  background-color: #f3f4f6;
-  border-color: #d1d5db;
+.paginationBtn img {
+  height: 13px;
 }
 
-.pageButton:disabled {
-  opacity: 0.5;
+.paginationBtn.disabled {
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
-.pageButton.active {
-  background-color: #3b82f6;
-  color: #ffffff;
-  border-color: #3b82f6;
+.paginationBtn.pageNumber {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #b2b2b2;
 }
 
-@media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
+.paginationBtn.pageNumber.active {
+  color: #161616;
+  border-color: #161616;
 }

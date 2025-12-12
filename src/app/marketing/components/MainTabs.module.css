@@ -2,6 +2,12 @@
   width: 100%;
 }
 
+/* Content wrapper (aboutUs와 동일한 구조) */
+.content {
+  width: 100%;
+  margin: 0 auto;
+}
+
 .tabs {
   display: flex;
   justify-content: center;
@@ -22,7 +28,7 @@
   white-space: nowrap;
 }
 
-.content {
+.tabContent {
   width: 100%;
   padding: 0;
 }
