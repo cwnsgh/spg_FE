@@ -12,7 +12,7 @@ import styles from './BrandInfo.module.css';
 
 const BrandInfo: React.FC = () => {
   return (
-    <section className={styles.brandInfo}>
+    <section className={`${styles.brandInfo} brand-info`}>
       <GlobalNetwork />
       <IRInfo />
     </section>

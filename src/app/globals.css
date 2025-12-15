@@ -8,6 +8,9 @@
 /* Common CSS (Fonts) */
 @import '../styles/common.css';
 
+/* Main CSS (전역 스타일 - 헤더, 푸터, 섹션 공통 스타일) */
+@import '../styles/main.css';
+
 /* CSS 변수 */
 :root {
   --background: #ffffff;

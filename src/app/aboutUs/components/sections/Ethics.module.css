@@ -4,14 +4,153 @@
 }
 
 .title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 2rem;
+  font-size: 4.8rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 5rem;
+  color: #000;
 }
 
-.placeholder {
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* 장(章) 제목 */
+.chapter {
+  margin-bottom: 5rem;
+}
+
+.chapterTitle {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #2196f3;
   text-align: center;
-  color: #6b7280;
-  padding: 3rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #2196f3;
+}
+
+/* 소제목 (별표1 내부 장) */
+.subChapter {
+  margin-bottom: 4rem;
+  margin-top: 3rem;
+}
+
+.subChapterTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+/* 조(條) */
+.article {
+  margin-bottom: 3rem;
+}
+
+.articleTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 1.5rem;
+}
+
+.articleContent {
+  font-size: 1.6rem;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.articleContent p {
+  margin-bottom: 1rem;
+}
+
+.articleContent strong {
+  font-weight: 700;
+  color: #000;
+}
+
+/* 목록 */
+.articleList {
+  font-size: 1.6rem;
+  line-height: 1.8;
+  color: #333;
+  margin-left: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.articleList li {
+  margin-bottom: 1rem;
+}
+
+.articleList strong {
+  font-weight: 700;
+  color: #000;
+}
+
+/* 하위 목록 */
+.subList {
+  margin-left: 2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  list-style-type: decimal;
+}
+
+.subList li {
+  margin-bottom: 0.8rem;
+}
+
+/* 소개 텍스트 */
+.introText {
+  font-size: 1.6rem;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 3rem;
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+/* 개정일자 */
+.revisionDate {
+  font-size: 1.6rem;
+  color: #666;
+  text-align: right;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #ddd;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .title {
+    font-size: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .chapterTitle {
+    font-size: 2rem;
+  }
+
+  .subChapterTitle {
+    font-size: 1.8rem;
+  }
+
+  .articleTitle {
+    font-size: 1.6rem;
+  }
+
+  .articleContent,
+  .articleList {
+    font-size: 1.4rem;
+  }
+
+  .content {
+    padding: 0 1rem;
+  }
 }

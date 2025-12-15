@@ -3,6 +3,14 @@
   padding: 2rem 0;
 }
 
+.title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 1.5rem 0 3rem;
+  text-align: center;
+}
+
 /* Our Philosophy 섹션 */
 .philosophy {
   background-color: #ffffff;
@@ -30,13 +38,9 @@
 
 /* Core Value 섹션 */
 .coreValue {
-  background: #0a2b6a;
-  padding: 8rem 4rem;
   margin-bottom: 4rem;
   position: relative;
-  border-radius: 1rem;
   overflow: hidden;
-  min-height: 800px;
 }
 
 /* 배경 패턴 (반짝이는 파란색 점) */
