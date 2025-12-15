@@ -3,15 +3,431 @@
   padding: 2rem 0;
 }
 
-.title {
-  font-size: 2rem;
+.mainTitle {
+  font-size: 4.8rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 4rem;
+  color: #000;
+}
+
+/* 서브 탭 */
+.subTabs {
+  display: flex;
+  gap: 1.3rem;
+  justify-content: center;
+  margin-bottom: 5rem;
+}
+
+.subTab {
+  padding: 1.9rem 3rem;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #000;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.subTab:hover {
+  background: #eee;
+}
+
+.subTab.active {
+  color: #fff;
+  background: #333;
+  border-color: #333;
+}
+
+/* 콘텐츠 영역 */
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section {
+  margin-bottom: 5rem;
+}
+
+.sectionTitle {
+  font-size: 2.4rem;
   font-weight: 700;
-  color: #1f2937;
   margin-bottom: 2rem;
+  color: #000;
+}
+
+.subSectionTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #000;
+}
+
+.description {
+  font-size: 1.6rem;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 3rem;
+}
+
+/* 채용절차 */
+.recruitmentProcess {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+
+.processStep {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.arrow {
+  font-size: 2rem;
+  color: #999;
+}
+
+.stepCircle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: #e3f2fd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.stepCircle.finalStep {
+  width: 180px;
+  height: 180px;
+  background: #2196f3;
+  color: #fff;
+}
+
+.stepNumber {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.stepTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  display: block;
+}
+
+.stepCircle.finalStep .stepNumber,
+.stepCircle.finalStep .stepTitle {
+  color: #fff;
+}
+
+/* 제출서류 */
+.documentsList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.documentItem {
+  font-size: 1.6rem;
+  color: #333;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+/* 복리후생 */
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.benefitCard {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.benefitIcon {
+  font-size: 3rem;
+}
+
+.benefitTitle {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 접수 및 문의처 */
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.6rem;
+  color: #333;
+}
+
+.contactIcon {
+  font-size: 2rem;
 }
 
 .placeholder {
   text-align: center;
   color: #6b7280;
   padding: 3rem;
+  font-size: 1.6rem;
+}
+
+/* 채용공고 */
+.jobPostingContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.introText {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 3rem;
+  text-align: left;
+}
+
+.jobPostingGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.jobCard {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.jobCardHeader {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.statusLabel {
+  background: #2196f3;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+}
+
+.locationLabel {
+  background: #f5f5f5;
+  color: #666;
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+}
+
+.jobTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.jobPeriod {
+  font-size: 1.4rem;
+  color: #666;
+  margin: 0;
+}
+
+.jobCardActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.detailButton {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.detailButton:hover {
+  background: #f5f5f5;
+}
+
+.applyButton {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  background: #333;
+  border: 1px solid #333;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.applyButton:hover {
+  background: #555;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 4rem;
+}
+
+.paginationArrow {
+  padding: 0.8rem 1.2rem;
+  font-size: 1.6rem;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.paginationArrow:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+
+.paginationArrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paginationNumber {
+  padding: 0.8rem 1.2rem;
+  font-size: 1.6rem;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 4rem;
+  text-align: center;
+}
+
+.paginationNumber:hover {
+  background: #f5f5f5;
+}
+
+.paginationNumber.active {
+  color: #fff;
+  background: #333;
+  border-color: #333;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .mainTitle {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .subTabs {
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .subTab {
+    padding: 1.5rem 2rem;
+    font-size: 1.6rem;
+  }
+
+  .recruitmentProcess {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .arrow {
+    transform: rotate(90deg);
+  }
+
+  .documentsList {
+    grid-template-columns: 1fr;
+  }
+
+  .benefitsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .jobPostingGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .jobCard {
+    padding: 1.5rem;
+  }
+
+  .jobTitle {
+    font-size: 1.6rem;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .paginationNumber {
+    padding: 0.6rem 1rem;
+    font-size: 1.4rem;
+    min-width: 3.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .jobPostingGrid {
+    grid-template-columns: 1fr;
+  }
 }

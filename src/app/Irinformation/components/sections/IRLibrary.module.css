@@ -1,0 +1,218 @@
+/* IR 자료실 영역 */
+.irLibrary {
+  padding: 0;
+}
+
+/* 탭 영역 */
+.tabArea {
+  display: flex;
+  gap: 13px;
+  margin-bottom: 50px;
+  justify-content: center;
+}
+
+.tabBtn {
+  padding: 1.9rem 3rem;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #000;
+  background: #fff;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 200px;
+  text-align: center;
+  border: 1px solid #ececec;
+  user-select: none;
+}
+
+.tabBtn:hover {
+  background: #eee;
+}
+
+.tabBtn.active {
+  color: #fff;
+  background: #333;
+  border-color: #333;
+}
+
+/* 필터 영역 */
+.filterArea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.yearSelectWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.yearSelectWrap::after {
+  content: "";
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  width: 0.6rem;
+  height: auto;
+  aspect-ratio: 4 / 8;
+  background: url("/images/icon/arrow_04.png") no-repeat center;
+  background-size: contain;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hiddenLabel {
+  display: none;
+}
+
+.yearSelect {
+  padding: 1.2rem 4rem 1.2rem 1.8rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #333;
+  border: none;
+  cursor: pointer;
+  background: #fff;
+  appearance: none;
+}
+
+.unitInfo {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #666;
+}
+
+/* 테이블 영역 */
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.financialTable {
+  width: 100%;
+  min-width: 800px;
+  border-top: 2px solid #555;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 25% 1fr 1fr 1fr 1fr;
+  background: #fcfcfc;
+  border-bottom: 2px solid #e5e5e5;
+}
+
+.tableHeader .headerCell {
+  padding: 2.5rem 1.6rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+  color: #161616;
+  border-right: 1px dashed #e5e5e5;
+}
+
+.tableHeader .headerCell:first-child {
+  text-align: center;
+  border-color: #4d4e4e;
+}
+
+.tableHeader .headerCell:last-child {
+  border-right: none;
+}
+
+.tableBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 25% 1fr 1fr 1fr 1fr;
+  border-bottom: 1px solid #e5e5e5;
+  transition: background 0.3s;
+}
+
+.tableRow:hover {
+  background: #fff;
+}
+
+.tableRow.lastRow {
+  background: #218edd1c;
+}
+
+.tableRow.lastRow * {
+  color: #171717;
+}
+
+.tableRow.lastRow:hover {
+  background: #218edd1c;
+}
+
+.tableCell {
+  padding: 2.5rem 1.6rem;
+  text-align: center;
+  font-size: 1.6rem;
+  border-right: 1px dashed #e5e5e5;
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+}
+
+.tableCell:first-child {
+  border-right: 1px dashed #4d4e4e;
+  font-family: "Pretendard", sans-serif;
+  text-align: center;
+}
+
+.tableCell:last-child {
+  border-right: none;
+}
+
+.tableCell.empty {
+  color: #ccc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tabArea {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tabBtn {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .filterArea {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .tableWrapper {
+    overflow-x: scroll;
+  }
+
+  .financialTable {
+    min-width: 600px;
+  }
+
+  .tableHeader,
+  .tableRow {
+    grid-template-columns: 30% 1fr 1fr 1fr 1fr;
+  }
+
+  .tableCell {
+    padding: 1.5rem 1rem;
+    font-size: 1.4rem;
+  }
+}
+

@@ -1,16 +1,9 @@
-import Breadcrumb from "../../../components/Breadcrumb";
 import styles from "./Vision.module.css";
 
 export default function Vision() {
-  const breadcrumbItems = [
-    { label: "홈", href: "/" },
-    { label: "회사소개", href: "/aboutUs" },
-    { label: "경영이념 및 비전" },
-  ];
-
   return (
     <div className={styles.container}>
-      <Breadcrumb items={breadcrumbItems} />
+      <h2 className={styles.title}>경영이념 및 비전</h2>
       {/* Our Philosophy 섹션 */}
       <section className={styles.philosophy}>
         <h3 className={styles.philosophyTitle}>Our Philosophy</h3>
@@ -23,82 +16,7 @@ export default function Vision() {
 
       {/* Core Value 섹션 */}
       <section className={styles.coreValue}>
-        {/* 배경 패턴 */}
-        <div className={styles.backgroundPattern}></div>
-
-        {/* 중앙 다이아몬드 */}
-        <div className={styles.coreValueCenter}>
-          <div className={styles.centerDiamond}>
-            <p className={styles.centerTitle}>Core Value</p>
-            <p className={styles.centerSubtitle}>핵심가치</p>
-            {/* 중앙 다이아몬드 각 변 중앙에서 나가는 점선 */}
-            <div className={styles.centerDashedLineTop}></div>
-            <div className={styles.centerDashedLineRight}></div>
-            <div className={styles.centerDashedLineBottom}></div>
-            <div className={styles.centerDashedLineLeft}></div>
-          </div>
-        </div>
-
-        {/* 고객만족 - Top Left */}
-        <div className={`${styles.valueItem} ${styles.topLeft}`}>
-          <div className={styles.valueIconDiamond}>
-            <div className={styles.iconCustomer}>
-              <span className={styles.smileMouth}></span>
-            </div>
-            <div className={styles.solidLineLeft}></div>
-          </div>
-          <div className={styles.valueTextBlock}>
-            <h4 className={styles.valueTitle}>고객만족</h4>
-            <p className={styles.valueDescription}>
-              최고의 품질과 최상의 서비스를 제공함으로써 고객을 최우선으로 두는
-              고객 감동의 기업 문화를 조성합니다.
-            </p>
-          </div>
-        </div>
-
-        {/* 주주만족 - Top Right */}
-        <div className={`${styles.valueItem} ${styles.topRight}`}>
-          <div className={styles.valueTextBlock}>
-            <h4 className={styles.valueTitle}>주주만족</h4>
-            <p className={styles.valueDescription}>
-              효율적이고 투명한 경영으로 건전성을 확보하고, 기업의 가치를
-              향상시켜 주주의 건전한 이익을 극대화합니다.
-            </p>
-          </div>
-          <div className={styles.valueIconDiamond}>
-            <div className={styles.iconShareholder}></div>
-            <div className={styles.solidLineRight}></div>
-          </div>
-        </div>
-
-        {/* 사원만족 - Bottom Left */}
-        <div className={`${styles.valueItem} ${styles.bottomLeft}`}>
-          <div className={styles.valueIconDiamond}>
-            <div className={styles.iconEmployee}></div>
-            <div className={styles.solidLineLeft}></div>
-          </div>
-          <div className={styles.valueTextBlock}>
-            <h4 className={styles.valueTitle}>사원만족</h4>
-            <p className={styles.valueDescription}>
-              임직원의 존엄과 가치를 인식하고 존중하며, 공정한 기회를 통해
-              정당하게 보상한다.
-            </p>
-          </div>
-        </div>
-
-        {/* 가치경영 - Bottom Right */}
-        <div className={`${styles.valueItem} ${styles.bottomRight}`}>
-          <div className={styles.valueTextBlock}>
-            <h4 className={styles.valueTitle}>가치경영</h4>
-            <p className={styles.valueDescription}>
-              고객/주주/사원의 가치 제고와 지속적 수익성과 가치 창출
-            </p>
-          </div>
-          <div className={styles.valueIconDiamond}>
-            <div className={styles.iconValue}></div>
-            <div className={styles.solidLineRight}></div>
-          </div>
-        </div>
+        <img src="/images/aboutus/vision/main_pic.png" alt="Core Value" />
       </section>
 
       {/* Vision 섹션 */}

@@ -1,19 +1,11 @@
 import Image from "next/image";
-import Breadcrumb from "../../../components/Breadcrumb";
 import ceoImage from "../../../../assets/aboutus/about_ceo.png";
 import styles from "./Greeting.module.css";
 
 export default function Greeting() {
-  const breadcrumbItems = [
-    { label: "홈", href: "/" },
-    { label: "회사소개", href: "/aboutUs" },
-    { label: "인사말" },
-  ];
-
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <Breadcrumb items={breadcrumbItems} />
         <h2 className={styles.title}>인사말</h2>
         <div className={styles.mainContent}>
           <div className={styles.imageWrapper}>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Breadcrumb from "../../../components/Breadcrumb";
 import styles from "./CompanyHistory.module.css";
 
 interface HistoryEvent {
@@ -76,12 +75,6 @@ const periodRanges = [
 export default function CompanyHistory() {
   const [selectedPeriod, setSelectedPeriod] = useState(periodRanges[0]);
 
-  const breadcrumbItems = [
-    { label: "홈", href: "/" },
-    { label: "회사소개", href: "/aboutUs" },
-    { label: "회사연혁" },
-  ];
-
   // 선택된 기간에 해당하는 이벤트 필터링
   const filteredHistory = historyData.filter((period) => {
     const periodStart = parseInt(period.decade.split("'")[0]);
@@ -92,7 +85,6 @@ export default function CompanyHistory() {
 
   return (
     <div className={styles.container}>
-      <Breadcrumb items={breadcrumbItems} />
       <div className={styles.content}>
         {/* 왼쪽 사이드바 */}
         <aside className={styles.sidebar}>
