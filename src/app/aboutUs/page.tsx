@@ -19,13 +19,18 @@
  * Suspense 사용 이유:
  * - HeroBanner에서 useSearchParams()를 사용하므로 Suspense로 감싸야 함
  */
-import { Suspense } from "react";
-import HeroBanner from "../components/HeroBanner";
+"use client";
+
+import { Suspense, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
+import HeroBanner, { BreadcrumbItem } from "../components/HeroBanner";
+import Breadcrumb from "../components/Breadcrumb";
 import AboutTabs from "./components/AboutTabs";
 import aboutUsBanner from "../../assets/aboutus_banner.png";
 import styles from "./page.module.css";
 
-export default function AboutUs() {
+function AboutUsContent() {
+  const searchParams = useSearchParams();
   // 회사소개 서브 탭 목록
   const aboutTabs = [
     { label: "인사말", value: 0 },
@@ -36,10 +41,26 @@ export default function AboutUs() {
     { label: "윤리경영", value: 5 },
   ];
 
+  // 현재 활성 탭에 따라 breadcrumb 생성
+  const breadcrumb = useMemo<BreadcrumbItem[]>(() => {
+    const baseItems: BreadcrumbItem[] = [
+      { label: "홈", href: "/" },
+      { label: "회사소개", href: "/aboutUs" },
+    ];
+
+    const tabParam = searchParams.get("tab");
+    const activeTab = tabParam ? parseInt(tabParam, 10) : 0;
+
+    if (activeTab < aboutTabs.length) {
+      return [...baseItems, { label: aboutTabs[activeTab].label }];
+    }
+
+    return baseItems;
+  }, [searchParams]);
+
   return (
-    <main className={styles.main}>
+    <>
       {/* 상단 히어로 배너: 페이지 타이틀 + 서브 탭들 */}
-      {/* useSearchParams 사용으로 인해 Suspense 필요 */}
       <Suspense fallback={<div>Loading...</div>}>
         <HeroBanner
           title="회사소개"
@@ -53,10 +74,25 @@ export default function AboutUs() {
 
       {/* 메인 콘텐츠 영역: 선택된 탭에 따른 섹션 표시 */}
       <div className={styles.content}>
+        {/* Breadcrumb 영역 (content 안에 위치) */}
+        <div className={styles.breadcrumbArea}>
+          <Breadcrumb items={breadcrumb} />
+        </div>
+
         <Suspense fallback={<div>Loading...</div>}>
           <AboutTabs />
         </Suspense>
       </div>
+    </>
+  );
+}
+
+export default function AboutUs() {
+  return (
+    <main className={styles.main}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <AboutUsContent />
+      </Suspense>
     </main>
   );
 }

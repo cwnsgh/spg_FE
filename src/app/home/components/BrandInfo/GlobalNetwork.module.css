@@ -72,11 +72,19 @@
   width: 57.3%;
 }
 
-.regionImg {
+/* Swiper 슬라이드 스타일 */
+.spgBranch :global(.swiper-wrapper .swiper-slide) {
+  border-radius: 20px;
+  overflow: hidden;
   position: relative;
 }
 
-.regionImg::after {
+/* 이미지 영역 */
+.spgBranch :global(.swiper-wrapper .swiper-slide .region-img) {
+  position: relative;
+}
+
+.spgBranch :global(.swiper-wrapper .swiper-slide .region-img::after) {
   content: "";
   background: rgba(0, 0, 0, 0.5);
   display: block;
@@ -89,13 +97,10 @@
   transition: all 0.3s;
 }
 
-.spgBranch :global(.swiper-wrapper .swiper-slide) {
-  border-radius: 20px;
-  overflow: hidden;
-  position: relative;
-}
-
-.spgBranch :global(.swiper-wrapper .swiper-slide.swiper-slide-active .region-img::after) {
+.spgBranch
+  :global(
+    .swiper-wrapper .swiper-slide.swiper-slide-active .region-img::after
+  ) {
   background: rgba(0, 0, 0, 0.2);
 }
 
@@ -107,7 +112,8 @@
   width: 100%;
 }
 
-.branchRegion {
+/* 브랜치 지역 정보 */
+.spgBranch :global(.swiper-wrapper .swiper-slide .branch-region) {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -127,8 +133,57 @@
   color: #fff;
 }
 
-.spgBranch :global(.swiper-wrapper .swiper-slide:hover .branch-region .region-ko::after) {
+.spgBranch
+  :global(
+    .swiper-wrapper .swiper-slide:hover .branch-region .region-ko::after
+  ) {
   background: #fff;
+}
+
+/* 지역명 한국어 */
+.spgBranch :global(.swiper-wrapper .swiper-slide .branch-region .region-ko) {
+  font-weight: 700;
+}
+
+.spgBranch
+  :global(.swiper-wrapper .swiper-slide .branch-region .region-ko::after) {
+  content: "";
+  width: 1px;
+  height: 14px;
+  background: #969696;
+  display: inline-block;
+  margin: 0 12px;
+  position: relative;
+  transition: all 0.3s;
+  bottom: -1px;
+}
+
+/* 지역명 영어 */
+.spgBranch :global(.swiper-wrapper .swiper-slide .branch-region .region-eg) {
+  font-weight: 500;
+}
+
+.spgBranch :global(.swiper-wrapper .swiper-slide .branch-region *) {
+  color: #217fc3;
+  line-height: 1;
+  transition: all 0.3s;
+}
+
+/* CSS Modules 클래스명도 유지 */
+.regionImg {
+  position: relative;
+}
+
+.branchRegion {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: #fff;
+  padding: 12px 32px;
+  border-radius: 50px;
+  line-height: 1;
+  z-index: 2;
+  transition: all 0.2s;
 }
 
 .regionKo {
@@ -150,10 +205,3 @@
 .regionEg {
   font-weight: 500;
 }
-
-.branchRegion * {
-  color: #217fc3;
-  line-height: 1;
-  transition: all 0.3s;
-}
-

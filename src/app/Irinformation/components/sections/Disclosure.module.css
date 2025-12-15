@@ -1,0 +1,303 @@
+/* 게시판 영역 */
+.board {
+  padding: 0;
+}
+
+/* 검색 영역 */
+.searchArea {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 50px;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 10%;
+  width: 28%;
+  border: 1px solid #ebebeb;
+  height: 4.6rem;
+  border-radius: 50px;
+  overflow: hidden;
+  padding-left: 2.5rem;
+  padding-right: 1.7rem;
+}
+
+.searchSelect {
+  font-size: 1.4rem;
+  background: #fff;
+  cursor: pointer;
+  height: 100%;
+  width: 23.5%;
+  color: #666;
+  font-weight: 600;
+  border: none;
+  outline: none;
+}
+
+.searchInputWrap {
+  position: relative;
+  height: 100%;
+  width: 76.5%;
+}
+
+.searchInput {
+  width: 100%;
+  font-size: 1.4rem;
+  padding-right: 4rem;
+  height: 100%;
+  font-weight: 600;
+  color: #666;
+  border: none;
+  outline: none;
+}
+
+.searchBtn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.4rem;
+  height: 2.4rem;
+  background: url("/images/icon/search_ico.png") no-repeat center;
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+}
+
+/* 게시판 리스트 */
+.boardList {
+  width: 100%;
+  border-top: 2px solid #555;
+}
+
+.boardHeader {
+  display: grid;
+  grid-template-columns: 40px calc(8% - 40px) 52% 12% 15% 13%;
+  padding: 2rem 1rem;
+  border-bottom: 1px solid #e5e5e5;
+  text-align: center;
+  background: #f9fbfc;
+}
+
+.boardHeader > div {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.boardHeader.adminMode .checkboxHeader {
+  height: 1.6rem;
+}
+
+.checkboxHeader input[type="checkbox"],
+.checkboxCell input[type="checkbox"] {
+  width: 1.8rem;
+  height: 1.8rem;
+  cursor: pointer;
+}
+
+.boardItem {
+  display: grid;
+  grid-template-columns: 40px calc(8% - 40px) 52% 12% 15% 13%;
+  padding: 1.8rem 1rem;
+  font-size: 1.4rem;
+  color: #666;
+  border-bottom: 1px solid #e5e5e5;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.boardItem:hover {
+  background: #f9f9f9;
+}
+
+.checkboxCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boardCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.boardCell.title {
+  justify-content: flex-start;
+  cursor: pointer;
+  padding-left: 6%;
+  padding-right: 4%;
+  min-width: 0;
+}
+
+.titleLink {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  font-weight: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.titleLink:hover {
+  color: #161616;
+}
+
+.emptyState {
+  display: block;
+  grid-column: 1 / -1;
+  padding: 50px 10px;
+  text-align: center;
+  color: #999;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 1.6rem;
+}
+
+/* 관리자 버튼 영역 */
+.adminActions {
+  display: none;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 2.5rem;
+}
+
+.adminActions.show {
+  display: flex;
+}
+
+.adminBtn {
+  padding: 1rem 2.2rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #666;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.adminBtn#adminPageBtn {
+  background: #222;
+  color: #fff;
+  border-color: #222;
+  padding-right: 16px;
+}
+
+.adminBtn#adminPageBtn:hover {
+  background: #555;
+  border-color: #555;
+}
+
+.adminBtn#writeBtn {
+  background: #0094ff;
+  color: #fff;
+  border-color: #0094ff;
+  position: relative;
+  padding-right: 36px;
+}
+
+.adminBtn#writeBtn:hover {
+  background: #2271a9;
+  border-color: #2271a9;
+}
+
+.adminBtn#writeBtn::after {
+  content: "+";
+  font-size: 2.2rem;
+  font-weight: 400;
+  position: absolute;
+  right: 15px;
+  line-height: 1;
+  top: 44%;
+  transform: translateY(-50%);
+}
+
+.adminBtn#adminPageBtn img {
+  transform: rotate(-45deg);
+  filter: invert(1);
+}
+
+.adminBtn:hover {
+  background: #f9f9f9;
+  border-color: #ccc;
+  color: #161616;
+}
+
+.adminBtn#adminPageBtn:hover,
+.adminBtn#writeBtn:hover {
+  color: #fff;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  margin-top: 110px;
+}
+
+.paginationButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid transparent;
+  background: #fff;
+  font-size: 3rem;
+  color: #161616;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+
+.paginationButton img {
+  height: 13px;
+}
+
+.paginationButton.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.paginationButton.pageNumber {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #b2b2b2;
+}
+
+.paginationButton.pageNumber.active {
+  color: #161616;
+  border-color: #161616;
+  border-bottom-color: #161616;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .searchBox {
+    width: 100%;
+  }
+
+  .boardHeader,
+  .boardItem {
+    grid-template-columns: 30px 50px 1fr 80px 80px 60px;
+    font-size: 1.2rem;
+  }
+
+  .boardCell {
+    font-size: 1.2rem;
+  }
+}
+

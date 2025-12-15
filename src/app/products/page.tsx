@@ -3,7 +3,7 @@
  *
  * HTML 구조에 맞춘 제품 목록 페이지입니다.
  * 구조:
- * 1. HeroBanner: 페이지 상단 배너
+ * 1. HeroBanner: 페이지 상단 배너 + 탭
  * 2. section.products: 제품 콘텐츠 영역
  *    - ProductNavigation: 왼쪽 네비게이션 (서브 카테고리 + 공통 기능)
  *    - ProductGrid: 오른쪽 제품 그리드 (3열 그리드 + 페이지네이션)
@@ -11,7 +11,8 @@
 "use client";
 
 import { useState, useMemo, Suspense } from "react";
-import HeroBanner from "../components/HeroBanner";
+import { useSearchParams } from "next/navigation";
+import HeroBanner, { BreadcrumbItem } from "../components/HeroBanner";
 import Breadcrumb from "../components/Breadcrumb";
 import ProductNavigation from "./components/ProductNavigation";
 import ProductGrid from "./components/ProductGrid";
@@ -171,7 +172,21 @@ const subCategoryTitles: Record<string, { korean: string; english: string }> = {
   "fan-ac": { korean: "팬 AC 모터", english: "FAN AC MOTOR" },
 };
 
-export default function Products() {
+function ProductsContent() {
+  const searchParams = useSearchParams();
+  // 제품소개 메인 탭 목록
+  const productTabs = [
+    { label: "로봇감속기", value: 0 },
+    { label: "표준AC 기어드모터", value: 1 },
+    { label: "표준BLDC 기어드모터", value: 2 },
+    { label: "DC기어드모터", value: 3 },
+    { label: "동력용모터", value: 4 },
+    { label: "유성감속기", value: 5 },
+    { label: "기타", value: 6 },
+    { label: "보안경계", value: 7 },
+    { label: "음식물처리기", value: 8 },
+  ];
+
   // 현재 선택된 서브 카테고리 (기본값: standard-ac)
   const [activeSubCategory, setActiveSubCategory] = useState("standard-ac");
 
@@ -184,19 +199,34 @@ export default function Products() {
   const currentTitle =
     subCategoryTitles[activeSubCategory] || subCategoryTitles["standard-ac"];
 
-  // breadcrumb 항목
-  const breadcrumbItems = [
-    { label: "홈", href: "/" },
-    { label: "제품소개", href: "/products" },
-    { label: currentTitle.korean },
-  ];
+  // 현재 활성 탭에 따라 breadcrumb 생성
+  const breadcrumbItems = useMemo<BreadcrumbItem[]>(() => {
+    const baseItems: BreadcrumbItem[] = [
+      { label: "홈", href: "/" },
+      { label: "제품소개", href: "/products" },
+    ];
+
+    const tabParam = searchParams.get("tab");
+    const activeTab = tabParam ? parseInt(tabParam, 10) : 0;
+
+    if (activeTab < productTabs.length) {
+      return [...baseItems, { label: productTabs[activeTab].label }];
+    }
+
+    return [...baseItems, { label: currentTitle.korean }];
+  }, [searchParams, currentTitle.korean]);
 
   return (
-    <main className={styles.main}>
-      {/* 상단 히어로 배너 */}
-      <Suspense fallback={<div>Loading...</div>}>
-        <HeroBanner title="제품소개" backgroundImage={productBanner.src} />
-      </Suspense>
+    <>
+      {/* 상단 히어로 배너: 페이지 타이틀 + 탭 */}
+      <HeroBanner
+        title="제품소개"
+        backgroundImage={productBanner.src}
+        tabs={productTabs}
+        useUrlParams={true}
+        urlParamKey="tab"
+        basePath="/products"
+      />
 
       {/* Breadcrumb 영역 */}
       <div className={styles.breadcrumbArea}>
@@ -223,6 +253,16 @@ export default function Products() {
           <ProductGrid products={filteredProducts} />
         </div>
       </section>
+    </>
+  );
+}
+
+export default function Products() {
+  return (
+    <main className={styles.main}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProductsContent />
+      </Suspense>
     </main>
   );
 }
