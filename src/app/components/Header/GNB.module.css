@@ -76,3 +76,10 @@
 
 /* 스크롤 시 색상 변경은 Header.module.css에서 처리 */
 
+/* 햄버거 메뉴 열렸을 때 GNB 숨김 */
+:global(.menuOpen) .gnb {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+

@@ -54,6 +54,7 @@ const Header: React.FC = () => {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             isScrolled={shouldShowScrolled}
+            isMenuOpen={isMenuOpen}
           />
         </div>
         <div className={styles.rightArea}>

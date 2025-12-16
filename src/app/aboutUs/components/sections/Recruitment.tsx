@@ -40,12 +40,11 @@ export default function Recruitment() {
   ];
 
   const benefits = [
-    { icon: "💼", title: "주5일 근무" },
-    { icon: "🎓", title: "학자금 지원" },
-    { icon: "🍃", title: "4대보험 실시" },
-    { icon: "👥", title: "장기근속" },
-    { icon: "🏢", title: "휴양시설 운영" },
-    { icon: "⭐", title: "기타" },
+    { icon: "/images/aboutus/icon_1.png", title: "주5일 근무" },
+    { icon: "/images/aboutus/icon_2.png", title: "학자금 지원" },
+    { icon: "/images/aboutus/icon_4.png", title: "4대보험 실시" },
+    { icon: "/images/aboutus/icon_3.png", title: "장기근속" },
+    { icon: "/images/aboutus/icon_5.png", title: "휴양시설 운영" },
   ];
 
   return (
@@ -75,10 +74,10 @@ export default function Recruitment() {
             <h3 className={styles.sectionTitle}>모집안내</h3>
             <h4 className={styles.subSectionTitle}>- 인사제도 방향</h4>
             <p className={styles.description}>
-              SPG는 인재를 최고의 자산으로 생각하며, 역량 있는 인재에게는
-              성장과 승진, 교육의 기회를 제공합니다. 개인의 능력과 성과에 따라
-              공정하게 평가하고 보상하며, 함께 성장하는 기업 문화를 만들어
-              나가고 있습니다.
+              SPG는 인재를 최고의 자산으로 생각하며, 역량 있는 인재에게는 성장과
+              승진, 교육의 기회를 제공합니다. 개인의 능력과 성과에 따라 공정하게
+              평가하고 보상하며, 함께 성장하는 기업 문화를 만들어 나가고
+              있습니다.
             </p>
           </section>
 
@@ -86,15 +85,13 @@ export default function Recruitment() {
           <section className={styles.section}>
             <h4 className={styles.subSectionTitle}>- 채용절차</h4>
             <p className={styles.description}>
-              SPG의 채용 절차는 공정하고 투명하게 진행되며, 각 단계별로
-              체계적인 평가를 통해 최적의 인재를 선발합니다.
+              SPG의 채용 절차는 공정하고 투명하게 진행되며, 각 단계별로 체계적인
+              평가를 통해 최적의 인재를 선발합니다.
             </p>
             <div className={styles.recruitmentProcess}>
               {recruitmentSteps.map((item, index) => (
                 <div key={index} className={styles.processStep}>
-                  {index > 0 && (
-                    <div className={styles.arrow}>→</div>
-                  )}
+                  {index > 0 && <div className={styles.arrow}>→</div>}
                   <div
                     className={`${styles.stepCircle} ${
                       item.isFinal ? styles.finalStep : ""
@@ -110,11 +107,11 @@ export default function Recruitment() {
 
           {/* 제출서류 */}
           <section className={styles.section}>
-            <h4 className={styles.subSectionTitle}>- 제출서류</h4>
+            <h4 className={styles.subSectionTitle}>• 제출서류</h4>
             <div className={styles.documentsList}>
               {requiredDocuments.map((doc, index) => (
                 <div key={index} className={styles.documentItem}>
-                  {doc}
+                  - {doc}
                 </div>
               ))}
             </div>
@@ -122,11 +119,13 @@ export default function Recruitment() {
 
           {/* 복리후생 */}
           <section className={styles.section}>
-            <h4 className={styles.subSectionTitle}>- 복리후생</h4>
+            <h4 className={styles.subSectionTitle}>• 복리후생</h4>
             <div className={styles.benefitsGrid}>
               {benefits.map((benefit, index) => (
                 <div key={index} className={styles.benefitCard}>
-                  <div className={styles.benefitIcon}>{benefit.icon}</div>
+                  <div className={styles.benefitIcon}>
+                    <img src={benefit.icon} alt={benefit.title} />
+                  </div>
                   <div className={styles.benefitTitle}>{benefit.title}</div>
                 </div>
               ))}
@@ -138,18 +137,31 @@ export default function Recruitment() {
             <h4 className={styles.subSectionTitle}>- 접수 및 문의처</h4>
             <div className={styles.contactInfo}>
               <div className={styles.contactItem}>
-                <span className={styles.contactIcon}>📍</span>
+                <img
+                  src="/images/aboutUs/icon_map.png"
+                  alt="이메일"
+                  className={styles.contactIcon}
+                />
                 <span>
                   인천광역시 남동구 남동서로 208번길 45 (고잔동, 남동공단 8블럭
                   12L), 199번지 21B2L
                 </span>
               </div>
               <div className={styles.contactItem}>
-                <span className={styles.contactIcon}>✉️</span>
+                <img
+                  src="/images/aboutUs/icon_message.png"
+                  alt="이메일"
+                  className={styles.contactIcon}
+                />
                 <span>hanwh@spg.co.kr</span>
               </div>
             </div>
           </section>
+          {/* <img
+            src="/images/aboutUs/main_2.png"
+            alt="모집안내"
+            className={styles.tempImage}
+          /> */}
         </div>
       )}
 
@@ -157,8 +169,8 @@ export default function Recruitment() {
       {activeSubTab === 1 && (
         <div className={styles.jobPostingContent}>
           <p className={styles.introText}>
-            (주)에스피지를 이끌어 갈 인재를 모집합니다. 여러분의 지원을
-            기다리고 있습니다.
+            (주)에스피지를 이끌어 갈 인재를 모집합니다. 여러분의 지원을 기다리고
+            있습니다.
           </p>
 
           <div className={styles.jobPostingGrid}>

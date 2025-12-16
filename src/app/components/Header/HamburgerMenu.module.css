@@ -1,11 +1,11 @@
 /* 햄버거 메뉴 컨테이너 */
 .hamMenu {
   position: fixed;
-  bottom: 0;
+  top: 100px;
   left: 0;
   width: 100%;
   height: calc(100vh - 100px);
-  z-index: 99998;
+  z-index: 100000;
   display: none;
   overflow-y: auto;
   backdrop-filter: blur(30px);
@@ -21,6 +21,7 @@
 .hamInner {
   width: 73%;
   display: flex;
+  padding-top: 30px;
 }
 
 .menuColumn {
@@ -117,7 +118,3 @@
   padding: 7px 0;
   display: block;
 }
-
-
-
-
