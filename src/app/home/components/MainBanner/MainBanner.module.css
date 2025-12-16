@@ -63,7 +63,7 @@
 }
 
 .mainSwiper :global(.swiper-pagination span::before) {
-  content: '';
+  content: "";
   width: 8px;
   height: 8px;
   background: #fff;
@@ -73,7 +73,8 @@
   opacity: 0.5;
 }
 
-.mainSwiper :global(.swiper-pagination span.swiper-pagination-bullet-active::before) {
+.mainSwiper
+  :global(.swiper-pagination span.swiper-pagination-bullet-active::before) {
   opacity: 1;
 }
 
@@ -87,10 +88,16 @@
 .mainSwiper :global(.swiper-pagination span .progress-ring-circle) {
   stroke-dasharray: 75.4 75.4;
   stroke-dashoffset: 75.4;
-  transition: stroke-dashoffset 0.1s linear, stroke 0.3s ease;
+  transition:
+    stroke-dashoffset 0.1s linear,
+    stroke 0.3s ease;
 }
 
-.mainSwiper :global(.swiper-pagination span.swiper-pagination-bullet-active .progress-ring-circle) {
+.mainSwiper
+  :global(
+    .swiper-pagination
+      span.swiper-pagination-bullet-active
+      .progress-ring-circle
+  ) {
   stroke: #fff;
 }
-

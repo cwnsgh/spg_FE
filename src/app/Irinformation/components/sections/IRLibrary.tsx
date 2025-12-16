@@ -253,6 +253,7 @@ export default function IRLibrary() {
 
   return (
     <section className={styles.irLibrary}>
+      <h2 className={styles.section_title}>IR 자료실</h2>
       <div className={styles.tabArea}>
         <button
           className={`${styles.tabBtn} ${currentTab === "balance" ? styles.active : ""}`}

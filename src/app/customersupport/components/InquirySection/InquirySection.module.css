@@ -3,6 +3,15 @@
   padding: 0 var(--layout-side-pc-sub);
 }
 
+/* 섹션 타이틀 */
+.section_title {
+  font-size: 56px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 70px 0 80px 0;
+  text-align: center;
+}
+
 /* 카테고리 탭 */
 .categoryTabs {
   display: flex;

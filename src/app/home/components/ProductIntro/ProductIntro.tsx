@@ -42,7 +42,7 @@ const ProductIntro: React.FC = () => {
   };
 
   return (
-    <section className={styles.prdIntro}>
+    <section className={`${styles.prdIntro} section-02 prd-intro`}>
       <div className={styles.title}>
         <p className="eg-font">Products</p>
         <h2>
@@ -80,7 +80,7 @@ const ProductIntro: React.FC = () => {
         {/* B: 이미지 Swiper 영역 */}
         <div className={styles.prdImgArea}>
           <Swiper
-            className={`${styles.prdSwiper} swiper-container`}
+            className={`${styles.prdSwiper} prd-swiper swiper-container`}
             modules={[Navigation]}
             slidesPerView={1.5}
             spaceBetween={90}
