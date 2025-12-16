@@ -107,6 +107,13 @@ export default function HeroBanner({
       {/* 상단 영역: 타이틀과 탭 (200px 높이, 흰색 배경) */}
       <div className={styles.heroContent}>
         <div className={styles.heroContentInner}>
+          {/* 브레드크럼 (제품 상세 페이지용) */}
+          {breadcrumb && breadcrumb.length > 0 && (
+            <div className={styles.breadcrumb}>
+              <Breadcrumb items={breadcrumb} />
+            </div>
+          )}
+
           <h1 className={styles.title}>{title}</h1>
 
           {/* 제품 카테고리 링크 (제품소개 페이지용) */}

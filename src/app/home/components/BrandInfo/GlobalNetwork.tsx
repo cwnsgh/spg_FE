@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 // @ts-ignore
 import { Swiper, SwiperSlide } from "swiper/react";
 // @ts-ignore
@@ -24,59 +25,31 @@ const GlobalNetwork: React.FC = () => {
     setImagesLoaded((prev) => prev + 1);
   };
 
-  // 모든 이미지 로드 후 Swiper 완전히 재초기화
+  // 모든 이미지 로드 후 Swiper 업데이트 (단순화)
   useEffect(() => {
     if (imagesLoaded === totalImages && swiperRef.current) {
-      // DOM 렌더링 완료 대기
       const timeoutId = setTimeout(() => {
         if (swiperRef.current) {
-          const swiper = swiperRef.current;
-          
-          // Autoplay 완전히 정지
-          if (swiper.autoplay) {
-            swiper.autoplay.stop();
+          swiperRef.current.update();
+          if (swiperRef.current.autoplay) {
+            swiperRef.current.autoplay.start();
           }
-          
-          // Swiper 크기 및 슬라이드 완전히 재계산
-          swiper.updateSize();
-          swiper.updateSlides();
-          swiper.updateSlidesClasses();
-          swiper.update();
-          
-          // loop 모드에서 첫 번째 슬라이드로 이동 (transition 없이)
-          swiper.slideToLoop(0, 0, false);
-          
-          // 한 프레임 후 다시 한 번 확실하게 위치 설정
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              if (swiperRef.current) {
-                const swiper = swiperRef.current;
-                swiper.updateSize();
-                swiper.update();
-                swiper.slideToLoop(0, 0, false);
-                
-                // Navigation 업데이트
-                if (swiper.navigation) {
-                  swiper.navigation.update();
-                }
-                
-                // Autoplay 시작 (이미지 로드 완료 후)
-                if (swiper.autoplay) {
-                  setTimeout(() => {
-                    if (swiperRef.current?.autoplay) {
-                      swiperRef.current.autoplay.start();
-                    }
-                  }, 500);
-                }
-              }
-            });
-          });
         }
-      }, 150);
-      
+      }, 100);
+
       return () => clearTimeout(timeoutId);
     }
   }, [imagesLoaded, totalImages]);
+
+  // Cleanup: 컴포넌트 언마운트 시 Swiper 정리
+  useEffect(() => {
+    return () => {
+      if (swiperRef.current) {
+        swiperRef.current.destroy(true, true);
+        swiperRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div className={`${styles.globalNetwork} global-network`}>
@@ -128,29 +101,23 @@ const GlobalNetwork: React.FC = () => {
               swiper.navigation.init();
               swiper.navigation.update();
             }
-            
+
             // 이미지가 로드되지 않았을 경우 autoplay 비활성화
             if (imagesLoaded < totalImages && swiper.autoplay) {
               swiper.autoplay.stop();
-            }
-          }}
-          onSlideChange={(swiper: SwiperType) => {
-            // 이미지 로드 완료 후 슬라이드 변경 시 업데이트
-            if (imagesLoaded === totalImages && swiperRef.current) {
-              requestAnimationFrame(() => {
-                if (swiperRef.current) {
-                  swiperRef.current.update();
-                }
-              });
             }
           }}
         >
           {branchData.map((branch, index) => (
             <SwiperSlide key={index}>
               <div className="region-img">
-                <img
+                <Image
                   src={branch.imgPath}
                   alt={branch.alt}
+                  width={400}
+                  height={300}
+                  className={styles.branchImage}
+                  loading={index < 3 ? "eager" : "lazy"}
                   onLoad={handleImageLoad}
                   onError={handleImageLoad}
                 />

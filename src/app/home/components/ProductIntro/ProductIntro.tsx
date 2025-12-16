@@ -9,6 +9,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 // @ts-ignore
 import { Swiper, SwiperSlide } from "swiper/react";
 // @ts-ignore
@@ -40,6 +41,16 @@ const ProductIntro: React.FC = () => {
     const idx = swiper.realIndex ?? swiper.activeIndex;
     setActiveIndex(idx);
   };
+
+  // Cleanup: 컴포넌트 언마운트 시 Swiper 정리
+  useEffect(() => {
+    return () => {
+      if (swiperRef.current) {
+        swiperRef.current.destroy(true, true);
+        swiperRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <section className={`${styles.prdIntro} section-02 prd-intro`}>
@@ -93,7 +104,14 @@ const ProductIntro: React.FC = () => {
           >
             {productData.map((product, index) => (
               <SwiperSlide key={index}>
-                <img src={product.imgPath} alt={product.nameKr} />
+                <Image
+                  src={product.imgPath}
+                  alt={product.nameKr}
+                  width={600}
+                  height={400}
+                  className={styles.productImage}
+                  loading={index < 2 ? "eager" : "lazy"}
+                />
               </SwiperSlide>
             ))}
           </Swiper>
