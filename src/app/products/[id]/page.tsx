@@ -4,8 +4,10 @@ import { use } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import HeroBanner from "../../components/HeroBanner";
 import Breadcrumb, { BreadcrumbItem } from "../../components/Breadcrumb";
 import { getProductById } from "../data/productData";
+import productBanner from "../../../assets/product_banner.png";
 import styles from "./page.module.css";
 
 interface ProductDetailPageProps {
@@ -28,6 +30,9 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
   return (
     <main className={styles.main}>
+      {/* 상단 히어로 배너: 페이지 타이틀 */}
+      {/* <HeroBanner title="제품소개" backgroundImage={productBanner.src} /> */}
+
       {/* Breadcrumb 영역 */}
       <div className={styles.breadcrumbArea}>
         <Breadcrumb items={breadcrumbItems} />

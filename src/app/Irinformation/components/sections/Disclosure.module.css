@@ -61,6 +61,12 @@
   outline: none;
 }
 
+.searchInput:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
 .searchBtn {
   position: absolute;
   right: 0;
