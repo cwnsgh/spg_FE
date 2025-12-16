@@ -95,7 +95,7 @@ const MainBanner: React.FC = () => {
   };
 
   return (
-    <section className={styles.mainBnr}>
+    <section className={`${styles.mainBnr} section-01 main-bnr`}>
       <Swiper
         className={`${styles.mainSwiper} main-swiper swiper-container`}
         modules={[Autoplay, Pagination]}

@@ -93,6 +93,7 @@ export default function FAQSection() {
 
   return (
     <section className={styles.faq}>
+      <h2 className={styles.section_title}>FAQ</h2>
       <div className={styles.faqTop}>
         <h2>
           고객님의 궁금한 사항들을

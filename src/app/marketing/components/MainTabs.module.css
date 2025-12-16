@@ -21,9 +21,9 @@
   padding: 0;
   background: transparent;
   border: none;
-  color: #000;
-  font-size: 4.8rem;
-  font-weight: 600;
+  color: #1f2937;
+  font-size: 56px;
+  font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
 }

@@ -123,6 +123,7 @@ export default function IRContent() {
 
   return (
     <section className={styles.board}>
+      <h2 className={styles.section_title}>IR콘텐츠</h2>
       <div className={styles.searchArea}>
         <div className={styles.searchBox}>
           <select

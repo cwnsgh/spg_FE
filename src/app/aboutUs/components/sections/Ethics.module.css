@@ -1,25 +1,24 @@
 .container {
   width: 100%;
-  padding: 2rem 0;
 }
 
 .title {
-  font-size: 4.8rem;
-  font-weight: 600;
+  font-size: 56px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 70px 0 80px 0;
   text-align: center;
-  margin-bottom: 5rem;
-  color: #000;
 }
 
 .content {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 180px;
 }
 
 /* 장(章) 제목 */
 .chapter {
-  margin-bottom: 5rem;
+  margin-bottom: 8rem;
 }
 
 .chapterTitle {
@@ -27,8 +26,8 @@
   font-weight: 700;
   color: #2196f3;
   text-align: center;
-  margin-bottom: 3rem;
-  padding-bottom: 1rem;
+  margin-bottom: 5rem;
+  padding-bottom: 2rem;
   border-bottom: 2px solid #2196f3;
 }
 
@@ -49,7 +48,7 @@
 
 /* 조(條) */
 .article {
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
 }
 
 .articleTitle {

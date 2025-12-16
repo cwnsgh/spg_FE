@@ -143,6 +143,7 @@ export default function InquirySection() {
 
   return (
     <section className={styles.productInquiry}>
+      <h2 className={styles.section_title}>제품문의</h2>
       {/* 카테고리 탭 */}
       <div className={styles.categoryTabs}>
         <div

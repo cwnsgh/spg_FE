@@ -85,6 +85,8 @@ export default function CompanyHistory() {
 
   return (
     <div className={styles.container}>
+      <h2 className={styles.title}>회사연혁</h2>
+
       <div className={styles.content}>
         {/* 왼쪽 사이드바 */}
         <aside className={styles.sidebar}>
@@ -105,7 +107,6 @@ export default function CompanyHistory() {
 
         {/* 오른쪽 메인 콘텐츠 */}
         <main className={styles.mainContent}>
-          <h2 className={styles.title}>회사연혁</h2>
           <div className={styles.timeline}>
             {filteredHistory.map((period, periodIndex) => (
               <div key={periodIndex} className={styles.period}>

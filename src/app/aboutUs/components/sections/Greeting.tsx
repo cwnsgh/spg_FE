@@ -5,8 +5,8 @@ import styles from "./Greeting.module.css";
 export default function Greeting() {
   return (
     <div className={styles.container}>
+      <h2 className={styles.title}>인사말</h2>
       <div className={styles.content}>
-        <h2 className={styles.title}>인사말</h2>
         <div className={styles.mainContent}>
           <div className={styles.imageWrapper}>
             <Image
