@@ -18,8 +18,8 @@ const GlobalNetwork: React.FC = () => {
   const swiperRef = useRef<SwiperType | null>(null);
 
   return (
-    <div className={styles.globalNetwork}>
-      <div className={styles.topTxt}>
+    <div className={`${styles.globalNetwork} global-network`}>
+      <div className={`${styles.topTxt} top-txt`}>
         <p className="eg-font">Global Network</p>
         <h2>
           SPG는 국내 뿐만 아니라 전세계
@@ -31,12 +31,12 @@ const GlobalNetwork: React.FC = () => {
           <br />
           and across the globe.
         </p>
-        <Link href="#" className={`${styles.moreView} eg-font`}>
+        <Link href="#" className={`${styles.moreView} more-view eg-font`}>
           SEE ALL +
         </Link>
       </div>
-      <div className={styles.btmContents}>
-        <div className={styles.leftBtn} ref={prevButtonRef}>
+      <div className={`${styles.btmContents} btm-contents`}>
+        <div className={`${styles.leftBtn} left-btn`} ref={prevButtonRef}>
           <img
             src="/images/icon/arrow_04.png"
             style={{ transform: "rotate(180deg)" }}
@@ -44,7 +44,7 @@ const GlobalNetwork: React.FC = () => {
           />
         </div>
         <Swiper
-          className={`${styles.spgBranch} swiper-container`}
+          className={`${styles.spgBranch} spg-branch swiper-container`}
           modules={[Autoplay, Navigation]}
           slidesPerView={2.5}
           spaceBetween={30}

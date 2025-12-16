@@ -11,7 +11,7 @@ import styles from './CategoryMenu.module.css';
 
 const CategoryMenu: React.FC = () => {
   return (
-    <section className={styles.cateMenu}>
+    <section className={`${styles.cateMenu} section-03 cate-menu`}>
       <ul className={styles.cateList}>
         {categoryData.map((category, index) => (
           <li key={index} className={styles.cateItem}>

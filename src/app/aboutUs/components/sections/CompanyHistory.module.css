@@ -1,14 +1,13 @@
 .container {
   width: 100%;
-  padding: 2rem 0;
+  padding: 0 180px;
 }
 
 .content {
   display: flex;
   gap: 4rem;
   max-width: 1600px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 180px;
 }
 
 /* 왼쪽 사이드바 */
@@ -54,10 +53,10 @@
 }
 
 .title {
-  font-size: 3rem;
+  font-size: 56px;
   font-weight: 700;
-  color: #000000;
-  margin-bottom: 3rem;
+  color: #1f2937;
+  margin: 70px 0 80px 0;
   text-align: center;
 }
 

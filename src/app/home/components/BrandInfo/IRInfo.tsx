@@ -142,7 +142,7 @@ const IRInfo: React.FC = () => {
             </div>
           </div>
           <div className={styles.detail}>
-            <div className={styles.boardItem}>
+            <div className={`${styles.boardItem} board-item`}>
               <h4 dangerouslySetInnerHTML={{ __html: irInfo.title }} />
               <p className={styles.date}>{irInfo.date}</p>
             </div>

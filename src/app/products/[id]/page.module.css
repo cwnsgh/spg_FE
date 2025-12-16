@@ -1,0 +1,211 @@
+.main {
+  padding: 100px 0 180px;
+  background-color: #fff;
+}
+
+.breadcrumbArea {
+  margin-bottom: 50px;
+}
+
+/* 제품 상세 영역 */
+.productDetail {
+  padding: 0 var(--layout-side-pc-sub, 180px);
+}
+
+.productInfo {
+  display: flex;
+  gap: 4.5%;
+  margin-bottom: 50px;
+}
+
+/* 제품 이미지 */
+.productImage {
+  flex: 0 0 45%;
+  position: relative;
+}
+
+.productImage .image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* 제품 정보 */
+.productContent {
+  flex: 1;
+}
+
+.productTitle {
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: #999;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.productTitleKorean {
+  display: block;
+  font-size: 5rem;
+  font-weight: 700;
+  color: #000;
+  margin-top: 0.5rem;
+}
+
+.productDescription {
+  font-size: 1.6rem;
+  line-height: 1.8;
+  color: #000;
+  margin-bottom: 3rem;
+}
+
+/* 특징 영역 */
+.features {
+  margin-bottom: 3rem;
+}
+
+.featuresTitle {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background: #0a2b6a;
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  border-radius: 5px;
+  margin-bottom: 2rem;
+}
+
+.featuresDivider {
+  height: 1px;
+  background: #e5e5e5;
+  margin: 2rem 0;
+}
+
+.featuresList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem 3rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.featureItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.featureKorean {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #000;
+}
+
+.featureEnglish {
+  font-size: 1.3rem;
+  color: #999;
+}
+
+/* 다운로드 버튼 */
+.downloadButtons {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.downloadButton {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.2rem 2rem;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+/* 도면 PDF 다운로드 버튼 (연한 파란색 배경) */
+.catalogButton {
+  background: #e8eaf0;
+  border: none;
+  color: #4a5568;
+}
+
+.catalogButton:hover {
+  background: #d1d5e0;
+}
+
+/* 기술자료 PDF 다운로드 버튼 (흰색 배경, 테두리) */
+.technicalButton {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  color: #666;
+}
+
+.technicalButton:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+/* 내용 영역 */
+.contentArea {
+  margin-bottom: 50px;
+  padding: 3rem;
+  background: #f7f7f7;
+  border-radius: 20px;
+  min-height: 300px;
+}
+
+.content {
+  font-size: 1.6rem;
+  line-height: 1.8;
+  color: #333;
+  text-align: center;
+}
+
+/* 목록 버튼 */
+.listButtonArea {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.listButton {
+  padding: 1.2rem 4rem;
+  background: #333;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 1.6rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.listButton:hover {
+  background: #555;
+}
+
+@media (max-width: 768px) {
+  .productInfo {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .productImage {
+    flex: 1;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .downloadButtons {
+    flex-direction: column;
+  }
+
+  .downloadButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

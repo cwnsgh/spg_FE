@@ -93,7 +93,8 @@
   display: flex;
   flex-wrap: nowrap;
   gap: 0;
-  margin-right: 190px;
+  margin-right: 180px;
+  justify-content: end;
   align-items: center;
   margin-bottom: 25px;
 }

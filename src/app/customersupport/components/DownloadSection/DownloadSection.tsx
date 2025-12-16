@@ -115,8 +115,10 @@ export default function DownloadSection() {
 
   return (
     <section className={styles.download}>
-      {/* 왼쪽 카테고리 네비게이션 */}
-      <div className={styles.categoryNav}>
+      <h2 className={styles.section_title}>다운로드</h2>
+      <div className={styles.downloadWrapper}>
+        {/* 왼쪽 카테고리 네비게이션 */}
+        <div className={styles.categoryNav}>
         <button
           className={`${styles.categoryBtn} ${
             activeCategory === "manual" ? styles.active : ""
@@ -328,6 +330,7 @@ export default function DownloadSection() {
             </button>
           </div>
         )}
+      </div>
       </div>
     </section>
   );

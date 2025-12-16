@@ -123,6 +123,7 @@ export default function IRAnnouncement() {
 
   return (
     <section className={styles.board}>
+      <h2 className={styles.section_title}>IR공고</h2>
       <div className={styles.searchArea}>
         <div className={styles.searchBox}>
           <select
