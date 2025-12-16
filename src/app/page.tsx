@@ -5,7 +5,7 @@ import BrandInfo from "./home/components/BrandInfo/BrandInfo";
 
 export default function Home() {
   return (
-    <main>
+    <main className="home-page">
       <MainBanner />
       <ProductIntro />
       <CategoryMenu />

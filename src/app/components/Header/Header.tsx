@@ -54,17 +54,19 @@ const Header: React.FC = () => {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             isScrolled={shouldShowScrolled}
+            isMenuOpen={isMenuOpen}
           />
         </div>
         <div className={styles.rightArea}>
           <Link href="#" className={styles.askPrd}>
             제품 문의
           </Link>
-          <div className={styles.searchBox}>
+          {/* 검색창 영역 */}
+          {/* <div className={styles.searchBox}>
             <div className={styles.searchBtn}>
               <img src="/images/icon/search_ico.png" alt="검색" />
             </div>
-          </div>
+          </div> */}
           <div className={styles.hamBtn} onClick={toggleMenu}>
             <span></span>
             <span></span>

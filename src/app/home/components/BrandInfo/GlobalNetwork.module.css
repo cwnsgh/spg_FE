@@ -26,6 +26,7 @@
 /* 전역 CSS가 적용되도록 최소한의 스타일만 유지 */
 .btmContents {
   /* 전역 CSS: main section.brand-info .global-network .btm-contents 사용 */
+  padding-right: 0 !important;
 }
 
 /* 전역 CSS 사용 */
@@ -43,6 +44,7 @@
 
 .spgBranch {
   /* 전역 CSS 사용 */
+  margin: 0 !important; 
 }
 
 /* Swiper 슬라이드 스타일 */
@@ -141,6 +143,7 @@
   line-height: 1;
   transition: all 0.3s;
 }
+
 
 /* CSS Modules 클래스명도 유지 */
 .regionImg {

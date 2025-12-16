@@ -2,6 +2,8 @@
 .footer {
   padding: 100px var(--layout-side-pc);
   background-color: #ffffff;
+  border-top: 1px solid #f2f2f2;
+  margin-top: 180px;
 }
 
 .topArea {

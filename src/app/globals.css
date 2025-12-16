@@ -28,7 +28,12 @@
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: #fff;
+}
+
+/* 메인 페이지에서 Footer의 margin-top 제거 */
+body:has(.home-page) footer {
+  margin-top: 0 !important;
 }
 
 /* 메인 섹션 공통 */
