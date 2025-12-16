@@ -69,14 +69,34 @@ function ProductsContent() {
   // 현재 선택된 서브 카테고리 (기본값: standard-ac)
   const [activeSubCategory, setActiveSubCategory] = useState("standard-ac");
 
+  // 검색 기능
+  const [searchKeyword, setSearchKeyword] = useState("");
+
   // 현재 활성 메인 탭
   const tabParam = searchParams.get("tab");
   const activeTab = tabParam ? parseInt(tabParam, 10) : 0;
 
-  // 선택된 서브 카테고리에 따라 제품 필터링
+  // 검색 핸들러
+  const handleSearch = () => {
+    // 검색 로직은 나중에 구현
+    console.log("검색어:", searchKeyword);
+  };
+
+  // 선택된 서브 카테고리와 검색어에 따라 제품 필터링
   const filteredProducts = useMemo(() => {
-    return productData[activeSubCategory] || [];
-  }, [activeSubCategory]);
+    let products = productData[activeSubCategory] || [];
+
+    // 검색어가 있으면 필터링
+    if (searchKeyword.trim()) {
+      products = products.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+          product.nameEn.toLowerCase().includes(searchKeyword.toLowerCase())
+      );
+    }
+
+    return products;
+  }, [activeSubCategory, searchKeyword]);
 
   // 현재 메인 탭의 타이틀
   const currentTitle = mainTabTitles[activeTab] || mainTabTitles[0];
@@ -120,6 +140,30 @@ function ProductsContent() {
             {currentTitle.korean}
             <span className={styles.egFont}>{currentTitle.english}</span>
           </h1>
+        </div>
+
+        {/* 검색 영역 */}
+        <div className={styles.searchArea}>
+          <div className={styles.searchInputWrap}>
+            <input
+              type="text"
+              className={styles.searchInput}
+              placeholder="검색어를 입력해 주세요"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
+            />
+            <button
+              className={styles.searchBtn}
+              type="button"
+              aria-label="검색"
+              onClick={handleSearch}
+            />
+          </div>
         </div>
         <div className={styles.productContent}>
           {/* 왼쪽: 네비게이션 (서브 카테고리 + 공통 기능) */}

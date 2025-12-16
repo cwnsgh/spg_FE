@@ -9,8 +9,14 @@
   overflow: hidden;
 }
 
-.bnr img {
+.bnr {
+  position: relative;
   width: 100%;
+  height: 100%;
+}
+
+.bannerImage {
+  object-fit: cover;
 }
 
 .txt {

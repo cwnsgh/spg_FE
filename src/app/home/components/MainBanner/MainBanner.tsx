@@ -7,6 +7,7 @@
 
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 // @ts-ignore
 import { Swiper, SwiperSlide } from "swiper/react";
 // @ts-ignore
@@ -38,6 +39,14 @@ const MainBanner: React.FC = () => {
         }
       });
     }
+
+    // Cleanup: 컴포넌트 언마운트 시 Swiper 정리
+    return () => {
+      if (swiperRef.current) {
+        swiperRef.current.destroy(true, true);
+        swiperRef.current = null;
+      }
+    };
   }, []);
 
   const handleAutoplayTimeLeft = (
@@ -121,11 +130,19 @@ const MainBanner: React.FC = () => {
           <SwiperSlide key={index}>
             <Link href={slide.href || "#"}>
               <div className={styles.bnr}>
-                <img src={slide.imgPath} alt={slide.title} />
+                <Image
+                  src={slide.imgPath}
+                  alt={slide.title}
+                  fill
+                  priority={index === 0}
+                  className={styles.bannerImage}
+                  style={{ objectFit: "cover" }}
+                />
               </div>
               <div className={styles.txt}>
                 <h2>
                   {slide.title}
+                  <br />
                   {slide.titleEm && <em>{slide.titleEm}</em>}의 정밀 모터 기술
                 </h2>
                 <p dangerouslySetInnerHTML={{ __html: slide.description }} />
