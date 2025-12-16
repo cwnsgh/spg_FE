@@ -138,7 +138,7 @@ export default function Recruitment() {
             <div className={styles.contactInfo}>
               <div className={styles.contactItem}>
                 <img
-                  src="/images/aboutUs/icon_map.png"
+                  src="/images/aboutus/icon_map.png"
                   alt="이메일"
                   className={styles.contactIcon}
                 />
@@ -149,7 +149,7 @@ export default function Recruitment() {
               </div>
               <div className={styles.contactItem}>
                 <img
-                  src="/images/aboutUs/icon_message.png"
+                  src="/images/aboutus/icon_message.png"
                   alt="이메일"
                   className={styles.contactIcon}
                 />
@@ -158,7 +158,7 @@ export default function Recruitment() {
             </div>
           </section>
           {/* <img
-            src="/images/aboutUs/main_2.png"
+            src="/images/aboutus/main_2.png"
             alt="모집안내"
             className={styles.tempImage}
           /> */}
