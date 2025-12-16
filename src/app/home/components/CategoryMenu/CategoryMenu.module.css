@@ -118,6 +118,7 @@
 
 .cateItem:nth-child(2) > a:hover .nameKr .moreView {
   background: rgba(27, 88, 199, 0.2);
+  border-color: transparent;
 }
 
 .cateItem:nth-child(2) > a:hover .nameKr .moreView img {
@@ -130,6 +131,7 @@
 
 .cateItem:nth-child(3) > a:hover .nameKr .moreView {
   background: rgba(13, 54, 125, 0.2);
+  border-color: transparent;
 }
 
 .cateItem:nth-child(3) > a:hover .nameKr .moreView img {

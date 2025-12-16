@@ -87,6 +87,7 @@
 /* 헤더 상태별 스타일 - 스크롤 시 흰배경 */
 .scrolled {
   background-color: #fff;
+  border-bottom: 1px solid #f2f2f2;
 }
 
 .scrolled .logo img {
