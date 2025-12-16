@@ -30,14 +30,28 @@ const GNB: React.FC<GNBProps> = ({
     >
       {menuData.map((menu, index) => (
         <li key={index}>
-          <Link href={menu.href} prefetch={true}>
+          <Link
+            href={menu.href}
+            prefetch={true}
+            onClick={(e) => {
+              // 서브메뉴가 열려있을 때도 메인 링크 클릭 허용
+              e.stopPropagation();
+            }}
+          >
             {menu.label}
           </Link>
           {menu.subMenu && (
             <ul className={styles.subMenu}>
               {menu.subMenu.map((subItem, subIndex) => (
                 <li key={subIndex}>
-                  <Link href={subItem.href} prefetch={false}>
+                  <Link
+                    href={subItem.href}
+                    prefetch={false}
+                    onClick={(e) => {
+                      // 링크 클릭 시 정상적으로 이동하도록 이벤트 전파 허용
+                      // stopPropagation 제거하여 링크가 정상 작동하도록 함
+                    }}
+                  >
                     {subItem.label}
                   </Link>
                 </li>
