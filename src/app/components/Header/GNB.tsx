@@ -14,6 +14,7 @@ interface GNBProps {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   isScrolled: boolean;
+  isMenuOpen?: boolean;
 }
 
 const GNB: React.FC<GNBProps> = ({
@@ -21,7 +22,12 @@ const GNB: React.FC<GNBProps> = ({
   onMouseEnter,
   onMouseLeave,
   isScrolled,
+  isMenuOpen = false,
 }) => {
+  if (isMenuOpen) {
+    return null;
+  }
+
   return (
     <ul
       className={`${styles.gnb} ${isScrolled ? styles.scrolled : ""}`}

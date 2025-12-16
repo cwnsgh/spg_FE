@@ -9,7 +9,6 @@
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 99999;
 }
 
 .logo {
@@ -110,8 +109,12 @@
   backdrop-filter: blur(30px);
   background: rgba(0, 0, 0, 0.6);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
 }
 
+.menuOpen .hamBtn {
+  pointer-events: auto;
+}
 .menuOpen .logo img {
   filter: brightness(0) invert(1);
 }
@@ -135,5 +138,12 @@
 }
 
 .menuOpen .leftArea :global(.gnb) {
-  display: none;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.menuOpen .askPrd {
+  opacity: 0;
+  visibility: hidden;
 }
