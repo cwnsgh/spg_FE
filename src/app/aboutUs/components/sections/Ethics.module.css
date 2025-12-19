@@ -3,17 +3,15 @@
 }
 
 .title {
-  font-size: 56px;
-  font-weight: 700;
-  color: #1f2937;
+  font-size: 4.8rem;
+  font-weight: 600;
   margin: 70px 0 80px 0;
   text-align: center;
 }
 
 .content {
-  max-width: 1600px;
   margin: 0 auto;
-  padding: 0 180px;
+  padding: 0 var(--layout-side-pc-sub);
 }
 
 /* 장(章) 제목 */
