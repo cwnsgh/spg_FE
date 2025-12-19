@@ -3,11 +3,11 @@
 }
 
 .mainTitle {
-  font-size: 56px;
-  font-weight: 700;
-  color: #1f2937;
+  font-size: 4.8rem;
+  font-weight: 600;
   margin: 70px 0 80px 0;
   text-align: center;
+  line-height: 1;
 }
 
 /* 서브 탭 */
@@ -15,17 +15,19 @@
   display: flex;
   gap: 1.3rem;
   justify-content: center;
-  margin-bottom: 5rem;
+  margin-bottom: 10rem;
 }
 
 .subTab {
-  padding: 1.9rem 3rem;
+  padding: 2rem 0;
+  width: 20rem;
+  line-height: 1;
   font-size: 1.8rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #000;
   background: #fff;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 5rem;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -42,9 +44,7 @@
 
 /* 콘텐츠 영역 */
 .content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 var(--layout-side-pc-sub);
 }
 .content2 {
   display: flex;
@@ -63,85 +63,123 @@
 }
 
 .section {
-  margin-bottom: 5rem;
+  padding: 8rem 0;
+  display: flex;
+  border-bottom: 1px solid #e5e5e5;
+}
+.section:nth-of-type(2), .section:nth-of-type(5) {padding: 9rem 0;}
+.section:nth-of-type(3), .section:nth-of-type(4) {padding: 9.5rem 0 9rem;}
+.section:last-child {
+  border-bottom: 2px solid #555;
 }
 
 .sectionTitle {
-  font-size: 2.4rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
+  font-size: 4rem;
+  font-weight: 600;
+  padding-bottom: 3rem;
+  border-bottom: 2px solid #555;
   color: #000;
 }
 
 .subSectionTitle {
-  font-size: 1.8rem;
+  font-size: 2.8rem;
   font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #000;
+  width: 18%;
+}
+.description p,
+.description {
+  font-size: 1.8rem;
+  line-height: 1.8;
+  font-weight: 600;
+  width: 82%;
 }
 
-.description {
-  font-size: 1.6rem;
-  line-height: 1.8;
-  color: #333;
-  margin-bottom: 3rem;
-}
 
 /* 채용절차 */
 .recruitmentProcess {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 3rem;
-  flex-wrap: wrap;
+  gap: 4.5rem;
+  margin-top: 2.5rem;
+  padding-right: 3%;
 }
 
 .processStep {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
+  flex: 1;
+  position: relative;
 }
 
-.arrow {
-  font-size: 2rem;
-  color: #999;
+.processStep:last-child::after {
+  content: ""; width: calc(100% + 2.5rem); height: auto; aspect-ratio: 1/1; background: #d5ebfc; display: block;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; z-index: 1;
 }
+.processStep:last-child {margin-left: 1rem;}
+.processStep:last-child .stepCircle {position: relative; z-index: 2; border: none;}
 
 .stepCircle {
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
   border-radius: 50%;
-  background: #e3f2fd;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
   text-align: center;
+  border: 1px dashed #ddd;
+  position: relative;
+  
 }
 
+.stepCircle.finalStep::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 70%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.stepCircle::after {
+  content: ""; background: url("/images/icon/arrow_04.png") no-repeat; width: 13px; aspect-ratio: 13/23;
+  background-size: contain; filter: invert(0.8);
+  position: absolute; right: -3rem; top: 50%; transform: translateY(-50%);
+}
+.stepCircle.finalStep::after {
+  display: none;
+}
+
+
 .stepCircle.finalStep {
-  width: 180px;
-  height: 180px;
   background: #2196f3;
-  color: #fff;
+  color: #fff; overflow: hidden;
 }
 
 .stepNumber {
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.7rem;
+  line-height: 1;
   display: block;
+  color: #31a8ff;
+  position: relative;
+  z-index: 2;
 }
 
 .stepTitle {
-  font-size: 1.4rem;
+  font-size: 2.2rem;
   font-weight: 600;
   display: block;
+  line-height: 1;
+  position: relative;
+  z-index: 2;
 }
 
-.stepCircle.finalStep .stepNumber,
+.stepCircle.finalStep .stepNumber {color: #000;}
 .stepCircle.finalStep .stepTitle {
   color: #fff;
 }
@@ -149,25 +187,25 @@
 /* 제출서류 */
 .documentsList {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 0.8rem;
-  margin-top: 2rem;
+  position: relative;
+  top: -0.3rem;
 }
 
 .documentItem {
-  font-size: 1.6rem;
-  color: #333;
-  line-height: 1.6;
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.8;
   text-align: left;
+  width: 40%;
 }
 
 /* 복리후생 */
 .benefitsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 2rem;
-  max-width: 900px;
+  gap: 2rem; width: 82%;
 }
 
 /* 5개 항목일 때: 첫 3개는 위, 나머지 2개는 아래 */
@@ -182,22 +220,20 @@
 .benefitCard {
   background: #f5f5f5;
   border-radius: 8px;
-  padding: 2rem;
+  padding: 1.7rem 3rem;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 2rem;
+  gap: 15%;
 }
 
 .benefitIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
-  background: #e8e8e8;
+  width: 38%;
+  aspect-ratio: 1/1;
   border-radius: 50%;
-  padding: 1.5rem;
   flex-shrink: 0;
 }
 
@@ -208,9 +244,8 @@
 }
 
 .benefitTitle {
-  font-size: 1.6rem;
-  font-weight: 500;
-  color: #333;
+  font-size: 2.2rem;
+  font-weight: 600;
   flex: 1;
 }
 
@@ -218,20 +253,21 @@
 .contactInfo {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 2rem;
+  gap: 2.7rem;
 }
 
 .contactItem {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 1.6rem;
-  color: #333;
+  gap: 3rem;
+}
+
+.contactItem span {
+  font-size: 1.8rem; font-weight: 600;
 }
 
 .contactIcon {
-  font-size: 2rem;
+  width: 2.6rem;
 }
 
 .placeholder {
@@ -243,88 +279,95 @@
 
 /* 채용공고 */
 .jobPostingContent {
-  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 var(--layout-side-pc-sub);
 }
 
 .introText {
-  font-size: 1.6rem;
-  color: #333;
-  margin-bottom: 3rem;
+  font-size: 4rem;
+  font-weight: 600;
   text-align: left;
+  line-height: 1.5;
+  margin-bottom: 8rem;
 }
 
 .jobPostingGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
+  row-gap: 3rem;
   margin-bottom: 4rem;
 }
 
 .jobCard {
   background: #fff;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  border: 1px solid #c1c1c1;
+  border-radius: 2rem;
+  padding: 4rem 3rem 3rem;
 }
 
 .jobCardHeader {
   display: flex;
-  gap: 0.8rem;
+  gap: 0.9rem;
   align-items: center;
+  margin-bottom: 3rem;
 }
 
 .statusLabel {
-  background: #2196f3;
+  background: linear-gradient(70deg, #153e77 0%, #1a5c9b 40%, #2181cf 100%);
   color: #fff;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 600;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  padding: 0.9rem 2rem;
+  border-radius: 5px;
+  line-height: 1;
 }
 
 .locationLabel {
-  background: #f5f5f5;
-  color: #666;
-  font-size: 1.2rem;
-  font-weight: 500;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  background: linear-gradient(#fff, #fff) padding-box,
+              linear-gradient(135deg, #143a72, #608fbd, #86b9e1) border-box;
+  color: #333;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 0.8rem 1.6rem;
+  border: 1.5px solid transparent;
+  border-radius: 5px;
+  line-height: 1;
+  position: relative;
 }
 
 .jobTitle {
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 600;
   color: #000;
   margin: 0;
   line-height: 1.4;
+  margin-bottom: 3.5rem;
+  word-break: keep-all;
 }
 
 .jobPeriod {
-  font-size: 1.4rem;
-  color: #666;
+  font-size: 1.8rem;
+  color: #a3a3a3;
+  font-weight: 600;
   margin: 0;
+  word-break: keep-all;
 }
 
 .jobCardActions {
   display: flex;
   gap: 1rem;
-  margin-top: auto;
+  margin-top: 8rem;
 }
 
 .detailButton {
   flex: 1;
-  padding: 1rem;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #333;
+  padding: 1.8rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
   background: #fff;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -335,71 +378,79 @@
 
 .applyButton {
   flex: 1;
-  padding: 1rem;
-  font-size: 1.4rem;
-  font-weight: 500;
+  padding: 1.8rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: #fff;
-  background: #333;
-  border: 1px solid #333;
-  border-radius: 4px;
+  background: #0f1926;
+  border: 1px solid #0f1926;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .applyButton:hover {
   background: #555;
+  border-color: #555;
 }
 
 /* 페이지네이션 */
 .pagination {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 4rem;
+  justify-content: center;
+  gap: 3px;
+  margin-top: 110px;
 }
 
 .paginationArrow {
-  padding: 0.8rem 1.2rem;
-  font-size: 1.6rem;
-  color: #333;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid transparent;
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  font-size: 3rem;
+  color: #161616;
   cursor: pointer;
   transition: all 0.3s;
+  border: none;
 }
 
-.paginationArrow:hover:not(:disabled) {
-  background: #f5f5f5;
-}
 
-.paginationArrow:disabled {
-  opacity: 0.5;
+.paginationArrow.disabled {
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
+.paginationArrow img {
+  height: 13px;
+}
+
 .paginationNumber {
-  padding: 0.8rem 1.2rem;
-  font-size: 1.6rem;
-  color: #333;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid transparent;
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  font-size: 2rem;
+  font-weight: 500;
+  color: #b2b2b2;
   cursor: pointer;
   transition: all 0.3s;
-  min-width: 4rem;
-  text-align: center;
+  border: none;
 }
 
 .paginationNumber:hover {
-  background: #f5f5f5;
+  color: #161616;
 }
 
 .paginationNumber.active {
-  color: #fff;
-  background: #333;
-  border-color: #333;
+  color: #161616;
+  border-bottom-color: #161616;
 }
 
 /* 반응형 */
