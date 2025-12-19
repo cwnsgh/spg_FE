@@ -12,7 +12,7 @@ export default function Vision() {
           위한
           <br />
           경영방침 및 경영목표를 바탕으로 고품격의 제품을 생산하여 고객만족을
-          만들어 갈 것 입니다.
+          만들어 갈 것입니다.
         </p>
       </section>
 
@@ -40,7 +40,6 @@ export default function Vision() {
             >
               <div className={styles.cardContent}>
                 <div className={styles.cardNumber}>01</div>
-                <div className={styles.cardUnderline}></div>
                 <h4 className={styles.cardTitle}>신제품개발, 수출확대</h4>
               </div>
             </div>
@@ -55,7 +54,6 @@ export default function Vision() {
             >
               <div className={styles.cardContent}>
                 <div className={styles.cardNumber}>02</div>
-                <div className={styles.cardUnderline}></div>
                 <h4 className={styles.cardTitle}>
                   주주, 고객, 임직원 중심의
                   <br />
@@ -74,7 +72,6 @@ export default function Vision() {
             >
               <div className={styles.cardContent}>
                 <div className={styles.cardNumber}>03</div>
-                <div className={styles.cardUnderline}></div>
                 <h4 className={styles.cardTitle}>
                   세계적인 품질 경쟁력과 <br />
                   R&D 기술력 보유

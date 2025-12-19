@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import styles from "./Recruitment.module.css";
 
 export default function Recruitment() {
   const [activeSubTab, setActiveSubTab] = useState(1); // 채용공고를 기본값으로
   const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 5; // 전체 페이지 수
 
   const subTabs = [
     { label: "모집안내", value: 0 },
@@ -25,23 +27,23 @@ export default function Recruitment() {
 
   const recruitmentSteps = [
     { step: 1, title: "1차 서류전형" },
-    { step: 2, title: "2차 실무면접" },
+    { step: 2, title: "2차 실무진 면접" },
     { step: 3, title: "3차 경영진 면접" },
-    { step: 4, title: "최종", isFinal: true },
+    { step: 4, title: "채용", isFinal: true },
   ];
 
   const requiredDocuments = [
-    "사내 소정 양식 입사지원서",
+    "당사 소정 양식의 입사지원서",
+    "자격증사본(소지자에 한함)",
     "최종학력 졸업증명서",
+    "공인 어학성적표(소지자에 한함)",
     "최종학력 성적증명서",
-    "경력증명서(소재자에 한함)",
-    "취업보호대상자 증명서(소재자에 한함)",
-    "우대등록증 등",
+    "주민등록등본 1통",
   ];
 
   const benefits = [
     { icon: "/images/aboutus/icon_1.png", title: "주5일 근무" },
-    { icon: "/images/aboutus/icon_2.png", title: "학자금 지원" },
+    { icon: "/images/aboutus/icon_2.png", title: "자녀 학자금 지원" },
     { icon: "/images/aboutus/icon_4.png", title: "4대보험 실시" },
     { icon: "/images/aboutus/icon_3.png", title: "장기근속" },
     { icon: "/images/aboutus/icon_5.png", title: "휴양시설 운영" },
@@ -70,38 +72,31 @@ export default function Recruitment() {
       {activeSubTab === 0 && (
         <div className={styles.content}>
           {/* 인사제도 방향 */}
+          <h3 className={styles.sectionTitle}>모집안내</h3>
           <section className={styles.section}>
-            <h3 className={styles.sectionTitle}>모집안내</h3>
-            <h4 className={styles.subSectionTitle}>- 인사제도 방향</h4>
-            <p className={styles.description}>
-              SPG는 인재를 최고의 자산으로 생각하며, 역량 있는 인재에게는 성장과
-              승진, 교육의 기회를 제공합니다. 개인의 능력과 성과에 따라 공정하게
-              평가하고 보상하며, 함께 성장하는 기업 문화를 만들어 나가고
-              있습니다.
-            </p>
+            <h4 className={styles.subSectionTitle}>• 인사제도 방향</h4>
+            <p className={styles.description}>임직원 개인의 능력에 따라 승급, 승격, 교육의 기회를 공평하게 가질 수 있는 인사제도 채택으로 공정한 인사를 실시하고 있습니다.</p>
           </section>
 
           {/* 채용절차 */}
           <section className={styles.section}>
-            <h4 className={styles.subSectionTitle}>- 채용절차</h4>
-            <p className={styles.description}>
-              SPG의 채용 절차는 공정하고 투명하게 진행되며, 각 단계별로 체계적인
-              평가를 통해 최적의 인재를 선발합니다.
-            </p>
-            <div className={styles.recruitmentProcess}>
-              {recruitmentSteps.map((item, index) => (
-                <div key={index} className={styles.processStep}>
-                  {index > 0 && <div className={styles.arrow}>→</div>}
-                  <div
-                    className={`${styles.stepCircle} ${
-                      item.isFinal ? styles.finalStep : ""
-                    }`}
-                  >
-                    <span className={styles.stepNumber}>STEP {item.step}</span>
-                    <span className={styles.stepTitle}>{item.title}</span>
+            <h4 className={styles.subSectionTitle}>• 채용절차</h4>
+            <div className={styles.description}>
+              <p>당사의 채용 절차를 안내드립니다. 아래 전형 과정을 통해 지원자 여러분을 만나게 됩니다.</p>
+              <div className={styles.recruitmentProcess}>
+                {recruitmentSteps.map((item, index) => (
+                  <div key={index} className={styles.processStep}>
+                    <div
+                      className={`${styles.stepCircle} ${
+                        item.isFinal ? styles.finalStep : ""
+                      }`}
+                    >
+                      <span className={styles.stepNumber}>STEP {item.step}</span>
+                      <span className={styles.stepTitle}>{item.title}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </section>
 
@@ -134,7 +129,7 @@ export default function Recruitment() {
 
           {/* 접수 및 문의처 */}
           <section className={styles.section}>
-            <h4 className={styles.subSectionTitle}>- 접수 및 문의처</h4>
+            <h4 className={styles.subSectionTitle}>• 접수 및 문의처</h4>
             <div className={styles.contactInfo}>
               <div className={styles.contactItem}>
                 <img
@@ -143,8 +138,7 @@ export default function Recruitment() {
                   className={styles.contactIcon}
                 />
                 <span>
-                  인천광역시 남동구 남동서로 208번길 45 (고잔동, 남동공단 8블럭
-                  12L), 199번지 21B2L
+                  인천광역시 남동구 청능대로 289번길 45 (고잔동, 남동공단 67B 12L), (우편번호 21633)
                 </span>
               </div>
               <div className={styles.contactItem}>
@@ -153,7 +147,7 @@ export default function Recruitment() {
                   alt="이메일"
                   className={styles.contactIcon}
                 />
-                <span>hanwh@spg.co.kr</span>
+                <span>hansh@spg.co.kr</span>
               </div>
             </div>
           </section>
@@ -169,7 +163,7 @@ export default function Recruitment() {
       {activeSubTab === 1 && (
         <div className={styles.jobPostingContent}>
           <p className={styles.introText}>
-            (주)에스피지를 이끌어 갈 인재를 모집합니다. 여러분의 지원을 기다리고
+            (주)에스피지를 이끌어 갈 인재를 모집합니다.<br/>여러분의 지원을 기다리고
             있습니다.
           </p>
 
@@ -193,11 +187,22 @@ export default function Recruitment() {
           {/* 페이지네이션 */}
           <div className={styles.pagination}>
             <button
-              className={styles.paginationArrow}
+              className={`${styles.paginationArrow} ${
+                currentPage === 1 ? styles.disabled : ""
+              }`}
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+            >
+              <Image src="/images/icon/first_ico.png" alt="맨 앞으로" width={13} height={13} />
+            </button>
+            <button
+              className={`${styles.paginationArrow} ${
+                currentPage === 1 ? styles.disabled : ""
+              }`}
               onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
             >
-              &lt;
+              <Image src="/images/icon/prev_ico.png" alt="앞으로" width={13} height={13} />
             </button>
             {[1, 2, 3, 4, 5].map((page) => (
               <button
@@ -211,11 +216,22 @@ export default function Recruitment() {
               </button>
             ))}
             <button
-              className={styles.paginationArrow}
-              onClick={() => setCurrentPage((prev) => Math.min(5, prev + 1))}
-              disabled={currentPage === 5}
+              className={`${styles.paginationArrow} ${
+                currentPage === totalPages ? styles.disabled : ""
+              }`}
+              onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+              disabled={currentPage === totalPages}
             >
-              &gt;
+              <Image src="/images/icon/next_ico.png" alt="뒤로" width={13} height={13} />
+            </button>
+            <button
+              className={`${styles.paginationArrow} ${
+                currentPage === totalPages ? styles.disabled : ""
+              }`}
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages}
+            >
+              <Image src="/images/icon/last_ico.png" alt="맨 뒤로" width={13} height={13} />
             </button>
           </div>
         </div>
