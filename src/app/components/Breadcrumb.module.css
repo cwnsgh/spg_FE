@@ -1,7 +1,6 @@
 .breadcrumb {
   margin-bottom: 0;
-  padding-top: 100px;
-  padding-right: 180px;
+  padding: 100px var(--layout-side-pc-sub) 0;
 }
 
 .breadcrumb ol {

@@ -26,6 +26,7 @@
   transform: translateY(-2px);
 }
 
+
 .productImageWrap {
   width: 100%;
 }
@@ -69,6 +70,8 @@
   flex-shrink: 0;
   align-self: center;
   position: relative;
+  background: transparent;
+  transition: all 0.3s;
 }
 
 .productLinkBtn::after {
@@ -78,7 +81,16 @@
   aspect-ratio: 75 / 48;
   background-size: cover;
   opacity: 0.3;
+  transition: all 0.3s;
 }
+
+.productItem:hover .productLinkBtn {
+  background: #ccc;
+}
+.productItem:hover .productLinkBtn::after {
+  opacity: 1; filter: invert(1);
+}
+
 
 /* 페이지네이션 */
 .pagination {

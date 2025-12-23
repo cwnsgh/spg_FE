@@ -5,9 +5,8 @@
 
 /* 섹션 타이틀 */
 .section_title {
-  font-size: 56px;
-  font-weight: 700;
-  color: #1f2937;
+  font-size: 4.8rem;
+  font-weight: 600;
   margin: 70px 0 80px 0;
   text-align: center;
 }
