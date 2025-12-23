@@ -224,19 +224,19 @@ export default function Disclosure() {
 
       {isAdmin && (
         <div className={`${styles.adminActions} ${styles.show}`}>
-          <button className={styles.adminBtn} id="adminPageBtn">
+          <button className={`${styles.adminBtn} ${styles.adminBtnAdminPage}`} id="adminPageBtn">
             관리자 <Image src="/images/icon/arrow_01.png" alt="" width={14} height={14} />
           </button>
-          <button className={styles.adminBtn} id="selectDelete">
+          <button className={`${styles.adminBtn} ${styles.adminBtnDelete}`} id="selectDelete">
             선택삭제
           </button>
-          <button className={styles.adminBtn} id="selectCopy">
+          <button className={`${styles.adminBtn} ${styles.adminBtnCopy}`} id="selectCopy">
             선택복사
           </button>
-          <button className={styles.adminBtn} id="selectMove">
+          <button className={`${styles.adminBtn} ${styles.adminBtnMove}`} id="selectMove">
             선택이동
           </button>
-          <button className={styles.adminBtn} id="writeBtn">
+          <button className={`${styles.adminBtn} ${styles.adminBtnWrite}`} id="writeBtn">
             글쓰기
           </button>
         </div>

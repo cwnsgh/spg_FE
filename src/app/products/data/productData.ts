@@ -22,16 +22,16 @@ export const productData: Record<string, Product[]> = {
       image: "/images/products/prd_01.png",
       detailUrl: "/products/product-1",
       description:
-        "Component Cup Type은 컴팩트한 구조 고토크 고강성, 제로백래쉬를 구현한 고정밀 감속기입니다. 정밀 위치 제어와 부드러운 회전이 요구되는 로봇 및 자동화 장비에 최적화된 솔루션입니다.",
+        "Component Cup Type은 컴팩트한 구조에 고토크, 고강성, 제로 백래쉬를 구현한 고정밀 감속기입니다. 정밀 위치 제어와 부드러운 회전이 요구되는 로봇 및 자동화 장비에 최적화 된 솔루션입니다.",
       features: [
         { korean: "컴팩트 심플한 디자인", english: "Compact and simple design" },
-        { korean: "고토크용량", english: "High torque capacity" },
-        { korean: "고강성", english: "High stiffness" },
         { korean: "제로백래쉬", english: "Non-backlash" },
+        { korean: "고토크용량", english: "High torque capacity" },
         {
           korean: "우수한 위치결정정도와 최견정도",
-          english: "High positioning and rotation accuracies",
+          english: "High positioning and rotational accuracies",
         },
+        { korean: "고강성", english: "High stiffness" },
         { korean: "입출력측이 동축", english: "Coaxial input and output" },
       ],
       catalogPdfUrl: "#",
