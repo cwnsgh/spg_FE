@@ -1,6 +1,6 @@
 .majorClients {
   width: 100%;
-  padding: 100px var(--layout-side-pc-sub) 180px;
+  padding: 100px var(--layout-side-pc-sub) 0;
 }
 
 .majorClients > section {
@@ -30,6 +30,11 @@
   overflow: hidden;
 }
 
+.majorClients > section ul li img {transition: all 0.4s;}
+.majorClients > section ul li:hover img {
+  transform: scale(1.05);
+}
+
 .majorClients > section ul li img,
 .clientImage {
   width: 100%;
@@ -38,7 +43,7 @@
 }
 
 .domesticClients {
-  margin-bottom: 120px;
+  margin-bottom: 12rem !important;
 }
 
 .overseasClients {

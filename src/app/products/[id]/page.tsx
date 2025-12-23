@@ -55,7 +55,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
           {/* 제품 정보 */}
           <div className={styles.productContent}>
             <h1 className={styles.productTitle}>
-              {product.nameEn}
+              <span className={styles.productTitleEnglish}>{product.nameEn}</span>
               <span className={styles.productTitleKorean}>{product.name}</span>
             </h1>
 
@@ -66,7 +66,6 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             {product.features && product.features.length > 0 && (
               <div className={styles.features}>
                 <div className={styles.featuresTitle}>특징</div>
-                <div className={styles.featuresDivider}></div>
                 <ul className={styles.featuresList}>
                   {product.features.map((feature, index) => (
                     <li key={index} className={styles.featureItem}>
@@ -79,7 +78,6 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                     </li>
                   ))}
                 </ul>
-                <div className={styles.featuresDivider}></div>
               </div>
             )}
 
@@ -91,13 +89,13 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                   className={`${styles.downloadButton} ${styles.catalogButton}`}
                   download
                 >
+                  도면 PDF 다운로드
                   <Image
-                    src="/images/icon/download_ico.png"
+                    src="/images/icon/download_ico_b.png"
                     alt="다운로드"
                     width={20}
                     height={20}
                   />
-                  도면 PDF 다운로드
                 </a>
               )}
               {product.technicalPdfUrl && (
@@ -106,13 +104,13 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                   className={`${styles.downloadButton} ${styles.technicalButton}`}
                   download
                 >
+                  기술자료 PDF 다운로드
                   <Image
                     src="/images/icon/download_ico.png"
                     alt="다운로드"
                     width={20}
                     height={20}
                   />
-                  기술자료 PDF 다운로드
                 </a>
               )}
             </div>

@@ -5,9 +5,8 @@
 
 /* 섹션 타이틀 */
 .section_title {
-  font-size: 56px;
-  font-weight: 700;
-  color: #1f2937;
+  font-size: 4.8rem;
+  font-weight: 600;
   margin: 70px 0 80px 0;
   text-align: center;
 }
@@ -234,19 +233,24 @@
   gap: 7px;
 }
 
-.adminBtn#adminPageBtn {
+.adminBtnAdminPage {
   background: #222;
   color: #fff;
   border-color: #222;
   padding-right: 16px;
 }
 
-.adminBtn#adminPageBtn:hover {
-  background: #555;
-  border-color: #555;
+.adminBtnAdminPage:hover {
+  background: #555 !important;
+  border-color: #555 !important;
 }
 
-.adminBtn#writeBtn {
+.adminBtnAdminPage img {
+  transform: rotate(-45deg);
+  filter: invert(1);
+}
+
+.adminBtnWrite {
   background: #0094ff;
   color: #fff;
   border-color: #0094ff;
@@ -254,12 +258,12 @@
   padding-right: 36px;
 }
 
-.adminBtn#writeBtn:hover {
-  background: #2271a9;
-  border-color: #2271a9;
+.adminBtnWrite:hover {
+  background: #2271a9 !important;
+  border-color: #2271a9 !important;
 }
 
-.adminBtn#writeBtn::after {
+.adminBtnWrite::after {
   content: "+";
   font-size: 2.2rem;
   font-weight: 400;
@@ -270,20 +274,15 @@
   transform: translateY(-50%);
 }
 
-.adminBtn#adminPageBtn img {
-  transform: rotate(-45deg);
-  filter: invert(1);
-}
-
 .adminBtn:hover {
   background: #f9f9f9;
   border-color: #ccc;
   color: #161616;
 }
 
-.adminBtn#adminPageBtn:hover,
-.adminBtn#writeBtn:hover {
-  color: #fff;
+.adminBtnWrite:hover,
+.adminBtnAdminPage:hover {
+  color: #fff !important;
 }
 
 /* 페이지네이션 */

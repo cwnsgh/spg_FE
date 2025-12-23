@@ -1,5 +1,5 @@
 .main {
-  padding: 100px 0 180px;
+  padding: 100px 0 0;
   background-color: #fff;
 }
 
@@ -14,71 +14,79 @@
 
 .productInfo {
   display: flex;
-  gap: 4.5%;
-  margin-bottom: 50px;
+  margin-bottom: 18rem;
 }
 
 /* 제품 이미지 */
 .productImage {
-  flex: 0 0 45%;
+  flex: 1;
   position: relative;
+  overflow: hidden;
 }
 
 .productImage .image {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: contain;
+  object-position: center;
 }
 
 /* 제품 정보 */
 .productContent {
   flex: 1;
+  padding-left: 4%;
 }
 
 .productTitle {
-  font-size: 2.4rem;
-  font-weight: 400;
-  color: #999;
-  margin-bottom: 1rem;
-  line-height: 1.4;
+  margin-bottom: 3rem;
 }
 
 .productTitleKorean {
   display: block;
-  font-size: 5rem;
+  font-size: 4.8rem;
   font-weight: 700;
   color: #000;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+}
+.productTitleEnglish {
+  font-size: 3rem;
+  font-weight: 500;
+  color: #a3a3a3;
+  line-height: 1.4;
+  font-family: 'Outfit', sans-serif;
 }
 
 .productDescription {
-  font-size: 1.6rem;
-  line-height: 1.8;
+  font-size: 2rem;
+  line-height: 1.6;
+  font-weight: 400;
   color: #000;
-  margin-bottom: 3rem;
+  padding-bottom: 3.5rem;
+  margin-bottom: 4rem;
+  border-bottom: 2px solid #e5e5e5;
+  word-break: keep-all;
+  padding-right: 5%;
 }
 
 /* 특징 영역 */
 .features {
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
+  padding-bottom: 3.5rem;
+  border-bottom: 2px solid #e5e5e5;
 }
 
 .featuresTitle {
   display: inline-block;
-  padding: 0.5rem 1.5rem;
+  padding: 0.7rem 2rem;
+  line-height: 1;
   background: #0a2b6a;
   color: #fff;
   font-size: 1.4rem;
   font-weight: 600;
-  border-radius: 5px;
+  border-radius: 0.6rem;
   margin-bottom: 2rem;
 }
 
-.featuresDivider {
-  height: 1px;
-  background: #e5e5e5;
-  margin: 2rem 0;
-}
 
 .featuresList {
   display: grid;
@@ -93,54 +101,71 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  padding-left: 1.2rem;
 }
 
 .featureKorean {
-  font-size: 1.6rem;
-  font-weight: 500;
+  font-size: 2rem;
+  font-weight: 400;
   color: #000;
+  position: relative;
+}
+.featureKorean::after {
+  content: ''; width: 0.4rem; height: 0.4rem;
+  background: #000; border-radius: 50%; display: block;
+  position: absolute; left: -1.2rem; top: 50%; transform: translateY(-50%);
 }
 
 .featureEnglish {
-  font-size: 1.3rem;
-  color: #999;
+  font-size: 1.6rem;
+  color: #a3a3a3;
+  font-family: 'Outfit', sans-serif;
+  margin-top: 0.1rem;
+  font-weight: 300;
 }
 
 /* 다운로드 버튼 */
 .downloadButtons {
   display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+  gap: 3%;
 }
 
 .downloadButton {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  padding: 1.2rem 2rem;
-  border-radius: 5px;
-  font-size: 1.5rem;
+  justify-content: space-between;
+  padding: 1.85rem 5%;
+  line-height: 1;
+  border-radius: 1rem;
+  font-size: 1.8rem;
   font-weight: 500;
   text-decoration: none;
   transition: all 0.3s;
+  flex: 1;
+}
+
+.downloadButton img {
+  width: auto; height: 2.1rem;
+  max-width: unset; filter: brightness(0.5);
 }
 
 /* 도면 PDF 다운로드 버튼 (연한 파란색 배경) */
 .catalogButton {
-  background: #e8eaf0;
+  background: #e9eef3;
   border: none;
-  color: #4a5568;
+  color: #122e64;
 }
 
 .catalogButton:hover {
-  background: #d1d5e0;
+  background: #dee5ec;
 }
 
 /* 기술자료 PDF 다운로드 버튼 (흰색 배경, 테두리) */
 .technicalButton {
   background: #fff;
-  border: 1px solid #e5e5e5;
-  color: #666;
+  border: 2px solid #a3a3a3;
+  color: #171717;
+  font-weight: 500;
 }
 
 .technicalButton:hover {
@@ -153,14 +178,15 @@
   margin-bottom: 50px;
   padding: 3rem;
   background: #f7f7f7;
-  border-radius: 20px;
-  min-height: 300px;
+  min-height: 100rem;
+  display: flex; align-items: center; justify-content: center;
 }
 
 .content {
-  font-size: 1.6rem;
+  font-size: 3.5rem;
   line-height: 1.8;
-  color: #333;
+  font-weight: 500;
+  color: #171717;
   text-align: center;
 }
 
@@ -168,15 +194,16 @@
 .listButtonArea {
   display: flex;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 12rem;
 }
 
 .listButton {
-  padding: 1.2rem 4rem;
-  background: #333;
+  padding: 2.1rem 8.5rem;
+  line-height: 1;
+  background: #1e1d1a;
   color: #fff;
-  border-radius: 10px;
-  font-size: 1.6rem;
+  border-radius: 10rem;
+  font-size: 1.8rem;
   font-weight: 500;
   text-decoration: none;
   transition: background 0.3s;

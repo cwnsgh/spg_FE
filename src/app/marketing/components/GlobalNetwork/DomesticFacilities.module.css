@@ -19,15 +19,26 @@
   font-weight: 600;
   color: #171717;
   cursor: pointer;
-  border-bottom: 1px solid #171717;
   transition: all 0.3s;
   line-height: 1;
   opacity: 0.3;
+  position: relative;
+}
+
+.tabItem:hover {
+  opacity: 0.7;
+}
+
+.tabItem::after {
+  content: ""; width: 100%; position: absolute; bottom: 0; left: 0;
+  height: 1px; background: #171717;
 }
 
 .tabItem.active {
   opacity: 1;
-  border-bottom: 2px solid #171717;
+}
+.tabItem.active::after {
+  height: 2px;
 }
 
 .regionTabs {
@@ -165,6 +176,11 @@
   right: 0;
   top: 35px;
   line-height: 1;
+}
+
+.facilityMapBtn:hover {
+  background: #888; color: #fff;
+  border-color: #888;
 }
 
 .facilityItem:first-child .facilityMapBtn {

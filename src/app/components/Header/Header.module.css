@@ -43,6 +43,28 @@
   border-radius: 50px;
 }
 
+
+.adminBtns {
+  display: flex; align-items: center; gap: 3rem;
+  margin-right: 2rem; line-height: 1; display: none;
+}
+.adminBtns > * {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; font-weight: 500;
+  color: #fff;
+}
+.adminBtns .adminBtn {
+  
+}
+.adminBtns > * img {
+  width: 2.4rem;
+  height: 2.4rem;
+  filter: invert(1);
+}
+
+.adminBtns .uploadBtn {}
+
 .searchBox {
   /* search-box 스타일 */
 }
@@ -144,7 +166,6 @@
   visibility: hidden !important;
 }
 
-.menuOpen .askPrd {
-  opacity: 0;
-  visibility: hidden;
+.menuOpen .adminBtns {
+  display: flex;
 }

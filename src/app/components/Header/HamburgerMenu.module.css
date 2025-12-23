@@ -111,10 +111,14 @@
 }
 
 .smallCate li a {
-  color: #666666;
+  color: #888;
   font-size: 1.7rem;
   font-weight: 600;
   line-height: 1;
   padding: 7px 0;
   display: block;
+  transition: all 0.2;
+}
+.smallCate li:hover a {
+  color: #bbb;
 }

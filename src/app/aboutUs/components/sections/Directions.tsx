@@ -6,7 +6,7 @@ export default function Directions() {
   const locations = [
     {
       name: "본사",
-      address: "인천광역시 남동구 청능대로289번길 45 (고잔동,남동공단 678 12L) 21633",
+      address: "인천광역시 남동구 청능대로289번길 45<br/>(고잔동,남동공단 678 12L) 21633",
       phone: "032-820-8200",
       fax: "032-812-4806",
       mapUrl: `https://www.google.com/maps?q=${encodeURIComponent("인천광역시 남동구 청능대로289번길 45")}&output=embed`,
@@ -30,17 +30,22 @@ export default function Directions() {
         <div key={index} className={styles.locationSection}>
           <div className={styles.infoColumn}>
             <h3 className={styles.locationName}>{location.name}</h3>
-            <div className={styles.infoItem}>
-              <span className={styles.infoLabel}>주소</span>
-              <span className={styles.infoValue}>{location.address}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <span className={styles.infoLabel}>전화번호</span>
-              <span className={styles.infoValue}>{location.phone}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <span className={styles.infoLabel}>팩스</span>
-              <span className={styles.infoValue}>{location.fax}</span>
+            <div className={styles.infoItems}>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>주소</span>
+                <span 
+                  className={styles.infoValue}
+                  dangerouslySetInnerHTML={{ __html: location.address }}
+                />
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>전화번호</span>
+                <span className={styles.infoValue}>{location.phone}</span>
+              </div>
+              <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>팩스</span>
+                <span className={styles.infoValue}>{location.fax}</span>
+              </div>
             </div>
           </div>
           <div className={styles.mapColumn}>

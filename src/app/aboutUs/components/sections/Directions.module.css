@@ -5,38 +5,47 @@
 .title {
   font-size: 4.8rem;
   font-weight: 600;
-  margin: 70px 0 80px 0;
+  margin: 70px 0 110px 0;
   text-align: center;
 }
 
 .locationSection {
   display: flex;
-  gap: 4rem;
-  margin-bottom: 6rem;
-  align-items: flex-start;
+  margin-bottom: 14rem;
+  align-items: stretch;
   padding: 0 var(--layout-side-pc-sub);
+}
+.locationSection:last-child {
+  margin-bottom: 0;
 }
 
 .infoColumn {
-  flex: 0.5;
+  width: 32%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding-right: 4.5%;
   gap: 3rem;
 }
 
 .locationName {
-  font-size: 2.4rem;
-  font-weight: 700;
+  font-size: 4rem;
+  font-weight: 600;
   color: #000;
   margin: 0;
-  margin-bottom: 2rem;
+}
+
+.infoItems {
+  display: flex;
+  flex-flow: column;
+  gap: 3rem;
 }
 
 .infoItem {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
-  padding-bottom: 2.5rem;
+  gap: 1rem;
+  padding-bottom: 2rem;
   border-bottom: 1px solid #e5e5e5;
 }
 
@@ -44,7 +53,6 @@
   font-size: 1.8rem;
   font-weight: 700;
   color: #161616;
-  margin-bottom: 1.5rem;
 }
 
 .infoValue {
@@ -54,9 +62,9 @@
 }
 
 .mapColumn {
-  flex: 1;
-  height: 500px;
-  border-radius: 8px;
+  width: 68%;
+  aspect-ratio: 210 / 101;
+  border-radius: 2rem;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
