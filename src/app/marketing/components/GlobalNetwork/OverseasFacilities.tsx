@@ -293,6 +293,16 @@ export default function OverseasFacilities() {
               }}
             >
               <div className={styles.popupContent}>
+                <button
+                  className={styles.popupCloseBtn}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedFacility(null);
+                  }}
+                  aria-label="팝업 닫기"
+                >
+                  ×
+                </button>
                 <h3 className={styles.popupCompanyName}>{facility.name}</h3>
                 <div className={styles.popupAddressWrapper}>
                   <p className={styles.popupAddress}>{facility.address}</p>
