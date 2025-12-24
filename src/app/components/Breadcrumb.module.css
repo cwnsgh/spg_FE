@@ -1,6 +1,6 @@
 .breadcrumb {
   margin-bottom: 0;
-  padding: 100px var(--layout-side-pc-sub) 0;
+  padding: 10rem var(--layout-side-pc-sub) 0;
 }
 
 .breadcrumb ol {
@@ -57,4 +57,20 @@
 .current {
   color: #161616;
   font-weight: 600;
+}
+
+@media (max-width: 1050px) {
+  .breadcrumb {
+    width: 100%;
+    padding: 2rem var(--layout-side-mo) 5rem;
+  }
+  .breadcrumb ol {
+    gap: 2rem;
+  }
+  .breadcrumb ol li * {
+    font-size: 1.5rem;
+  }
+  .breadcrumb ol li::after {
+    right: -1.2rem;
+  }
 }

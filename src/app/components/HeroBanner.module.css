@@ -35,7 +35,7 @@
   font-weight: 600;
   color: #000000;
   position: relative;
-  margin-bottom: 15px;
+  margin-bottom: 1.5rem;
 }
 
 /* 하단 영역: 배경 이미지 (550px 높이) */
@@ -103,7 +103,7 @@
   background: transparent;
   border: none;
   color: #a3a3a3;
-  font-size: 18px;
+  font-size: 1.8rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -127,11 +127,11 @@
 .tab.active::before {
   content: "";
   position: absolute;
-  right: -8px;
+  right: -0.8rem;
   top: 0px;
   transform: translateY(-50%);
-  width: 5px;
-  height: 5px;
+  width: 0.5rem;
+  height: 0.5rem;
   background-color: #1f0779;
   border-radius: 0;
 }
@@ -142,15 +142,17 @@
   font-size: 0.875rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1050px) {
   .title {
-    font-size: 2rem;
+    font-size: 4.5rem;
+    font-weight: 600;
   }
 
   .heroContent {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    padding-top: 5rem;
   }
 
   .categoryLinks {
@@ -163,15 +165,39 @@
   }
 
   .tabs {
-    width: 100%;
-    max-width: 100%;
+    width: max-content;
+    max-width: unset;
+    gap: 3rem;
+    margin-bottom: 1.5rem;
   }
-
+  
+  .tab {
+    padding: 1.5rem 0;
+    font-size: 2rem;
+  }
+  .tab.active {font-weight: 700;}
   .tabs.largeTabs {
     flex-direction: column;
+  }
+  .tab.active::before {
+    top: 1.2rem;
   }
 
   .tabs.largeTabs .tab {
     width: 100%;
+  }
+
+  .heroImage {
+    aspect-ratio: 5 / 3;
+  }
+  .heroContentInner {
+    padding: 0 var(--layout-side-mo);
+    row-gap: 1rem;
+  }
+  .tabsWrap {
+    overflow-x: auto;
+  }
+  .tabsWrap::-webkit-scrollbar {
+    display: none;
   }
 }

@@ -5,7 +5,7 @@
 .mainTitle {
   font-size: 4.8rem;
   font-weight: 600;
-  margin: 70px 0 80px 0;
+  margin: 7rem 0 8rem 0;
   text-align: center;
   line-height: 1;
 }
@@ -145,7 +145,7 @@
 }
 
 .stepCircle::after {
-  content: ""; background: url("/images/icon/arrow_04.png") no-repeat; width: 13px; aspect-ratio: 13/23;
+  content: ""; background: url("/images/icon/arrow_04.png") no-repeat; width: 1.3rem; aspect-ratio: 13/23;
   background-size: contain; filter: invert(0.8);
   position: absolute; right: -3rem; top: 50%; transform: translateY(-50%);
 }
@@ -404,8 +404,8 @@
 }
 
 .paginationArrow {
-  width: 40px;
-  height: 40px;
+  width: 4rem;
+  height: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -425,12 +425,13 @@
 }
 
 .paginationArrow img {
-  height: 13px;
+  height: 1.3rem;
+  width: 1.3rem;
 }
 
 .paginationNumber {
-  width: 40px;
-  height: 40px;
+  width: 4rem;
+  height: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -454,68 +455,163 @@
 }
 
 /* 반응형 */
-@media (max-width: 768px) {
+@media (max-width: 1050px) {
+  .jobPostingContent {
+    padding: 0 var(--layout-side-mo);
+  }
+  .introText {
+    font-size: 2.2rem;
+    word-break: keep-all;
+    width: 90%;
+    margin-bottom: 4rem;
+    line-height: 1.7;
+  }
+  
   .mainTitle {
-    font-size: 3rem;
-    margin-bottom: 2rem;
+    font-size: 4rem;
+    margin: 2rem 0 4rem;
   }
 
   .subTabs {
     flex-wrap: wrap;
     gap: 1rem;
-    margin-bottom: 3rem;
+    padding: 0 var(--layout-side-mo);
+    gap: 1rem;
+    margin: 0 auto 5rem;
   }
 
   .subTab {
-    padding: 1.5rem 2rem;
-    font-size: 1.6rem;
+    width: calc(50% - 0.5rem);
+    padding: 1.9rem 1rem;
+    font-size: 1.7rem;
   }
 
   .recruitmentProcess {
-    flex-direction: column;
-    gap: 1.5rem;
+    gap: 4rem; flex-flow: wrap;
+    padding-right: 0;
+    justify-content: center;
+    margin-top: 4rem;
   }
-
+  .recruitmentProcess > div {
+    width: 38%;
+    flex: unset; margin-left: 0 !important;
+  }
+  .recruitmentProcess > div:last-child {
+    width: 40%;
+  }
+  .stepNumber {
+    font-size: 1.6rem; margin-bottom: 1rem;
+  }
+  .stepTitle {
+    font-size: 1.8rem;
+  }
   .arrow {
     transform: rotate(90deg);
   }
 
   .documentsList {
-    grid-template-columns: 1fr;
+    flex-flow: column;
+  }
+  .documentItem {
+    width: 100%;
   }
 
   .benefitsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-flow: wrap;
     gap: 1.5rem;
+    width: 100%;
   }
-
+  .benefitCard {
+    width: calc(50% - 0.75rem);
+    display: block;
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+  .benefitTitle {
+    font-size: 2rem;
+  }
+  .benefitIcon {
+    width: 80%;
+    margin: 0 auto 2rem;
+  }
   .jobPostingGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
   .jobCard {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
+    border-radius: 2rem;
   }
-
+  
   .jobTitle {
-    font-size: 1.6rem;
+    margin-bottom: 2rem;
+    font-size: 1.9rem;
   }
-
+  .jobPeriod {
+    line-height: 1.3;
+    font-size: 1.4rem;
+  }
+  .jobCardActions {
+    flex-flow: column; margin-top: 3.5rem;
+    gap: 0.5rem;
+  }
+  .jobCardActions * {
+    font-size: 1.6rem;
+    padding: 1.5rem 0;
+  }
   .pagination {
     flex-wrap: wrap;
     gap: 0.3rem;
+    margin-top: 8rem;
   }
+  .paginationArrow {
+    width: 3rem;
+    height: 3rem;
+  }
+  .paginationNumber.active {font-weight: 700;}
 
   .paginationNumber {
     padding: 0.6rem 1rem;
     font-size: 1.4rem;
     min-width: 3.5rem;
   }
-}
+  .jobCardHeader {
+    margin-bottom: 2.5rem;
+    gap: 0.6rem;
+  }
+  .statusLabel {
+    padding: 0.8rem 1rem 0.7rem;
+    font-size: 1.3rem;
+  }
+  .locationLabel {
+    padding: 0.7rem 0.8rem 0.6rem;
+    font-size: 1.3rem;
+  }
 
-@media (max-width: 480px) {
-  .jobPostingGrid {
-    grid-template-columns: 1fr;
+  .content {
+    padding: 0 var(--layout-side-mo);
+  }
+  .section {
+    padding: 6rem 0 !important;
+    flex-flow: column;
+  }
+  .subSectionTitle {
+    font-size: 2.5rem; width: 100%;
+    margin-bottom: 3rem;
+  }
+  .description p,
+  .description {
+    width: 100%; word-break: keep-all;
+  }
+
+  .stepCircle::after {
+    display: none;
+  }
+  .contactItem span {
+    word-break: keep-all;
+    line-height: 1.4;
   }
 }
+
