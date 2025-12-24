@@ -145,38 +145,40 @@ export default function InquirySection() {
     <section className={styles.productInquiry}>
       <h2 className={styles.section_title}>제품문의</h2>
       {/* 카테고리 탭 */}
-      <div className={styles.categoryTabs}>
-        <div
-          className={`${styles.categoryTab} ${
-            activeCategory === "all" ? styles.active : ""
-          }`}
-          onClick={() => setActiveCategory("all")}
-        >
-          전체
-        </div>
-        <div
-          className={`${styles.categoryTab} ${
-            activeCategory === "sales" ? styles.active : ""
-          }`}
-          onClick={() => setActiveCategory("sales")}
-        >
-          영업지원
-        </div>
-        <div
-          className={`${styles.categoryTab} ${
-            activeCategory === "technical" ? styles.active : ""
-          }`}
-          onClick={() => setActiveCategory("technical")}
-        >
-          기술지원
-        </div>
-        <div
-          className={`${styles.categoryTab} ${
-            activeCategory === "quality" ? styles.active : ""
-          }`}
-          onClick={() => setActiveCategory("quality")}
-        >
-          품질 및 AS
+      <div className={styles.categoryWrap}>
+        <div className={styles.categoryTabs}>
+          <div
+            className={`${styles.categoryTab} ${
+              activeCategory === "all" ? styles.active : ""
+            }`}
+            onClick={() => setActiveCategory("all")}
+          >
+            전체
+          </div>
+          <div
+            className={`${styles.categoryTab} ${
+              activeCategory === "sales" ? styles.active : ""
+            }`}
+            onClick={() => setActiveCategory("sales")}
+          >
+            영업지원
+          </div>
+          <div
+            className={`${styles.categoryTab} ${
+              activeCategory === "technical" ? styles.active : ""
+            }`}
+            onClick={() => setActiveCategory("technical")}
+          >
+            기술지원
+          </div>
+          <div
+            className={`${styles.categoryTab} ${
+              activeCategory === "quality" ? styles.active : ""
+            }`}
+            onClick={() => setActiveCategory("quality")}
+          >
+            품질 및 AS
+          </div>
         </div>
       </div>
 
@@ -230,16 +232,16 @@ export default function InquirySection() {
         ) : (
           paginatedData.map((item) => (
             <div key={item.wr_id} className={styles.boardItem}>
-              <div className={styles.boardCell}>{item.wr_id}</div>
-              <div className={`${styles.boardCell} ${styles.category}`}>
+              <div className={`${styles.boardCell} ${styles.cellNumber}`}>{item.wr_id}</div>
+              <div className={`${styles.boardCell} ${styles.category} ${styles.cellCategory}`}>
                 {item.ca_name}
               </div>
-              <div className={`${styles.boardCell} ${styles.title}`}>
+              <div className={`${styles.boardCell} ${styles.title} ${styles.cellTitle}`}>
                 <span>{item.wr_subject}</span>
               </div>
-              <div className={styles.boardCell}>{item.mb_name}</div>
-              <div className={styles.boardCell}>{item.wr_datetime}</div>
-              <div className={styles.boardCell}>
+              <div className={`${styles.boardCell} ${styles.cellAuthor}`}>{item.mb_name}</div>
+              <div className={`${styles.boardCell} ${styles.cellDate}`}>{item.wr_datetime}</div>
+              <div className={`${styles.boardCell} ${styles.cellStatus}`}>
                 <span
                   className={`${styles.statusBtn} ${
                     item.wr_comment ? styles.completed : styles.pending

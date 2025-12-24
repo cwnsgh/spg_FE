@@ -5,7 +5,7 @@
 .title {
   font-size: 4.8rem;
   font-weight: 600;
-  margin: 70px 0 80px 0;
+  margin: 7rem 0 8rem 0;
   text-align: center;
 }
 
@@ -138,14 +138,15 @@
 }
 
 /* 반응형 */
-@media (max-width: 768px) {
+@media (max-width: 1050px) {
   .title {
-    font-size: 3rem;
-    margin-bottom: 3rem;
+    font-size: 4rem;
+    margin: 2rem 0 6rem;
   }
 
   .chapterTitle {
-    font-size: 2rem;
+    font-size: 2.5rem;
+    margin-bottom: 4rem;
   }
 
   .subChapterTitle {
@@ -153,15 +154,30 @@
   }
 
   .articleTitle {
-    font-size: 1.6rem;
+    font-size: 2rem;
   }
 
   .articleContent,
   .articleList {
-    font-size: 1.4rem;
+    word-break: keep-all;
+    line-height: 1.6;
+    padding-left: 0.5rem;
   }
 
   .content {
-    padding: 0 1rem;
+    padding: 0 var(--layout-side-mo);
+  }
+
+  .chapter {
+    margin-bottom: 8rem;
+  }
+  .articleContent p {
+    margin-bottom: 2rem;
+    line-height: 1.5;
+    word-break: keep-all;
+  }
+
+  .subList li {
+    line-height: 1.5;
   }
 }

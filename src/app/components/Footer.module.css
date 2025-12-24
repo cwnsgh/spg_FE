@@ -89,7 +89,7 @@
   margin-top: auto;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1050px) {
   .footerContent {
     flex-direction: column;
   }

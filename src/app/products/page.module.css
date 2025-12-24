@@ -19,7 +19,7 @@
 /* 제목 영역 */
 .titleArea {
   padding: 0 var(--layout-side-pc-sub);
-  margin-bottom: 30px;
+  margin-bottom: 3rem;
 }
 
 .titleArea h1 {
@@ -100,19 +100,42 @@
   background-color: #fff;
 }
 
-@media (max-width: 768px) {
-  .breadcrumbArea {
-    padding: 2rem 1rem;
-  }
-  .titleArea {
-    padding: 0 2rem;
-  }
-}
 
-@media (max-width: 1024px) {
+@media (max-width: 1050px) {
+  .searchInputWrap {
+    width: 100%;
+    padding-left: 3rem; padding-right: 7rem;
+    border-width: 2px;
+  }
   .productContent {
     flex-direction: column;
     gap: 2rem;
-    padding: 0 2rem;
+    padding: 0 var(--layout-side-mo);
+  }
+  .titleArea {
+    padding: 0 var(--layout-side-mo);
+  }
+  .searchArea {
+    padding: 0 var(--layout-side-mo);
+    margin-bottom: 2.8rem;
+  }
+  .searchInput {
+    font-size: 1.8rem;
+  }
+  .searchBtn {
+    right: 3rem;
+  }
+  .titleArea h1 {
+    font-size: 3.5rem;
+    display: flex;
+    flex-flow: column;
+    order: 2;
+  }
+  .titleArea h1 .egFont {
+    margin-top: 1rem;
+    font-size: 2rem;
+    margin-left: 0.2rem;
+    color: rgba(0, 0, 0, 0.4);
+    font-weight: 600;
   }
 }
