@@ -5,7 +5,7 @@
 /* 탭 스타일 */
 .facilityTypeTabs {
   display: flex;
-  padding: 45px var(--layout-side-pc-sub) 0;
+  padding: 4.5rem var(--layout-side-pc-sub) 0;
   justify-content: center;
   background: #0f3283;
   list-style: none;
@@ -13,7 +13,7 @@
 }
 
 .tabItem {
-  padding: 20px 0;
+  padding: 2rem 0;
   font-size: 1.8rem;
   font-weight: 600;
   color: #fff;
@@ -65,7 +65,7 @@
 }
 
 .markerImage {
-  width: 35px;
+  width: 3.5rem;
   height: auto;
   display: block;
 }
@@ -85,24 +85,24 @@
   background: #fff;
   border-radius: 30px;
   border-bottom-left-radius: 5px;
-  padding: 30px 20px 20px;
-  min-width: 300px;
-  max-width: 400px;
+  padding: 3rem 2rem 2rem;
+  min-width: 30rem;
+  max-width: 40rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   position: relative;
 }
 
+.popupCloseBtn {
+  display: none;
+}
+
 .popupCompanyName {
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
   border-bottom: 1px solid #e5e5e5;
   font-size: 1.6rem;
   font-weight: 600;
   color: #171717;
-}
-
-.popupAddressWrapper {
-  /* 추가 스타일 필요시 */
 }
 
 .popupAddress {
@@ -120,7 +120,7 @@
   position: absolute;
   left: 0;
   top: 3px;
-  width: 12px;
+  width: 1.2rem;
   aspect-ratio: 322 / 432;
   background: url("/images/icon/location_ico.png") no-repeat center;
   background-size: contain;
@@ -134,12 +134,12 @@
 
 .popupDetailBtn {
   display: inline-block;
-  padding: 8px 20px;
+  padding: 0.8rem 2rem;
   background: linear-gradient(90deg, #143a72 0%, #195592 50%, #207ec3 100%);
   color: #fff;
   text-decoration: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 500;
   transition: all 0.3s;
 }
@@ -150,16 +150,18 @@
 
 /* 대륙별 상세정보 스타일 */
 .facilitiesDetail {
-  padding: 120px var(--layout-side-pc-sub) 0;
+  padding: 12rem var(--layout-side-pc-sub) 0;
 }
 
 .regionSection {
-  margin-bottom: 110px;
+  margin-bottom: 11rem;
   display: flex;
 }
 
 .regionSection:last-child {
   margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .regionTitle {
@@ -182,7 +184,7 @@
   background: #fff;
   border-radius: 20px;
   overflow: hidden;
-  padding: 35px 3%;
+  padding: 3.5rem 3%;
   width: calc(50% - 9px);
   border: 1px solid #ddd;
 }
@@ -190,8 +192,8 @@
 .cardHeader {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 30px;
+  gap: 1rem;
+  margin-bottom: 3rem;
 }
 
 .cardIcon {
@@ -228,7 +230,7 @@
   color: #000;
   font-weight: 600;
   line-height: 1.5;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
 }
 
 .cardAddress:last-child,
@@ -255,4 +257,96 @@
 
 .cardMapBtn:hover {
   filter: brightness(1.15);
+}
+
+
+@media (max-width: 1050px) {
+  .facilityTypeTabs {
+    padding: 3rem var(--layout-side-mo) 2rem;
+  }
+  .mapContainer {
+    background: #0f3283;
+    padding: 2rem 0;
+  }
+
+  .makerPopup {
+    position: fixed;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90%;
+  }
+  .popupContent {
+    max-width: unset;
+    border-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding: 5.5rem 6% 4.2rem;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+  }
+  .popupCloseBtn {
+    display: flex;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    width: 4rem;
+    height: 4rem;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    font-size: 3.5rem;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    z-index: 1;
+    transition: color 0.3s;
+  }
+  .popupCloseBtn:hover {
+    color: #161616;
+  }
+  .popupAddress {
+    font-size: 2rem;
+    padding-left: 4rem;
+  }
+  .popupAddress::before {
+    top: 4px; width: 1.5rem;
+  }
+  .popupCompanyName {
+    font-size: 2.3rem;
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .popupDetailBtn {
+    font-size: 2rem;
+    padding: 2rem 0;
+    width: 100%;
+    text-align: center;
+  }
+  .popupButtonWrapper {
+    margin-top: 4rem;
+  }
+  .facilitiesDetail {
+    padding: 8rem var(--layout-side-mo) 0;
+  }
+  .regionSection {
+    margin-bottom: 6rem;
+    flex-flow: column;
+    padding-bottom: 6rem;
+    border-bottom: 1px dashed #ddd;
+  }
+  .regionTitle {width: 100%; font-size: 3rem;}
+  .facilityCards {
+    width: 100%;
+  }
+  .facilityCard {width: 100%; padding: 4rem 3% 3rem;}
+  .cardInfo {
+    flex-flow: column;
+    align-items: flex-start;
+  }
+  .cardAddress,
+  .cardPhone {margin-bottom: 1.5rem;}
+
+  .cardCompanyName {line-height: 1.4;}
+  .cardHeader {align-items: flex-start;}
 }

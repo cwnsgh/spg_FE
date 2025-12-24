@@ -16,7 +16,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 50px;
+  margin-bottom: 5rem;
 }
 
 .faqTop h2 {
@@ -65,7 +65,7 @@
 .searchInput {
   width: 100%;
   font-size: 1.4rem;
-  padding-right: 40px;
+  padding-right: 4rem;
   height: 100%;
   font-weight: 600;
   color: #666;
@@ -104,7 +104,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 31px 2.6%;
+  padding: 3.1rem 2.6%;
   cursor: pointer;
   transition: background 0.3s;
 }
@@ -135,8 +135,8 @@
 }
 
 .arrowIcon {
-  width: 20px;
-  height: 21px;
+  width: 2rem;
+  height: 2.1rem;
   aspect-ratio: 109 / 186;
   background: url("/images/icon/arrow_04.png") no-repeat center;
   background-size: contain;
@@ -161,8 +161,8 @@
 
 .faqItem.active .faqAnswer {
   grid-template-rows: 1fr;
-  padding-top: 60px;
-  padding-bottom: 60px;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
 }
 
 .answerContents {
@@ -198,12 +198,12 @@
   align-items: center;
   justify-content: center;
   gap: 3px;
-  margin-top: 120px;
+  margin-top: 11rem;
 }
 
 .paginationBtn {
-  width: 40px;
-  height: 40px;
+  width: 4rem;
+  height: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -217,7 +217,9 @@
 }
 
 .paginationBtn img {
-  height: 13px;
+  height: 1.3rem;
+  max-width: unset;
+  width: auto;
 }
 
 .paginationBtn.disabled {
@@ -237,8 +239,59 @@
 }
 
 @media (max-width: 1050px) {
-  
+  .faq {
+    padding: 0 var(--layout-side-mo);
+  }
+  .section_title {
+    font-size: 4rem; margin: 2rem 0 4rem;
+  }
   .searchBox {
-    width: 100%;
+    width: 100%; margin-bottom: 0;
+  }
+  .searchBox * {font-size: 1.8rem !important;}
+  .searchInput {
+    font-weight: 500;
+  }
+  .faqTop {
+    flex-flow: column;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+  }
+  .faqTop h2 {
+    font-size: 2.2rem;
+    width: 90%;
+    word-break: keep-all; line-height: 1.5;
+    margin-bottom: 2.5rem;
+  }
+  .faqQuestion {
+    padding: 2.2rem 1rem;
+  }
+  .questionText {
+    font-size: 1.9rem;
+    gap: 2.5rem;
+  }
+  .arrowIcon {
+    width: 1.3rem; height: 1.4rem;
+  }
+
+  .faqAnswer {
+    padding: 0 1rem;
+    padding-right: 3rem;
+  }
+  .answerContents {
+    font-size: 1.9rem;
+    gap: 2.5rem;
+  }
+  .qLabel,
+  .aLabel {
+    font-size: 2.2rem;
+    position: relative; top: -0.3rem;
+  }
+  .pagination {
+    margin-top: 8rem;
+  }
+  .paginationBtn {
+    width: 3rem; height: 3rem;
+    font-size: 1.8rem !important;
   }
 }
