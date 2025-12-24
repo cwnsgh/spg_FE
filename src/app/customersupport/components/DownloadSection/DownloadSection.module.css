@@ -25,11 +25,11 @@
   text-align: center;
   display: flex;
   flex-flow: column;
-  gap: 10px;
+  gap: 1rem;
 }
 
 .categoryBtn {
-  padding: 20px 0;
+  padding: 2rem 0;
   font-size: 1.8rem;
   font-weight: 600;
   color: #000;
@@ -56,20 +56,20 @@
 .downloadContent {
   flex: 1;
   width: 76%;
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 
 /* 필터 및 검색 영역 */
 .filterArea {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 50px;
+  margin-bottom: 5rem;
   gap: 2%;
 }
 
 .productFilters {
   display: flex;
-  gap: 15px;
+  gap: 1.5rem;
   position: relative;
   width: 72%;
   flex-flow: wrap;
@@ -96,7 +96,7 @@
 }
 
 .productFilters select {
-  padding: 14px 40px 14px 20px;
+  padding: 1.4rem 4rem 1.4rem 2rem;
   border-radius: 30px;
   font-size: 1.4rem;
   font-weight: 500;
@@ -123,8 +123,8 @@
   height: 46px;
   border-radius: 50px;
   overflow: hidden;
-  padding-left: 25px;
-  padding-right: 17px;
+  padding-left: 2.5rem;
+  padding-right: 1.7rem;
 }
 
 .searchSelect {
@@ -187,7 +187,7 @@
 
 .downloadItem {
   border: 1px solid #8c8c8c;
-  border-radius: 15px;
+  border-radius: 1.5rem;
   padding: 2.4rem 5% 2.4rem 7%;
   display: flex;
   justify-content: space-between;
@@ -276,12 +276,13 @@
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   margin-right: 0;
+  word-break: keep-all;
 }
 
 .downloadBtn {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.8rem;
   padding-left: 5%;
   font-size: 1.4rem;
   font-weight: 600;
@@ -294,7 +295,7 @@
 }
 
 .downloadItem.manual .downloadBtn {
-  padding: 12px 24px;
+  padding: 1.2rem 2.4rem;
   border: none;
   width: 100%;
   flex-shrink: 0;
@@ -310,6 +311,8 @@
 
 .downloadBtn img {
   height: 2rem;
+  width: auto;
+  max-width: unset;
   opacity: 0.7;
   transition: all 0.3s;
 }
@@ -348,13 +351,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  margin-top: 110px;
+  gap: 0.3rem;
+  margin-top: 11rem;
 }
 
 .paginationBtn {
-  width: 40px;
-  height: 40px;
+  width: 4rem;
+  height: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -368,7 +371,9 @@
 }
 
 .paginationBtn img {
-  height: 13px;
+  height: 1.3rem;
+  max-width: unset;
+  width: auto;
 }
 
 .paginationBtn.disabled {
@@ -385,4 +390,84 @@
 .paginationBtn.pageNumber.active {
   color: #161616;
   border-color: #161616;
+}
+
+@media (max-width: 1050px) {
+  .section_title {
+    font-size: 4rem; margin: 2rem 0 4rem;
+  }
+  .download {
+    padding: 0 var(--layout-side-mo);
+  }
+  .downloadWrapper {
+    flex-flow: column;
+    gap: 1rem;
+  }
+  .productFilters select {
+    font-size: 1.5rem;
+  }
+  .categoryNav {
+    width: 100%;
+    flex-flow: row;
+    gap: 0.5rem;
+  }
+  .categoryBtn {
+    flex: 1;
+    font-size: 1.6rem;
+    padding: 1.5rem 0;
+  }
+  .filterArea {
+    flex-flow: column;
+    gap: 3rem;
+  }
+  .downloadContent {
+    width: 100%;
+  }
+  .productFilters {
+    width: 100%;
+    gap: 1rem;
+  }
+  .selectWrapper {
+    flex: 1;
+  }
+  .productFilters select {
+    width: 100%;
+  }
+  .searchBox {
+    width: 100%;
+  }
+  .searchBox * {font-size: 1.8rem !important;}
+  .searchInput {font-weight: 500;}
+  .downloadList {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .itemTitle {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .downloadItem {
+    border-radius: 1rem;
+    padding: 2.4rem 5%;
+    min-height: 10.5rem;
+  }
+
+  .downloadItem.manual {
+    padding: 2.4rem 5%;
+  }
+  .downloadItem.manual .itemTitle {
+    -webkit-line-clamp: 2;
+  }
+  
+  .pagination {margin-top: 8rem;}
+  .paginationBtn {
+    width: 3rem; height: 3rem;
+    font-size: 1.8rem !important;
+  }
+  .itemContent {
+    gap: 1rem;
+  }
 }

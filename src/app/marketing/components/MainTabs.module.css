@@ -14,7 +14,7 @@
   gap: 26.5px;
   align-items: center;
   margin: 0;
-  padding: 80px 0 0 0;
+  padding: 8rem 0 0 0;
 }
 
 .tab {
@@ -29,4 +29,11 @@
 .tabContent {
   width: 100%;
   padding: 0;
+}
+
+@media (max-width: 1050px) {
+  .tabs {padding: 2rem 0 0 0;}
+  .tab {
+    font-size: 4rem;
+  }
 }

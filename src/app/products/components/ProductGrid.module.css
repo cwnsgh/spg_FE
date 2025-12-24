@@ -119,8 +119,8 @@
 
 .paginationBtn img {
   height: 1.3rem;
-  width: 1.3rem;
   max-width: unset;
+  width: auto;
 }
 
 .paginationBtn.disabled {
