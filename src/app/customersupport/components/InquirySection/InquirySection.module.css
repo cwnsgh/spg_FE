@@ -7,20 +7,20 @@
 .section_title {
   font-size: 4.8rem;
   font-weight: 600;
-  margin: 70px 0 80px 0;
+  margin: 7rem 0 8rem 0;
   text-align: center;
 }
 
 /* 카테고리 탭 */
 .categoryTabs {
   display: flex;
-  gap: 13px;
-  margin-bottom: 50px;
+  gap: 1.3rem;
+  margin-bottom: 5rem;
   justify-content: center;
 }
 
 .categoryTab {
-  padding: 19px 30px;
+  padding: 1.9rem 3rem;
   font-size: 1.8rem;
   font-weight: 500;
   color: #000;
@@ -28,7 +28,7 @@
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s;
-  min-width: 200px;
+  min-width: 20rem;
   text-align: center;
   border: 1px solid #ececec;
   user-select: none;
@@ -89,7 +89,7 @@
 .searchInput {
   width: 100%;
   font-size: 1.4rem;
-  padding-right: 40px;
+  padding-right: 4rem;
   height: 100%;
   font-weight: 600;
   color: #666;
@@ -124,7 +124,7 @@
 .boardHeader {
   display: grid;
   grid-template-columns: 10% 6.5% 54% 8% 8.5% 13%;
-  padding: 20px 10px;
+  padding: 2rem 1rem;
   border-bottom: 1px solid #e5e5e5;
   text-align: center;
 }
@@ -138,7 +138,7 @@
 .boardItem {
   display: grid;
   grid-template-columns: 10% 6.5% 54% 8% 8.5% 13%;
-  padding: 18px 10px;
+  padding: 1.8rem 1rem;
   font-size: 1.4rem;
   color: #666;
   border-bottom: 1px solid #e5e5e5;
@@ -153,7 +153,7 @@
 .boardItem.emptyState {
   display: block;
   grid-column: 1 / -1;
-  padding: 50px 10px;
+  padding: 5rem 1rem;
   text-align: center;
   color: #999;
   border-bottom: 1px solid #e5e5e5;
@@ -214,13 +214,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  margin-top: 120px;
+  gap: 0.3rem;
+  margin-top: 12rem;
 }
 
 .paginationBtn {
-  width: 40px;
-  height: 40px;
+  width: 4rem;
+  height: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -234,7 +234,7 @@
 }
 
 .paginationBtn img {
-  height: 13px;
+  height: 1.3rem;
 }
 
 .paginationBtn.disabled {
@@ -251,4 +251,88 @@
 .paginationBtn.pageNumber.active {
   color: #161616;
   border-color: #161616;
+}
+
+@media (max-width: 1050px) {
+  .productInquiry {
+    padding: 0 var(--layout-side-mo);
+  }
+  .searchBox {
+    width: 100%;
+  }
+  .searchInput {
+    font-size: 1.8rem;
+  }
+  .searchSelect {
+    font-size: 1.8rem;
+  }
+
+  .section_title {
+    font-size: 4rem; margin: 2rem 0 4rem;
+  }
+  .categoryWrap {
+    overflow-x: auto;
+  }
+  .categoryWrap::-webkit-scrollbar {
+    display: none;
+  }
+  .categoryTabs {
+    justify-content: flex-start;
+    margin-bottom: 3rem;
+    gap: 1.2rem;
+  }
+  .categoryTab {
+    min-width: unset;
+    white-space: nowrap;
+    padding: 1.5rem 4rem;
+  }
+  .boardHeader {
+    display: none;
+  }
+
+  /* 모바일에서 boardItem 세로 배치 */
+  .boardItem {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    gap: 1rem;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .boardItem.emptyState {
+    display: block;
+    padding: 5rem 1rem;
+  }
+
+  /* 답변유무 버튼을 맨 위로 이동 */
+  .cellStatus {
+    order: -1;
+    align-self: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  /* 제목 */
+  .cellTitle {
+    width: 100%;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .boardCell {
+    font-size: 1.8rem;
+    text-align: left;
+    justify-content: flex-start;
+  }
+  .boardCell.title {
+    font-size: 2rem; color: #161616;
+  }
+  .boardCell.category {color: #333;}
+  .boardCell.cellNumber {display: none;}
+  /* 페이지네이션 */
+  .pagination {margin-top: 8rem;}
+  .paginationBtn {
+    width: 3rem; height: 3rem;
+  }
 }

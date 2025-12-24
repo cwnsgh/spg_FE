@@ -1,5 +1,5 @@
 /* reset */
-html {font-size: 10px; overflow-x: hidden;}
+html {font-size: clamp(8px, 0.5208vw, 12px); overflow-x: hidden;}
 body {font-size: 1.6rem; line-height: 1.5; overflow-x: hidden; width: 100%;}
 html,body,*, *::before, *::after {box-sizing:border-box;}
 html,body,h1,h2,h3,h3,h4,h5,h6,

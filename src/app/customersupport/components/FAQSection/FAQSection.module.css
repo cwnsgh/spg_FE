@@ -7,7 +7,7 @@
 .section_title {
   font-size: 4.8rem;
   font-weight: 600;
-  margin: 70px 0 80px 0;
+  margin: 7rem 0 8rem 0;
   text-align: center;
 }
 
@@ -234,4 +234,11 @@
 .paginationBtn.pageNumber.active {
   color: #161616;
   border-color: #161616;
+}
+
+@media (max-width: 1050px) {
+  
+  .searchBox {
+    width: 100%;
+  }
 }

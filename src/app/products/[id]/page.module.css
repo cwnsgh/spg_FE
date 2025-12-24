@@ -9,7 +9,7 @@
 
 /* 제품 상세 영역 */
 .productDetail {
-  padding: 0 var(--layout-side-pc-sub, 180px);
+  padding: 0 var(--layout-side-pc-sub);
 }
 
 .productInfo {
@@ -213,10 +213,40 @@
   background: #555;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1050px) {
+  .productDetail {
+    padding: 0 var(--layout-side-mo);
+  }
+
+  .productTitleKorean {
+    font-size: 3.5rem;
+  }
+  .productTitleEnglish {
+    font-size: 2rem;
+  }
+  .productContent {
+    padding-left: 0;
+  }
   .productInfo {
     flex-direction: column;
     gap: 2rem;
+    margin-bottom: 8rem;
+  }
+  .productDescription {
+    padding-right: 3%;
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+    font-size: 1.8rem;
+    line-height: 1.7;
+  }
+  .featuresTitle {
+    font-size: 1.7rem;
+    padding: 0.8rem 3rem;
+    font-weight: 500;
+  }
+  
+  .productTitle {
+    margin-bottom: 2rem;
   }
 
   .productImage {
@@ -229,10 +259,46 @@
 
   .downloadButtons {
     flex-direction: column;
+    gap: 1.5rem;
   }
 
   .downloadButton {
     width: 100%;
     justify-content: center;
+    font-size: 1.9rem;
+    padding: 2rem; font-weight: 500;
+    gap: 1rem;
+  }
+
+  .featureKorean::after {
+    top: 1.1rem;
+    transform: translateY(0);
+  }
+  .featuresList {
+    gap: 2.5rem 2rem;
+  }
+  .featureItem {
+    justify-content: space-around;
+  }
+
+  .featureKorean {
+    font-weight: 500; word-break: keep-all;
+    font-size: 1.8rem;
+  }
+  .featureEnglish {
+    font-weight: 400; word-break: keep-all;
+    font-size: 1.6rem;
+  }
+
+  .contentArea {min-height: 70rem;}
+  .content {
+    font-size: 2rem;
+  }
+
+  .listButtonArea {
+    margin-top: 8rem;
+  }
+  .listButton {
+    font-size: 2rem;
   }
 }

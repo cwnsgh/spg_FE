@@ -129,24 +129,26 @@ export default function HeroBanner({
 
           {/* 서브 탭 (고객지원, 회사소개 페이지용) */}
           {tabs && tabs.length > 0 && (
-            <div className={styles.tabs}>
-              {tabs.map((tab, index) => {
-                const tabValue = tab.value;
-                const isActive =
-                  typeof activeTab === "number"
-                    ? activeTab === tabValue
-                    : String(activeTab) === String(tabValue);
+            <div className={styles.tabsWrap}>
+              <div className={styles.tabs}>
+                {tabs.map((tab, index) => {
+                  const tabValue = tab.value;
+                  const isActive =
+                    typeof activeTab === "number"
+                      ? activeTab === tabValue
+                      : String(activeTab) === String(tabValue);
 
-                return (
-                  <button
-                    key={index}
-                    className={`${styles.tab} ${isActive ? styles.active : ""}`}
-                    onClick={() => handleTabChange(tabValue)}
-                  >
-                    {tab.label}
-                  </button>
-                );
-              })}
+                  return (
+                    <button
+                      key={index}
+                      className={`${styles.tab} ${isActive ? styles.active : ""}`}
+                      onClick={() => handleTabChange(tabValue)}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
