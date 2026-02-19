@@ -118,7 +118,6 @@
 .boardList {
   width: 100%;
   border-top: 2px solid #555;
-  margin-bottom: 110px;
 }
 
 .boardHeader {
@@ -192,7 +191,7 @@
 
 .statusBtn {
   display: inline-block;
-  padding: 8px 23px;
+  padding: 0.8rem 2.3rem;
   font-size: 1.6rem;
   font-weight: 500;
   border-radius: 5px;
@@ -235,6 +234,8 @@
 
 .paginationBtn img {
   height: 1.3rem;
+  max-width: unset;
+  width: auto;
 }
 
 .paginationBtn.disabled {
@@ -262,6 +263,7 @@
   }
   .searchInput {
     font-size: 1.8rem;
+    font-weight: 500;
   }
   .searchSelect {
     font-size: 1.8rem;
@@ -293,11 +295,12 @@
   /* 모바일에서 boardItem 세로 배치 */
   .boardItem {
     display: flex;
-    flex-direction: column;
-    padding: 2rem 1.5rem;
-    gap: 1rem;
+    flex-flow: wrap;
+    padding: 3rem 1rem 2.5rem;
     border-bottom: 1px solid #e5e5e5;
+    position: relative;
   }
+  .boardItem:hover {background: #fff;}
 
   .boardItem.emptyState {
     display: block;
@@ -307,8 +310,10 @@
   /* 답변유무 버튼을 맨 위로 이동 */
   .cellStatus {
     order: -1;
-    align-self: flex-start;
-    margin-bottom: 0.5rem;
+    align-self: flex-end;
+    position: absolute;
+    bottom: 2rem;
+    right: 1rem;
   }
 
   /* 제목 */
@@ -327,12 +332,49 @@
   }
   .boardCell.title {
     font-size: 2rem; color: #161616;
+    margin-bottom: 1.8rem;
+    width: 100%;
   }
-  .boardCell.category {color: #333;}
+  .boardCell.category {
+    color: #333;
+    max-width: 50%; margin-bottom: 1rem;
+    font-size: 1.6rem;
+  }
   .boardCell.cellNumber {display: none;}
+  .boardCell.cellAuthor {
+    font-size: 1.6rem;
+    padding-right: 1rem;
+    color: #b4b4b4;
+  }
+  
+  .boardCell.cellDate {
+    font-size: 1.6rem;
+    color: #b4b4b4;
+    font-weight: 500;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .boardCell.cellDate::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    display: block;
+    width: 1px;
+    height: 1.4rem;
+    background: #ccc;
+  }
   /* 페이지네이션 */
   .pagination {margin-top: 8rem;}
   .paginationBtn {
     width: 3rem; height: 3rem;
+    font-size: 1.8rem !important;
+  }
+  
+  .statusBtn {
+    padding: 0.6rem 1.8rem;
+    font-size: 1.5rem;
   }
 }

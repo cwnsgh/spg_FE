@@ -1,6 +1,6 @@
 /* IR 자료실 영역 */
 .irLibrary {
-  padding: 0 180px;
+  padding: 0 var(--layout-side-pc-sub);
 }
 
 /* 섹션 타이틀 */
@@ -15,7 +15,7 @@
 .tabArea {
   display: flex;
   gap: 13px;
-  margin-bottom: 50px;
+  margin-bottom: 5rem;
   justify-content: center;
 }
 
@@ -49,7 +49,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 3rem;
 }
 
 .yearSelectWrap {
@@ -189,20 +189,23 @@
 
 /* Responsive */
 @media (max-width: 1050px) {
+  .irLibrary {
+    padding: 0 var(--layout-side-mo);
+  }
+
+  .section_title {
+    font-size: 4rem; margin: 2rem 0 4rem;
+  }
   .tabArea {
-    flex-direction: column;
-    gap: 10px;
+    gap: 0.5rem;
+    margin-bottom: 4rem;
   }
 
   .tabBtn {
     min-width: auto;
     width: 100%;
-  }
-
-  .filterArea {
-    flex-direction: column;
-    gap: 20px;
-    align-items: flex-start;
+    font-size: 1.6rem;
+    padding: 1.5rem 2rem;
   }
 
   .tableWrapper {
@@ -219,7 +222,9 @@
   }
 
   .tableCell {
-    padding: 1.5rem 1rem;
-    font-size: 1.4rem;
+    padding: 1.8rem 1rem;
+    font-size: 1.8rem;
   }
+
+  .filterArea {margin-bottom: 1.5rem;}
 }
