@@ -9,6 +9,12 @@
   overflow: hidden;
 }
 
+.mainSwiper :global(.swiper-slide > a) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .bnr {
   position: relative;
   width: 100%;
@@ -16,6 +22,8 @@
 }
 
 .bannerImage {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -30,7 +38,7 @@
   font-size: 5.5rem;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 30px;
+  margin-bottom: 3rem;
   line-height: 1.3;
 }
 
@@ -50,7 +58,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 0.4rem;
   bottom: 60px;
   left: var(--layout-side-pc);
   width: max-content;
@@ -66,6 +74,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
 }
 
 .mainSwiper :global(.swiper-pagination span::before) {
@@ -89,6 +98,7 @@
   top: 0;
   left: 0;
   transform: rotate(-90deg);
+  overflow: visible;
 }
 
 .mainSwiper :global(.swiper-pagination span .progress-ring-circle) {
@@ -97,6 +107,7 @@
   transition:
     stroke-dashoffset 0.1s linear,
     stroke 0.3s ease;
+  stroke-linecap: round;
 }
 
 .mainSwiper
@@ -106,4 +117,73 @@
       .progress-ring-circle
   ) {
   stroke: #fff;
+}
+
+/* 반응형 - 모바일 */
+@media (max-width: 1050px) {
+  .txt {
+    left: var(--layout-side-mo);
+    word-break: keep-all;
+    top: 43%;
+  }
+
+  .txt h2 br {
+    display: none;
+  }
+
+  .txt h2 {
+    font-size: 3.8rem;
+    line-height: 1.4;
+    padding-right: 10%;
+  }
+
+  .txt p {
+    font-weight: 500;
+    line-height: 1.3;
+    font-size: 2rem;
+    float: right;
+    max-width: 90%;
+  }
+
+  .mainSwiper :global(.swiper-pagination) {
+    gap: 0.1rem;
+    bottom: 4rem;
+  }
+
+  .mainSwiper :global(.swiper-pagination span) {
+    width: 26px;
+    height: 26px;
+  }
+
+  .mainSwiper :global(.swiper-pagination span::before) {
+    width: 6px;
+    height: 6px;
+  }
+
+  .mainSwiper :global(.swiper-pagination span .progress-ring) {
+    width: 26px;
+    height: 26px;
+    overflow: visible;
+    bottom: 7rem;
+  }
+
+  .bnr::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 70%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0)
+    );
+    pointer-events: none;
+  }
+
+  .bannerImage {
+    object-position: 60% center;
+  }
 }

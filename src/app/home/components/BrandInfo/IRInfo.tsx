@@ -8,7 +8,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { stockInfo, financialInfo, irInfo } from "@/data/irData";
-import styles from "./IRInfo.module.css";
 
 const IRInfo: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -22,8 +21,8 @@ const IRInfo: React.FC = () => {
   };
 
   return (
-    <div className={styles.ir}>
-      <div className={styles.topTxt}>
+    <div className="ir">
+      <div className="top-txt">
         <h2>
           <span className="eg-font">IR</span>세계 최대의 기어드모터 및<br />
           정밀감속기 전문기업으로서 성장하겠습니다.
@@ -34,31 +33,31 @@ const IRInfo: React.FC = () => {
           specializing in geared motors and precision reducers.
         </p>
       </div>
-      <div className={styles.btmContents}>
+      <div className="btm-contents">
         {/* 주가정보 */}
         <Link
           href="#"
-          className={`${styles.stockInfo} ${hoveredIndex !== null && hoveredIndex !== 0 ? styles.off : ""}`}
+          className={`stock-info ${hoveredIndex !== null && hoveredIndex !== 0 ? "off" : ""}`}
           onMouseEnter={() => handleMouseEnter(0)}
           onMouseLeave={handleMouseLeave}
         >
-          <div className={styles.title}>
+          <div className="title">
             <h3>
               주가정보
-              <span className={styles.eg}>Stock Information</span>
+              <span className="eg">Stock Information</span>
             </h3>
-            <div className={styles.moreView}>
+            <div className="more-view">
               <img src="/images/icon/arrow_01.png" alt="" />
             </div>
           </div>
-          <div className={styles.detail}>
-            <div className={styles.currInfo}>
+          <div className="detail">
+            <div className="curr-info">
               <h4>
                 현재가
-                <span className={styles.eg}>Current Price</span>
+                <span className="eg">Current Price</span>
               </h4>
-              <p className={styles.priceWrap}>
-                <span className={`${styles.currPrice} eg-font`}>
+              <p className="price-wrap">
+                <span className="curr-price eg-font">
                   {stockInfo.currentPrice}
                 </span>
                 KRW
@@ -68,23 +67,23 @@ const IRInfo: React.FC = () => {
               <li>
                 <h4>
                   전일대비
-                  <span className={styles.eg}>Change</span>
+                  <span className="eg">Change</span>
                 </h4>
-                <p className={`change-price eg-font`}>{stockInfo.change}</p>
+                <p className="change-price eg-font">{stockInfo.change}</p>
               </li>
               <li>
                 <h4>
                   동락률
-                  <span className={styles.eg}>Change Rate</span>
+                  <span className="eg">Change Rate</span>
                 </h4>
-                <p className={`change-rate eg-font`}>{stockInfo.changeRate}</p>
+                <p className="change-rate eg-font">{stockInfo.changeRate}</p>
               </li>
               <li>
                 <h4>
                   거래량
-                  <span className={styles.eg}>Trading Volume</span>
+                  <span className="eg">Trading Volume</span>
                 </h4>
-                <p className={`trading-volu eg-font`}>
+                <p className="trading-volu eg-font">
                   {stockInfo.tradingVolume}
                 </p>
               </li>
@@ -94,33 +93,33 @@ const IRInfo: React.FC = () => {
         {/* 재무제표 */}
         <Link
           href="#"
-          className={`${styles.financialInfo} ${hoveredIndex !== null && hoveredIndex !== 1 ? styles.off : ""}`}
+          className={`financial-info ${hoveredIndex !== null && hoveredIndex !== 1 ? "off" : ""}`}
           onMouseEnter={() => handleMouseEnter(1)}
           onMouseLeave={handleMouseLeave}
         >
-          <div className={styles.title}>
+          <div className="title">
             <h3>
               재무제표
-              <span className={styles.eg}>Financial Statements</span>
+              <span className="eg">Financial Statements</span>
             </h3>
-            <div className={styles.moreView}>
+            <div className="more-view">
               <img src="/images/icon/arrow_01.png" alt="" />
             </div>
           </div>
-          <dl className={styles.detail}>
+          <dl className="detail">
             <dt>
               매출액
-              <span className={styles.eg}>Revenue</span>
+              <span className="eg">Revenue</span>
             </dt>
             <dd className="eg-font">{financialInfo.revenue}</dd>
             <dt>
               자산
-              <span className={styles.eg}>Assets</span>
+              <span className="eg">Assets</span>
             </dt>
             <dd className="eg-font">{financialInfo.assets}</dd>
             <dt>
               자본
-              <span className={styles.eg}>Capital</span>
+              <span className="eg">Capital</span>
             </dt>
             <dd className="eg-font">{financialInfo.capital}</dd>
           </dl>
@@ -128,23 +127,23 @@ const IRInfo: React.FC = () => {
         {/* IR정보 */}
         <Link
           href="#"
-          className={`${styles.irInfo} ${hoveredIndex !== null && hoveredIndex !== 2 ? styles.off : ""}`}
+          className={`ir-info ${hoveredIndex !== null && hoveredIndex !== 2 ? "off" : ""}`}
           onMouseEnter={() => handleMouseEnter(2)}
           onMouseLeave={handleMouseLeave}
         >
-          <div className={styles.title}>
+          <div className="title">
             <h3>
               IR정보
-              <span className={styles.eg}>Investor Relations</span>
+              <span className="eg">Investor Relations</span>
             </h3>
-            <div className={styles.moreView}>
+            <div className="more-view">
               <img src="/images/icon/arrow_01.png" alt="" />
             </div>
           </div>
-          <div className={styles.detail}>
-            <div className={`${styles.boardItem} board-item`}>
+          <div className="detail">
+            <div className="board-item">
               <h4 dangerouslySetInnerHTML={{ __html: irInfo.title }} />
-              <p className={styles.date}>{irInfo.date}</p>
+              <p className="date">{irInfo.date}</p>
             </div>
           </div>
         </Link>

@@ -1,11 +1,11 @@
 /**
  * 메인 배너 컴포넌트
  * - Swiper를 사용한 메인 배너 슬라이더
- * - 원형 진행 바가 있는 페이지네이션 포함
+ * - 원형 진행 바 페이지네이션 (반응형: 모바일 26px/r9, PC 34px/r12)
  */
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 // @ts-ignore
@@ -19,44 +19,80 @@ import "swiper/css";
 import "swiper/css/pagination";
 import styles from "./MainBanner.module.css";
 
+const PAGINATION_BREAKPOINT = 1050;
+
+function getBulletConfig() {
+  if (typeof window === "undefined") {
+    return { size: 34, radius: 12, circumference: 2 * Math.PI * 12 };
+  }
+  const isMobile = window.innerWidth <= PAGINATION_BREAKPOINT;
+  const size = isMobile ? 26 : 34;
+  const radius = isMobile ? 9 : 12;
+  const circumference = 2 * Math.PI * radius;
+  return { size, radius, circumference };
+}
+
 const MainBanner: React.FC = () => {
   const swiperRef = useRef<SwiperType | null>(null);
 
+  const updatePaginationViewport = useCallback((swiper: SwiperType) => {
+    const { size, radius, circumference } = getBulletConfig();
+    swiper.pagination.bullets.forEach((bullet: HTMLElement) => {
+      const svg = bullet.querySelector(".progress-ring") as SVGSVGElement;
+      const circle = bullet.querySelector(
+        ".progress-ring-circle"
+      ) as SVGCircleElement;
+      if (svg && circle) {
+        const center = size / 2;
+        svg.setAttribute("width", String(size));
+        svg.setAttribute("height", String(size));
+        circle.setAttribute("cx", String(center));
+        circle.setAttribute("cy", String(center));
+        circle.setAttribute("r", String(radius));
+        circle.style.strokeDasharray = `${circumference} ${circumference}`;
+        circle.style.strokeDashoffset = `${circumference}`;
+      }
+    });
+  }, []);
+
   useEffect(() => {
-    // Swiper 초기화 후 진행 바 설정
-    if (swiperRef.current) {
-      const swiper = swiperRef.current;
-      const circumference = 2 * Math.PI * 12;
+    const swiper = swiperRef.current;
+    if (!swiper) return;
 
-      // 초기 진행 바 설정
-      swiper.pagination.bullets.forEach((bullet: HTMLElement) => {
-        const circle = bullet.querySelector(
-          ".progress-ring-circle"
-        ) as SVGCircleElement;
-        if (circle) {
-          circle.style.strokeDasharray = `${circumference} ${circumference}`;
-          circle.style.strokeDashoffset = `${circumference}`;
-        }
-      });
-    }
+    const { circumference } = getBulletConfig();
+    swiper.pagination.bullets.forEach((bullet: HTMLElement) => {
+      const circle = bullet.querySelector(
+        ".progress-ring-circle"
+      ) as SVGCircleElement;
+      if (circle) {
+        circle.style.strokeLinecap = "round";
+        circle.style.strokeDasharray = `${circumference} ${circumference}`;
+        circle.style.strokeDashoffset = `${circumference}`;
+      }
+    });
 
-    // Cleanup: 컴포넌트 언마운트 시 Swiper 정리
+    const handleResize = () => {
+      if (swiperRef.current) updatePaginationViewport(swiperRef.current);
+    };
+    window.addEventListener("resize", handleResize);
+
     return () => {
+      window.removeEventListener("resize", handleResize);
       if (swiperRef.current) {
         swiperRef.current.destroy(true, true);
         swiperRef.current = null;
       }
     };
-  }, []);
+  }, [updatePaginationViewport]);
 
   const handleAutoplayTimeLeft = (
     swiper: SwiperType,
-    timeLeft: number,
+    _timeLeft: number,
     percentage: number
   ) => {
     const realIndex = swiper.realIndex;
     const activeBullet = swiper.pagination.bullets[realIndex];
-    const circumference = 2 * Math.PI * 12;
+    const { circumference } = getBulletConfig();
 
     if (activeBullet) {
       const circle = activeBullet.querySelector(
@@ -68,7 +104,6 @@ const MainBanner: React.FC = () => {
       }
     }
 
-    // 비활성 버튼 초기화
     swiper.pagination.bullets.forEach((bullet: HTMLElement, index: number) => {
       if (index !== realIndex) {
         const circle = bullet.querySelector(
@@ -82,7 +117,7 @@ const MainBanner: React.FC = () => {
   };
 
   const handleSlideChange = (swiper: SwiperType) => {
-    const circumference = 2 * Math.PI * 12;
+    const { circumference } = getBulletConfig();
     swiper.pagination.bullets.forEach((bullet: HTMLElement) => {
       const circle = bullet.querySelector(
         ".progress-ring-circle"
@@ -94,17 +129,19 @@ const MainBanner: React.FC = () => {
   };
 
   const renderBullet = (index: number, className: string) => {
+    const { size, radius } = getBulletConfig();
+    const center = size / 2;
     return `
       <span class="${className}">
-        <svg class="progress-ring" width="34" height="34">
-          <circle class="progress-ring-circle" cx="17" cy="17" r="12" fill="none" stroke="#fff" stroke-width="2"/>
+        <svg class="progress-ring" width="${size}" height="${size}" style="overflow: visible;">
+          <circle class="progress-ring-circle" cx="${center}" cy="${center}" r="${radius}" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </span>
     `;
   };
 
   return (
-    <section className={`${styles.mainBnr} section-01 main-bnr`}>
+    <section className={`${styles.mainBnr} section-01`} aria-label="메인 배너">
       <Swiper
         className={`${styles.mainSwiper} main-swiper swiper-container`}
         modules={[Autoplay, Pagination]}
@@ -135,6 +172,8 @@ const MainBanner: React.FC = () => {
                   alt={slide.title}
                   fill
                   priority={index === 0}
+                  sizes="100vw"
+                  quality={85}
                   className={styles.bannerImage}
                   style={{ objectFit: "cover" }}
                 />

@@ -1,4 +1,5 @@
 /* reset */
+/* 1920px 기준 10px = 0.5208vw, clamp로 최소 8px, 최대 12px로 제한하여 반응형 적용 */
 html {font-size: clamp(8px, 0.5208vw, 12px); overflow-x: hidden;}
 body {font-size: 1.6rem; line-height: 1.5; overflow-x: hidden; width: 100%;}
 html,body,*, *::before, *::after {box-sizing:border-box;}

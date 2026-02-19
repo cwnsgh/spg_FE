@@ -61,10 +61,16 @@ const Header: React.FC = () => {
           <Link href="#" className={styles.askPrd}>
             제품 문의
           </Link>
-          <div className={styles.adminBtns}>
-            <Link href="#" className={styles.adminBtn}><img src="/images/icon/admin_ico.png" alt="spg" />어드민 로그인</Link>
-            <Link href="#" className={styles.uploadBtn}><img src="/images/icon/upload_ico.png" alt="spg" />자료 업로드</Link>
-          </div>
+          {/* <div className={styles.adminBtns}>
+            <Link href="#" className={styles.adminBtn}>
+              <img src="/images/icon/admin_ico.png" alt="spg" />
+              어드민 로그인
+            </Link>
+            <Link href="#" className={styles.uploadBtn}>
+              <img src="/images/icon/upload_ico.png" alt="spg" />
+              자료 업로드
+            </Link>
+          </div> */}
           {/* 검색창 영역 */}
           {/* <div className={styles.searchBox}>
             <div className={styles.searchBtn}>

@@ -155,3 +155,82 @@
   width: 100%;
 }
 
+/* 반응형 - 모바일 */
+@media (max-width: 1050px) {
+  .cateMenu {
+    padding: 8rem 0 10rem;
+  }
+
+  .cateList {
+    padding: 0 var(--layout-side-mo);
+    gap: 0.8rem;
+    margin-bottom: 3.8rem;
+    row-gap: 1rem;
+  }
+
+  .cateItem {
+    width: calc(50% - 0.4rem);
+    aspect-ratio: unset;
+    background: linear-gradient(100deg, #dde6f9 0%, #eff2f8 100%) !important;
+    border-radius: 1rem;
+  }
+
+  .cateItem * {
+    color: #0044c1 !important;
+  }
+
+  .cateItem:nth-child(1) {
+    width: 100%;
+  }
+
+  .btmTxt {
+    padding-right: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .btmTxt img {
+    width: 210%;
+    max-width: unset;
+  }
+
+  .cateItem > a {
+    padding: 4rem 2.9rem;
+  }
+
+  .cateItem:nth-child(2) a::after {
+    display: none;
+  }
+
+  .cateItem > a .cateName .nameKr {
+    font-size: 2.15rem;
+    margin-bottom: 3.6rem;
+  }
+
+  .cateItem:nth-child(1) {
+    background: linear-gradient(70deg, #092f78 0%, #2d76ad 100%) !important;
+    border-radius: 1.5rem;
+  }
+
+  .cateItem:nth-child(1) a .nameKr {
+    margin-bottom: 1.5rem;
+  }
+
+  .cateItem:nth-child(1) * {
+    color: #fff !important;
+  }
+
+  .cateItem > a .cateName .nameKr .moreView {
+    display: none;
+  }
+
+  .cateItem > a .cateName .nameEg {
+    font-size: 1.75rem;
+    opacity: 1;
+  }
+
+  .cateItem:nth-child(1) a .nameEg {
+    font-weight: 300;
+  }
+}
+

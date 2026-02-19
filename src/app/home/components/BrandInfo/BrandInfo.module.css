@@ -1,11 +1,2 @@
 /* 섹션 4 - 브랜드 정보 */
-.brandInfo {
-  background: url("/images/section04_bg.png") no-repeat;
-  background-size: cover;
-  padding: 90px 0 150px;
-}
-
-.brandInfo * {
-  color: #fff;
-}
-
+/* 전역 CSS에서 처리하므로 CSS Module 스타일 제거 */

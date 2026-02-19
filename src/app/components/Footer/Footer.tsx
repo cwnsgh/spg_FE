@@ -19,15 +19,11 @@ const Footer: React.FC = () => {
           <div className={styles.info}>
             <p className={styles.companyName}>(주)케이먼트 코퍼레이션</p>
             <address>
-              <span>TEL&nbsp;&nbsp;1800-8413</span>
-              <span>FAX&nbsp;&nbsp;032-421-0880</span>
-              <br />
-              <span>대표이사&nbsp;&nbsp;김선홍</span>
-              <span>
-                주소&nbsp;&nbsp;인천시 계양구 오조산로 57번길
-                7-1&nbsp;&nbsp;미래사랑빌딩 601,602호
-              </span>
-              <span>사업자등록번호&nbsp;&nbsp;000-00-00000</span>
+              <span><em>TEL</em><span>1800-8413</span></span>
+              <span><em>FAX</em><span>032-421-0880</span></span>
+              <span><em>대표이사</em><span>김선홍</span></span>
+              <span><em>주소</em><span>인천시 계양구 오조산로 57번길 7-1 미래사랑빌딩 601,602호</span></span>
+              <span><em>사업자등록번호</em><span>000-00-00000</span></span>
             </address>
           </div>
         </div>

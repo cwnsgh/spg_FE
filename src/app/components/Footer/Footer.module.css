@@ -49,6 +49,10 @@
   margin-right: 2.4rem;
 }
 
+.info address span em {
+  margin-right: 0.8rem;
+}
+
 .fnb {
   display: flex;
   flex-flow: column;
@@ -82,4 +86,122 @@
   font-size: 1.6rem;
   font-weight: 500;
   color: #878787;
+}
+
+/* 반응형 - 모바일 (참조 index.html / main-responsive.css) */
+@media (max-width: 1050px) {
+  .footer {
+    padding: 5rem var(--layout-side-mo, 4%) 4rem;
+  }
+
+  .topArea {
+    flex-flow: column;
+    position: relative;
+    padding-top: 11.5rem;
+    padding-bottom: 2.5rem;
+    border-color: #e5e5e5;
+  }
+
+  .topArea .infoWrap {
+    order: 2;
+  }
+
+  .topArea .fnb {
+    order: 1;
+    flex-flow: row;
+    gap: 1.9rem;
+    padding-bottom: 2.5rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .topArea .infoWrap .fooLogo {
+    position: absolute;
+    top: 0;
+    width: auto;
+    height: 7.5rem;
+    margin-bottom: 0;
+  }
+
+  .topArea .infoWrap .fooLogo img {
+    max-width: unset;
+    height: 100%;
+  }
+
+  .topArea .info address {
+    row-gap: 2.2rem;
+    display: flex;
+    flex-flow: wrap;
+  }
+
+  .topArea .info address > span {
+    margin: 0;
+  }
+
+  .topArea .info address > span:nth-child(1) {
+    order: 1;
+    width: 30%;
+  }
+
+  .topArea .info address > span:nth-child(2) {
+    order: 2;
+    width: 70%;
+  }
+
+  .topArea .info address > span:nth-child(3) {
+    order: 3;
+    width: 30%;
+  }
+
+  .topArea .info address > span:nth-child(4) {
+    order: 5;
+    width: 100%;
+  }
+
+  .topArea .info address > span:nth-child(5) {
+    order: 4;
+    width: 70%;
+  }
+
+  .topArea .info address > span em {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 0.2rem;
+  }
+
+  .topArea .info address * {
+    font-size: 1.65rem;
+    font-weight: 600;
+  }
+
+  .fnb li a {
+    font-size: 1.65rem;
+    font-weight: 600;
+  }
+
+  .topArea .info .companyName {
+    font-size: 1.65rem;
+    margin-bottom: 2.5rem;
+    font-weight: 600;
+  }
+
+  .btmArea {
+    display: block;
+    padding-top: 3rem;
+  }
+
+  .btmArea ul {
+    margin-bottom: 2.1rem;
+  }
+
+  .btmArea ul li a {
+    font-weight: 600;
+    font-size: 1.65rem;
+  }
+
+  .copyright {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.5);
+  }
 }

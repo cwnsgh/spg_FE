@@ -45,6 +45,7 @@
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 3.8rem;
+  letter-spacing: -0.02em;
 }
 
 .menuColumn h2 span {
@@ -52,6 +53,7 @@
   font-weight: 500;
   color: #fff;
   margin-left: 15px;
+  letter-spacing: -0.02em;
 }
 
 .menu {
@@ -91,7 +93,8 @@
   font-weight: 400;
   padding: 1.1rem 0;
   display: block;
-  line-height: 1;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .smallCate {
@@ -114,11 +117,153 @@
   color: #888;
   font-size: 1.7rem;
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.2;
   padding: 7px 0;
   display: block;
+  letter-spacing: -0.02em;
   transition: all 0.2;
 }
 .smallCate li:hover a {
   color: #bbb;
+}
+
+/* 반응형 - 모바일 (헤더 100px에 맞춤) */
+@media (max-width: 1050px) {
+  .hamMenu {
+    top: 100px;
+    height: calc(100vh - 100px);
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .hamMenu::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hamInner {
+    width: 100%;
+    display: block;
+    padding: 4rem 9% 12.5rem;
+  }
+
+  .menuColumn {
+    width: 100%;
+    margin-right: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 컬럼 사이 간격 (제품소개 | 마케팅·IR정보 | 고객지원·회사소개) */
+  .menuColumn:nth-child(n + 2) {
+    margin-top: 3rem;
+  }
+
+  .menuColumn:first-child .menu {
+    display: block;
+  }
+
+  .menuColumn:first-child .menu .bigCate {
+    width: 100%;
+    display: block;
+    padding-left: 1.25rem;
+  }
+
+  .menuColumn .menu .bigCate > li .smallCate {
+    display: none;
+  }
+
+  .menuColumn:first-child .menu .bigCate:first-child > li:nth-child(5) {
+    margin-top: 0;
+  }
+
+  .menuColumn .menu .bigCate {
+    display: block;
+  }
+
+  .menuColumn .menu .bigCate > li > a {
+    padding: 1.75rem 0;
+    font-size: 1.9rem;
+    color: #acacac;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  /* 섹션 간격: h2(제목) 사이 여백 넉넉히 */
+  .menuColumn > .menu {
+    margin-bottom: 7rem;
+  }
+
+  /* 두 번째 이후 h2 위에 여백 (제품소개-마케팅, 마케팅-IR정보 등) */
+  .menuColumn > .menu + h2 {
+    margin-top: 3rem;
+  }
+
+  .menuColumn h2 {
+    font-size: 2.5rem;
+    color: #fff;
+    position: relative;
+    margin-bottom: 0;
+    margin-top: 0;
+    cursor: pointer;
+    letter-spacing: -0.02em;
+  }
+
+  .menuColumn > h2:first-child {
+    margin-top: 0;
+  }
+
+  .menuColumn h2::after {
+    content: "";
+    background: url("/images/icon/arrow_04.png") no-repeat;
+    background-size: contain;
+    display: block;
+    width: 0.9rem;
+    aspect-ratio: 6 / 11;
+    filter: invert(1);
+    position: absolute;
+    right: 0;
+    top: 55%;
+    transform: translateY(-50%) rotate(90deg);
+    transition: all 0.4s ease;
+  }
+
+  .menuColumn h2 span {
+    font-size: 1.65rem;
+    font-weight: 400;
+    color: #fff;
+    margin-left: 1.1rem;
+    letter-spacing: -0.02em;
+  }
+
+  /* 첫 번째 컬럼: 메뉴 항상 노출 (참조 .menu-column:first-child .menu { display: block }) */
+  .menuColumn:first-child > h2 + .menu {
+    max-height: none;
+    opacity: 1;
+    overflow: visible;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .menuColumn:first-child > h2::after {
+    transform: translateY(-50%) rotate(270deg);
+  }
+
+  /* 두 번째 컬럼 이후: 아코디언 (h2 클릭 시 open) */
+  .menuColumn:not(:first-child) > h2 + .menu {
+    margin-top: 0;
+    margin-bottom: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.4s ease;
+  }
+
+  .menuColumn:not(:first-child) > h2.open + .menu {
+    max-height: 1000px;
+    opacity: 1;
+    margin-top: 2rem;
+  }
+
+  .menuColumn:not(:first-child) > h2.open::after {
+    transform: translateY(-50%) rotate(270deg);
+  }
 }

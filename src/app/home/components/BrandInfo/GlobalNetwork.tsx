@@ -10,7 +10,6 @@ import { Autoplay, Navigation } from "swiper/modules";
 // @ts-ignore
 import type { Swiper as SwiperType } from "swiper";
 import { branchData } from "@/data/branchData";
-import styles from "./GlobalNetwork.module.css";
 import "swiper/css";
 import "swiper/css/navigation";
 
@@ -52,8 +51,8 @@ const GlobalNetwork: React.FC = () => {
   }, []);
 
   return (
-    <div className={`${styles.globalNetwork} global-network`}>
-      <div className={`${styles.topTxt} top-txt`}>
+    <div className="global-network">
+      <div className="top-txt">
         <p className="eg-font">Global Network</p>
         <h2>
           SPG는 국내 뿐만 아니라 전세계
@@ -65,12 +64,12 @@ const GlobalNetwork: React.FC = () => {
           <br />
           and across the globe.
         </p>
-        <Link href="#" className={`${styles.moreView} more-view eg-font`}>
+        <Link href="#" className="more-view eg-font">
           SEE ALL +
         </Link>
       </div>
-      <div className={`${styles.btmContents} btm-contents`}>
-        <div className={`${styles.leftBtn} left-btn`} ref={prevButtonRef}>
+      <div className="btm-contents">
+        <div className="left-btn" ref={prevButtonRef}>
           <img
             src="/images/icon/arrow_04.png"
             style={{ transform: "rotate(180deg)" }}
@@ -78,10 +77,16 @@ const GlobalNetwork: React.FC = () => {
           />
         </div>
         <Swiper
-          className={`${styles.spgBranch} spg-branch swiper-container`}
+          className="spg-branch swiper-container"
           modules={[Autoplay, Navigation]}
-          slidesPerView={2.5}
-          spaceBetween={30}
+          slidesPerView={1.3}
+          spaceBetween={20}
+          breakpoints={{
+            1050: {
+              slidesPerView: 2.5,
+              spaceBetween: 30,
+            },
+          }}
           loop={true}
           autoplay={
             imagesLoaded === totalImages
@@ -116,7 +121,7 @@ const GlobalNetwork: React.FC = () => {
                   alt={branch.alt}
                   width={400}
                   height={300}
-                  className={styles.branchImage}
+                  className="branch-image"
                   loading={index < 3 ? "eager" : "lazy"}
                   onLoad={handleImageLoad}
                   onError={handleImageLoad}

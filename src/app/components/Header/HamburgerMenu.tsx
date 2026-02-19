@@ -1,10 +1,10 @@
 /**
  * 햄버거 메뉴 컴포넌트
- * - 전체 화면 모바일 메뉴
+ * - 전체 화면 모바일 메뉴 (모바일에서 h2 클릭 시 아코디언)
  */
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { hamburgerMenuData } from "../../../data/menuData";
 import styles from "./HamburgerMenu.module.css";
@@ -15,13 +15,22 @@ interface HamburgerMenuProps {
 }
 
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
+  const [openSection, setOpenSection] = useState<string | null>(null);
 
-  // 링크 클릭 시 모달 닫기 + 스크롤 최상단
+  useEffect(() => {
+    if (!isOpen) setOpenSection(null);
+  }, [isOpen]);
+
+  const handleSectionToggle = (key: string) => {
+    setOpenSection((prev) => (prev === key ? null : key));
+  };
+
   const handleLinkClick = () => {
     onClose();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  if (!isOpen) return null;
 
   return (
     <div
@@ -31,7 +40,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
       <ul className={styles.hamInner} onClick={(e) => e.stopPropagation()}>
         {hamburgerMenuData.map((column, columnIndex) => (
           <li key={columnIndex} className={styles.menuColumn}>
-            {/* 첫 번째 컬럼: 하나의 title과 하나의 menu에 여러 big-cate */}
+            {/* 첫 번째 컬럼: 하나의 title과 하나의 menu에 여러 big-cate (모바일에서 항상 펼침) */}
             {column.title && column.bigCateGroups && (
               <>
                 <h2>
@@ -74,14 +83,29 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
                 </div>
               </>
             )}
-            {/* 나머지 컬럼: 여러 섹션 (각각 h2 + menu) */}
+            {/* 나머지 컬럼: 여러 섹션 (모바일에서 h2 클릭 시 아코디언) */}
             {column.sections &&
-              column.sections.map((section, sectionIndex) => (
-                <React.Fragment key={sectionIndex}>
-                  <h2>
-                    {section.title}
-                    <span>{section.titleEn}</span>
-                  </h2>
+              column.sections.map((section, sectionIndex) => {
+                const sectionKey = `${columnIndex}-s${sectionIndex}`;
+                const isOpenAccordion = openSection === sectionKey;
+                return (
+                  <React.Fragment key={sectionIndex}>
+                    <h2
+                      className={isOpenAccordion ? styles.open : undefined}
+                      onClick={() => handleSectionToggle(sectionKey)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          handleSectionToggle(sectionKey);
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={isOpenAccordion}
+                    >
+                      {section.title}
+                      <span>{section.titleEn}</span>
+                    </h2>
                   <div className={styles.menu}>
                     {section.bigCateGroups.map((bigCateGroup, groupIndex) => (
                       <ul key={groupIndex} className={styles.bigCate}>
@@ -112,7 +136,8 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
                     ))}
                   </div>
                 </React.Fragment>
-              ))}
+              );
+              })}
           </li>
         ))}
       </ul>

@@ -8,11 +8,10 @@
 import React from 'react';
 import GlobalNetwork from './GlobalNetwork';
 import IRInfo from './IRInfo';
-import styles from './BrandInfo.module.css';
 
 const BrandInfo: React.FC = () => {
   return (
-    <section className={`${styles.brandInfo} section-04 brand-info`}>
+    <section className="section-04 brand-info">
       <GlobalNetwork />
       <IRInfo />
     </section>
