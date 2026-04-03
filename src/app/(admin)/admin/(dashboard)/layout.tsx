@@ -50,13 +50,13 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
       //   description: "qa_config",
       //   href: "/admin/customersupport/qa-config",
       // },
-      // {
-      //   label: "FAQ 관리",
-      //   description: "faqs / faq_master",
-      //   href: "/admin/customersupport/faq",
-      // },
+      {
+        label: "FAQ 관리",
+        description: "faqs / faq_master",
+        href: "/admin/customersupport/faq",
+      },
       { label: "문의 설정", description: "qa_config" },
-      { label: "FAQ 관리", description: "faqs / faq_master" },
+      // { label: "FAQ 관리", description: "faqs / faq_master" },
     ],
   },
   {
