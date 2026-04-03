@@ -1,19 +1,13 @@
 "use client";
 
+import { ProductSubCategory } from "../data/productData";
 import styles from "./ProductNavigation.module.css";
 
 interface ProductNavigationProps {
   activeSubCategory: string;
   onSubCategoryChange: (category: string) => void;
+  subCategories: ProductSubCategory[];
 }
-
-const subCategories = [
-  { id: "standard-ac", label: "STANDARD AC" },
-  { id: "industrial-ac", label: "INDUSTRIAL AC" },
-  { id: "condenser-run", label: "CONDENSER RUN GEARED MOTOR" },
-  { id: "shaded-pole", label: "SHADED POLE GEARED MOTOR" },
-  { id: "fan-ac", label: "FAN AC" },
-];
 
 const commonNavItems = [
   { id: "principle", label: "작동원리" },
@@ -24,6 +18,7 @@ const commonNavItems = [
 export default function ProductNavigation({
   activeSubCategory,
   onSubCategoryChange,
+  subCategories,
 }: ProductNavigationProps) {
   return (
     <div className={styles.navWrap}>

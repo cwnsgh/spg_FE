@@ -1,0 +1,198 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.heroCard,
+.formCard {
+  padding: 2.4rem;
+  border-radius: 2rem;
+  background: #fff;
+  box-shadow: 0 14px 36px rgba(17, 42, 95, 0.06);
+}
+
+.heroCard {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.eyebrow,
+.tableEyebrow {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #7a89a5;
+}
+
+.title,
+.tableTitle {
+  margin-top: 0.8rem;
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #172033;
+}
+
+.description {
+  max-width: 72rem;
+  margin-top: 1.2rem;
+  font-size: 1.5rem;
+  line-height: 1.8;
+  color: #5f6b82;
+}
+
+.heroActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.primaryButton,
+.ghostButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primaryButton {
+  height: 4.6rem;
+  padding: 0 1.8rem;
+  background: #172033;
+  color: #fff;
+}
+
+.ghostButton {
+  height: 4.4rem;
+  padding: 0 1.6rem;
+  background: #f4f7fb;
+  color: #5f6b82;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+  margin-top: 2rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.field span {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #5f6b82;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 1.2rem 1.4rem;
+  border: 1px solid #dbe4f1;
+  border-radius: 1.2rem;
+  font-size: 1.4rem;
+  color: #172033;
+  background: #fff;
+}
+
+.field input,
+.field select {
+  height: 4.8rem;
+}
+
+.field textarea {
+  min-height: 14rem;
+  resize: vertical;
+}
+
+.fullField {
+  grid-column: 1 / -1;
+}
+
+.extraPair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+  grid-column: 1 / -1;
+}
+
+.loadingBox {
+  padding: 2rem;
+  border-radius: 1.6rem;
+  background: #f8fbff;
+  color: #6b7890;
+  font-size: 1.5rem;
+}
+
+.errorMessage,
+.successMessage {
+  margin: 0;
+  padding: 1.4rem 1.6rem;
+  border-radius: 1.4rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.errorMessage {
+  background: #fff0f0;
+  color: #c63b3b;
+}
+
+.successMessage {
+  background: #eef9f1;
+  color: #15703b;
+}
+
+@media (max-width: 1080px) {
+  .heroCard,
+  .formGrid,
+  .extraPair {
+    grid-template-columns: 1fr;
+  }
+
+  .heroCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .heroActions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .heroCard,
+  .formCard {
+    padding: 2rem;
+  }
+
+  .title,
+  .tableTitle {
+    font-size: 2.2rem;
+  }
+
+  .primaryButton,
+  .ghostButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

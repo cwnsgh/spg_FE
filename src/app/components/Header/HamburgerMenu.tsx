@@ -14,11 +14,13 @@ interface HamburgerMenuProps {
   onClose: () => void;
 }
 
+const DEFAULT_OPEN_SECTION = "product";
+
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
   const [openSection, setOpenSection] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isOpen) setOpenSection(null);
+    setOpenSection(isOpen ? DEFAULT_OPEN_SECTION : null);
   }, [isOpen]);
 
   const handleSectionToggle = (key: string) => {
@@ -40,16 +42,33 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
       <ul className={styles.hamInner} onClick={(e) => e.stopPropagation()}>
         {hamburgerMenuData.map((column, columnIndex) => (
           <li key={columnIndex} className={styles.menuColumn}>
-            {/* 첫 번째 컬럼: 하나의 title과 하나의 menu에 여러 big-cate (모바일에서 항상 펼침) */}
+            {/* 첫 번째 컬럼: 기본은 열림, 모바일에서 닫기/열기 가능 */}
             {column.title && column.bigCateGroups && (
               <>
-                <h2>
+                <h2
+                  className={
+                    openSection === DEFAULT_OPEN_SECTION ? styles.open : undefined
+                  }
+                  onClick={() => handleSectionToggle(DEFAULT_OPEN_SECTION)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSectionToggle(DEFAULT_OPEN_SECTION);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={openSection === DEFAULT_OPEN_SECTION}
+                >
                   {column.title}
                   <span>{column.titleEn}</span>
                 </h2>
-                <div className={styles.menu}>
+                <div className={`${styles.menu} ${styles.productMenu}`}>
                   {column.bigCateGroups.map((bigCateGroup, groupIndex) => (
-                    <ul key={groupIndex} className={styles.bigCate}>
+                    <ul
+                      key={groupIndex}
+                      className={`${styles.bigCate} ${styles.productGroup}`}
+                    >
                       {bigCateGroup.map((bigCate, bigCateIndex) => (
                         <li key={bigCateIndex}>
                           <Link

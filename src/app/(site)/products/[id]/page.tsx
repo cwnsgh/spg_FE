@@ -1,14 +1,12 @@
 "use client";
 
 import { use } from "react";
-import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import HeroBanner from "../../components/HeroBanner";
-import Breadcrumb, { BreadcrumbItem } from "../../components/Breadcrumb";
-import { getProductById } from "../data/productData";
-import productBanner from "../../../assets/product_banner.png";
-import styles from "./page.module.css";
+import { notFound } from "next/navigation";
+import Breadcrumb, { BreadcrumbItem } from "../../../components/Breadcrumb";
+import { getProductById } from "../../../products/data/productData";
+import styles from "../../../products/[id]/page.module.css";
 
 interface ProductDetailPageProps {
   params: Promise<{ id: string }>;
@@ -30,18 +28,12 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
   return (
     <main className={styles.main}>
-      {/* 상단 히어로 배너: 페이지 타이틀 */}
-      {/* <HeroBanner title="제품소개" backgroundImage={productBanner.src} /> */}
-
-      {/* Breadcrumb 영역 */}
       <div className={styles.breadcrumbArea}>
         <Breadcrumb items={breadcrumbItems} />
       </div>
 
-      {/* 제품 상세 영역 */}
       <section className={styles.productDetail}>
         <div className={styles.productInfo}>
-          {/* 제품 이미지 */}
           <div className={styles.productImage}>
             <Image
               src={product.image}
@@ -52,7 +44,6 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             />
           </div>
 
-          {/* 제품 정보 */}
           <div className={styles.productContent}>
             <h1 className={styles.productTitle}>
               <span className={styles.productTitleEnglish}>{product.nameEn}</span>
@@ -81,7 +72,6 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
               </div>
             )}
 
-            {/* PDF 다운로드 버튼 */}
             <div className={styles.downloadButtons}>
               {product.catalogPdfUrl && (
                 <a
@@ -117,14 +107,12 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
           </div>
         </div>
 
-        {/* 제품 내용 영역 */}
         {product.content && (
           <div className={styles.contentArea}>
             <div className={styles.content}>{product.content}</div>
           </div>
         )}
 
-        {/* 목록 버튼 */}
         <div className={styles.listButtonArea}>
           <Link href="/products" className={styles.listButton}>
             목록

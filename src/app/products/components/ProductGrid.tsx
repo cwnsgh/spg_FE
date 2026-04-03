@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./ProductGrid.module.css";
@@ -29,11 +29,11 @@ export default function ProductGrid({ products }: ProductGridProps) {
   const currentProducts = products.slice(startIndex, endIndex);
 
   // 페이지 변경 핸들러
-  const handlePageChange = (page: number) => {
+  const handlePageChange = useCallback((page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
-  };
+  }, [totalPages]);
 
   // 페이지네이션 버튼 생성
   const paginationButtons = useMemo(() => {
@@ -180,7 +180,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
     );
 
     return buttons;
-  }, [currentPage, totalPages]);
+  }, [currentPage, handlePageChange, totalPages]);
 
   // 서브 카테고리 변경 시 첫 페이지로 리셋
   useEffect(() => {
@@ -191,6 +191,9 @@ export default function ProductGrid({ products }: ProductGridProps) {
     <div className={styles.productMain}>
       {/* 제품 그리드 */}
       <div className={styles.productGrid}>
+        {currentProducts.length === 0 && (
+          <div className={styles.emptyState}>등록된 제품이 없습니다.</div>
+        )}
         {currentProducts.map((product) => (
           <Link
             key={product.id}

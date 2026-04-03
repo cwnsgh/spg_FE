@@ -1,88 +1,82 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { ApiError, FaqItem, FaqMaster, getFaq } from "@/api";
 import styles from "./FAQSection.module.css";
 
-// 임시 데이터 (HTML에서 가져옴)
-const faqData = [
-  {
-    wr_id: 15,
-    wr_subject: "자주 묻는 질문입니다.",
-    wr_content: "자주 묻는 질문에 대한 답변입니다.",
-  },
-  {
-    wr_id: 14,
-    wr_subject: "자주 묻는 질문입니다.",
-    wr_content: "자주 묻는 질문에 대한 답변입니다.",
-  },
-  {
-    wr_id: 13,
-    wr_subject: "자주 묻는 질문입니다.",
-    wr_content: "자주 묻는 질문에 대한 답변입니다.",
-  },
-  {
-    wr_id: 12,
-    wr_subject: "자주 묻는 질문입니다.",
-    wr_content: "자주 묻는 질문에 대한 답변입니다.",
-  },
-  {
-    wr_id: 11,
-    wr_subject: "자주 묻는 질문입니다.",
-    wr_content: "자주 묻는 질문에 대한 답변입니다.",
-  },
-  {
-    wr_id: 10,
-    wr_subject: "자주 묻는 질문입니다.",
-    wr_content: "자주 묻는 질문에 대한 답변입니다.",
-  },
-  {
-    wr_id: 9,
-    wr_subject: "자주 묻는 질문입니다.",
-    wr_content: "자주 묻는 질문에 대한 답변입니다.",
-  },
-  {
-    wr_id: 8,
-    wr_subject: "자주 묻는 질문입니다.",
-    wr_content: "자주 묻는 질문에 대한 답변입니다.",
-  },
-  {
-    wr_id: 7,
-    wr_subject: "자주 묻는 질문입니다.",
-    wr_content: "자주 묻는 질문에 대한 답변입니다.",
-  },
-  {
-    wr_id: 6,
-    wr_subject: "자주 묻는 질문입니다.",
-    wr_content: "자주 묻는 질문에 대한 답변입니다.",
-  },
-];
+function decodeHtmlEntities(value: string) {
+  if (typeof window === "undefined") {
+    return value;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = value;
+  return textarea.value;
+}
+
+function normalizeFaqSubject(value: string) {
+  const decodedValue = decodeHtmlEntities(value);
+
+  return decodedValue
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
 export default function FAQSection() {
   const [searchType, setSearchType] = useState("subject");
+  const [searchInput, setSearchInput] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
-  const itemsPerPage = 10;
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
+  const [categories, setCategories] = useState<FaqMaster[]>([]);
+  const [faqItems, setFaqItems] = useState<FaqItem[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // 검색 필터링
-  const filteredData = useMemo(() => {
-    if (!searchKeyword.trim()) return faqData;
+  const loadFaq = useCallback(async () => {
+    setIsLoading(true);
+    setErrorMessage("");
 
-    return faqData.filter((item) => {
-      const searchText =
-        searchType === "subject" ? item.wr_subject : item.wr_content;
-      return searchText.includes(searchKeyword);
-    });
-  }, [searchType, searchKeyword]);
+    try {
+      const data = await getFaq({
+        fm_id: selectedCategoryId || undefined,
+        page: currentPage,
+        stx: searchKeyword.trim() || undefined,
+      });
 
-  // 페이지네이션
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const paginatedData = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredData.slice(start, start + itemsPerPage);
-  }, [filteredData, currentPage]);
+      setCategories(data.master_list);
+      setFaqItems(data.faq_list);
+      setTotalPages(data.pagination.total_pages);
+    } catch (error) {
+      const message =
+        error instanceof ApiError
+          ? error.message
+          : "FAQ 정보를 불러오지 못했습니다.";
+
+      setErrorMessage(message);
+      setFaqItems([]);
+      setTotalPages(0);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, searchKeyword, selectedCategoryId]);
+
+  useEffect(() => {
+    loadFaq();
+  }, [loadFaq]);
 
   const handleSearch = () => {
+    setSearchKeyword(searchInput);
+    setCurrentPage(1);
+    setExpandedItem(null);
+  };
+
+  const handleCategoryChange = (categoryId: number) => {
+    setSelectedCategoryId(categoryId);
     setCurrentPage(1);
     setExpandedItem(null);
   };
@@ -114,9 +108,9 @@ export default function FAQSection() {
               type="text"
               className={styles.searchInput}
               placeholder="검색어를 입력해 주세요"
-              value={searchKeyword}
-              onChange={(e) => setSearchKeyword(e.target.value)}
-              onKeyPress={(e) => {
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => {
                 if (e.key === "Enter") handleSearch();
               }}
             />
@@ -130,31 +124,66 @@ export default function FAQSection() {
         </div>
       </div>
 
+      {categories.length > 0 && (
+        <div className={styles.categoryTabs}>
+          <button
+            type="button"
+            className={`${styles.categoryTab} ${
+              selectedCategoryId === 0 ? styles.activeCategoryTab : ""
+            }`}
+            onClick={() => handleCategoryChange(0)}
+          >
+            전체
+          </button>
+          {categories.map((category) => (
+            <button
+              key={category.fm_id}
+              type="button"
+              className={`${styles.categoryTab} ${
+                selectedCategoryId === category.fm_id
+                  ? styles.activeCategoryTab
+                  : ""
+              }`}
+              onClick={() => handleCategoryChange(category.fm_id)}
+            >
+              {category.subject}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className={styles.faqList}>
-        {paginatedData.length === 0 ? (
+        {isLoading ? (
+          <div className={styles.emptyState}>FAQ를 불러오는 중입니다.</div>
+        ) : errorMessage ? (
+          <div className={styles.emptyState}>{errorMessage}</div>
+        ) : faqItems.length === 0 ? (
           <div className={styles.emptyState}>검색 결과가 없습니다.</div>
         ) : (
-          paginatedData.map((item) => (
+          faqItems.map((item) => (
             <div
-              key={item.wr_id}
+              key={item.fa_id}
               className={`${styles.faqItem} ${
-                expandedItem === item.wr_id ? styles.active : ""
+                expandedItem === item.fa_id ? styles.active : ""
               }`}
             >
               <div
                 className={styles.faqQuestion}
-                onClick={() => toggleItem(item.wr_id)}
+                onClick={() => toggleItem(item.fa_id)}
               >
                 <div className={styles.questionText}>
                   <span className={styles.qLabel}>Q</span>
-                  <span>{item.wr_subject}</span>
+                  <span>{normalizeFaqSubject(item.subject)}</span>
                 </div>
                 <div className={styles.arrowIcon}></div>
               </div>
               <div className={styles.faqAnswer}>
                 <div className={styles.answerContents}>
                   <span className={styles.aLabel}>A</span>
-                  <span>{item.wr_content}</span>
+                  <div
+                    className={styles.answerHtml}
+                    dangerouslySetInnerHTML={{ __html: item.content }}
+                  />
                 </div>
               </div>
             </div>
@@ -169,7 +198,10 @@ export default function FAQSection() {
             className={`${styles.paginationBtn} ${
               currentPage === 1 ? styles.disabled : ""
             }`}
-            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+            onClick={() => {
+              setCurrentPage((prev) => Math.max(1, prev - 1));
+              setExpandedItem(null);
+            }}
             disabled={currentPage === 1}
           >
             <img src="/images/icon/prev_ico.png" alt="이전" />
@@ -180,7 +212,10 @@ export default function FAQSection() {
               className={`${styles.paginationBtn} ${styles.pageNumber} ${
                 currentPage === page ? styles.active : ""
               }`}
-              onClick={() => setCurrentPage(page)}
+              onClick={() => {
+                setCurrentPage(page);
+                setExpandedItem(null);
+              }}
             >
               {page}
             </button>
@@ -189,9 +224,10 @@ export default function FAQSection() {
             className={`${styles.paginationBtn} ${
               currentPage === totalPages ? styles.disabled : ""
             }`}
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-            }
+            onClick={() => {
+              setCurrentPage((prev) => Math.min(totalPages, prev + 1));
+              setExpandedItem(null);
+            }}
             disabled={currentPage === totalPages}
           >
             <img src="/images/icon/next_ico.png" alt="다음" />

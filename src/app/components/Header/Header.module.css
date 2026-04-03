@@ -58,17 +58,28 @@
 
 
 .adminBtns {
-  display: flex; align-items: center; gap: 3rem;
-  margin-right: 2rem; line-height: 1; display: none;
+  display: none;
+  align-items: center;
+  gap: 2rem;
+  margin-right: 2rem;
+  line-height: 1;
 }
 .adminBtns > * {
   display: flex;
   align-items: center;
-  gap: 0.5rem; font-weight: 500;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
   color: #fff;
+  font-size: 1.5rem;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  white-space: nowrap;
 }
 .adminBtns .adminBtn {
-  
+  font: inherit;
 }
 .adminBtns > * img {
   width: 2.4rem;
@@ -179,6 +190,11 @@
 
 .menuOpen .adminBtns {
   display: flex;
+  pointer-events: auto;
+}
+
+.menuOpen .askPrd {
+  pointer-events: auto;
 }
 
 /* 반응형 - 모바일 (참조 index.html / main-responsive.css) */
@@ -198,6 +214,15 @@
 
   .rightArea {
     gap: 2.5rem;
+  }
+
+  .adminBtns {
+    margin-right: 0;
+    gap: 1.5rem;
+  }
+
+  .adminBtns > * {
+    font-size: 1.5rem;
   }
 
   .hamBtn {

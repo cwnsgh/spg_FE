@@ -192,11 +192,19 @@
 }
 
 .mapContainer {
+  position: relative;
   width: 100%;
   height: 60rem;
 }
 
+.mapCanvas {
+  width: 100%;
+  height: 100%;
+}
+
 .mapPlaceholder {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   background: #e0e0e0;
@@ -205,6 +213,7 @@
   justify-content: center;
   color: #888;
   font-size: 1.6rem;
+  z-index: 1;
 }
 
 @media (max-width: 1050px) {

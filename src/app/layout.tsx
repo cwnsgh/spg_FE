@@ -13,8 +13,7 @@
  */
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
   title: "SPG Site",
@@ -29,14 +28,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        {/* 상단 헤더 (공통) */}
-        <Header />
-
-        {/* 각 페이지의 콘텐츠 (동적) */}
-        {children}
-
-        {/* 하단 푸터 (공통) */}
-        <Footer />
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

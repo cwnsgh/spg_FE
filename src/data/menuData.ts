@@ -2,22 +2,18 @@
  * 헤더 메뉴 데이터
  */
 import { MenuItem } from "../types";
+import { productTabs } from "../app/products/data/productData";
+
+const productGnbSubMenu: MenuItem[] = productTabs.map((tab) => ({
+  label: tab.label,
+  href: `/products?tab=${tab.value}`,
+}));
 
 export const gnbMenuData: MenuItem[] = [
   {
     label: "제품소개",
-    href: "/products",
-    subMenu: [
-      { label: "로봇감속기", href: "/products" },
-      { label: "표준AC 기어드모터", href: "/products" },
-      { label: "표준BLDC 기어드모터", href: "/products" },
-      { label: "DC기어드모터", href: "/products" },
-      { label: "동력용모터", href: "/products" },
-      { label: "유성감속기", href: "/products" },
-      { label: "기타", href: "/products" },
-      { label: "보안경계", href: "/products" },
-      { label: "음식물처리기", href: "/products" },
-    ],
+    href: "/products?tab=0",
+    subMenu: productGnbSubMenu,
   },
   {
     label: "마케팅",
@@ -119,55 +115,64 @@ export const hamburgerMenuData: HamburgerMenuColumn[] = [
     bigCateGroups: [
       [
         {
-          label: "로봇감속기",
-          href: "/products",
+          label: "표준 AC 기어드모터",
+          href: "/products?tab=0",
           smallCategories: [
-            { label: "KSH 시리즈", href: "/products" },
-            { label: "KSR 시리즈", href: "/products" },
-          ],
-        },
-        { label: "표준AC 기어드모터", href: "/products" },
-        { label: "표준BLDC 기어드모터", href: "/products" },
-        { label: "DC기어드모터", href: "/products" },
-        {
-          label: "동력용모터",
-          href: "/products",
-          smallCategories: [
-            { label: "일반동력(P/PA/PC)", href: "/products" },
-            { label: "메가시리즈", href: "/products" },
+            { label: "STANDARD AC", href: "/products?tab=0" },
+            { label: "INDUSTRIAL AC", href: "/products?tab=0" },
           ],
         },
         {
-          label: "유성감속기",
-          href: "/products",
+          label: "SH 정밀감속기",
+          href: "/products?tab=1",
           smallCategories: [
-            { label: "일반유성", href: "/products" },
-            { label: "SM시리즈", href: "/products" },
-            { label: "로타리테이블", href: "/products" },
+            { label: "KSH 시리즈", href: "/products?tab=1" },
+          ],
+        },
+        {
+          label: "SR 정밀감속기",
+          href: "/products?tab=2",
+          smallCategories: [
+            { label: "KSR 시리즈", href: "/products?tab=2" },
+          ],
+        },
+        {
+          label: "서보모터용 정밀 유성감속기",
+          href: "/products?tab=3",
+          smallCategories: [
+            { label: "일반유성", href: "/products?tab=3" },
+            { label: "SM 시리즈", href: "/products?tab=3" },
+          ],
+        },
+        {
+          label: "동력용 모터",
+          href: "/products?tab=4",
+          smallCategories: [
+            { label: "일반동력(P/PA/PC)", href: "/products?tab=4" },
+          ],
+        },
+        {
+          label: "동력용 기어드 모터",
+          href: "/products?tab=5",
+          smallCategories: [
+            { label: "메가시리즈", href: "/products?tab=5" },
           ],
         },
       ],
       [
         {
-          label: "기타",
-          href: "/products",
+          label: "BLDC 기어드 모터 X-TOR",
+          href: "/products?tab=6",
           smallCategories: [
-            { label: "동력용웜감속기", href: "/products" },
-            { label: "베벨기어박스", href: "/products" },
-            { label: "스텝모터", href: "/products" },
-            { label: "쉐이디드폴", href: "/products" },
-            { label: "FLAT", href: "/products" },
-            { label: "PELLET HEATING", href: "/products" },
-            { label: "BLDC FAN", href: "/products" },
-            { label: "CAPACITOR RUN", href: "/products" },
-            { label: "자동문", href: "/products" },
-            { label: "공기청정기용", href: "/products" },
-            { label: "냉장고용", href: "/products" },
-            { label: "에어컨용", href: "/products" },
+            { label: "X-TOR 시리즈", href: "/products?tab=6" },
           ],
         },
-        { label: "보안경계", href: "/products" },
-        { label: "음식물처리기", href: "/products" },
+        { label: "DC 기어드 모터", href: "/products?tab=7" },
+        { label: "SG 표준 AC 기어드모터", href: "/products?tab=8" },
+        { label: "로타리 테이블", href: "/products?tab=9" },
+        { label: "동력용 웜 감속기", href: "/products?tab=10" },
+        { label: "베벨 기어박스", href: "/products?tab=11" },
+        { label: "스텝모터", href: "/products?tab=12" },
       ],
     ],
   },

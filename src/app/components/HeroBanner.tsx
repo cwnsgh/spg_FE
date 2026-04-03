@@ -14,7 +14,7 @@
  */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -56,6 +56,11 @@ export default function HeroBanner({
 }: HeroBannerProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const tabsScrollRef = useRef<HTMLDivElement>(null);
+  const activeTabRef = useRef<HTMLButtonElement>(null);
+  const [isTabsOverflowing, setIsTabsOverflowing] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
   // URL 파라미터 사용 시 내부 상태 관리
   const [internalActiveTab, setInternalActiveTab] = useState<string | number>(
@@ -70,6 +75,21 @@ export default function HeroBanner({
   // 외부에서 activeTab을 제어하는지, 내부에서 제어하는지 결정
   const activeTab =
     externalActiveTab !== undefined ? externalActiveTab : internalActiveTab;
+
+  const updateScrollState = useCallback(() => {
+    const container = tabsScrollRef.current;
+
+    if (!container) return;
+
+    const hasOverflow = container.scrollWidth > container.clientWidth + 1;
+    const nextCanScrollLeft = container.scrollLeft > 2;
+    const nextCanScrollRight =
+      container.scrollLeft + container.clientWidth < container.scrollWidth - 2;
+
+    setIsTabsOverflowing(hasOverflow);
+    setCanScrollLeft(hasOverflow && nextCanScrollLeft);
+    setCanScrollRight(hasOverflow && nextCanScrollRight);
+  }, []);
 
   // URL 파라미터 동기화
   useEffect(() => {
@@ -87,6 +107,37 @@ export default function HeroBanner({
     }
   }, [searchParams, useUrlParams, urlParamKey, tabs]);
 
+  useEffect(() => {
+    updateScrollState();
+
+    const container = tabsScrollRef.current;
+    if (!container) return;
+
+    const handleResize = () => updateScrollState();
+
+    window.addEventListener("resize", handleResize);
+    container.addEventListener("scroll", updateScrollState, { passive: true });
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      container.removeEventListener("scroll", updateScrollState);
+    };
+  }, [tabs, updateScrollState]);
+
+  useEffect(() => {
+    activeTabRef.current?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+
+    const timer = window.setTimeout(() => {
+      updateScrollState();
+    }, 250);
+
+    return () => window.clearTimeout(timer);
+  }, [activeTab, updateScrollState]);
+
   // 탭 변경 핸들러
   const handleTabChange = (tab: string | number) => {
     if (useUrlParams && basePath) {
@@ -100,6 +151,23 @@ export default function HeroBanner({
       // 내부 상태만 업데이트
       setInternalActiveTab(tab);
     }
+  };
+
+  const scrollTabs = (direction: "left" | "right") => {
+    const container = tabsScrollRef.current;
+
+    if (!container) return;
+
+    const scrollAmount = Math.max(container.clientWidth * 0.75, 240);
+    const nextLeft =
+      direction === "left"
+        ? container.scrollLeft - scrollAmount
+        : container.scrollLeft + scrollAmount;
+
+    container.scrollTo({
+      left: nextLeft,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -130,7 +198,19 @@ export default function HeroBanner({
           {/* 서브 탭 (고객지원, 회사소개 페이지용) */}
           {tabs && tabs.length > 0 && (
             <div className={styles.tabsWrap}>
-              <div className={styles.tabs}>
+              {isTabsOverflowing && (
+                <button
+                  type="button"
+                  className={`${styles.tabScrollButton} ${styles.left} ${
+                    !canScrollLeft ? styles.disabled : ""
+                  }`}
+                  onClick={() => scrollTabs("left")}
+                  aria-label="이전 탭 보기"
+                  disabled={!canScrollLeft}
+                />
+              )}
+              <div className={styles.tabsScroll} ref={tabsScrollRef}>
+                <div className={styles.tabs}>
                 {tabs.map((tab, index) => {
                   const tabValue = tab.value;
                   const isActive =
@@ -141,6 +221,7 @@ export default function HeroBanner({
                   return (
                     <button
                       key={index}
+                      ref={isActive ? activeTabRef : null}
                       className={`${styles.tab} ${isActive ? styles.active : ""}`}
                       onClick={() => handleTabChange(tabValue)}
                     >
@@ -148,8 +229,20 @@ export default function HeroBanner({
                     </button>
                   );
                 })}
+                </div>
               </div>
-            </div>
+              {isTabsOverflowing && (
+                <button
+                  type="button"
+                  className={`${styles.tabScrollButton} ${styles.right} ${
+                    !canScrollRight ? styles.disabled : ""
+                  }`}
+                  onClick={() => scrollTabs("right")}
+                  aria-label="다음 탭 보기"
+                  disabled={!canScrollRight}
+                />
+              )}
+              </div>
           )}
         </div>
       </div>

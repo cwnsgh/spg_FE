@@ -153,6 +153,13 @@
   padding: 12rem var(--layout-side-pc-sub) 0;
 }
 
+.statusMessage {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 4rem;
+}
+
 .regionSection {
   margin-bottom: 11rem;
   display: flex;

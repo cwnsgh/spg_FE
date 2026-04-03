@@ -4,12 +4,14 @@
  */
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useHeaderScroll } from "../../../hooks/useHeaderScroll";
 import { useHamburgerMenu } from "../../../hooks/useHamburgerMenu";
 import { gnbMenuData } from "../../../data/menuData";
+import { useAuth } from "@/contexts/AuthContext";
+import AdminLoginModal from "@/app/components/Auth/AdminLoginModal";
 import GNB from "./GNB";
 import HamburgerMenu from "./HamburgerMenu";
 import styles from "./Header.module.css";
@@ -24,10 +26,13 @@ const LIGHT_BACKGROUND_PAGES = [
 ];
 
 const Header: React.FC = () => {
+  const router = useRouter();
   const pathname = usePathname();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { isScrolled, headerRef, handleMouseEnter, handleMouseLeave } =
     useHeaderScroll();
-  const { isMenuOpen, toggleMenu } = useHamburgerMenu();
+  const { isMenuOpen, toggleMenu, closeMenu } = useHamburgerMenu();
+  const { isLoggedIn, isAdmin, isLoading, logout } = useAuth();
 
   // 현재 페이지가 흰색 배경 페이지인지 확인
   const isLightPage = LIGHT_BACKGROUND_PAGES.some((page) =>
@@ -36,6 +41,23 @@ const Header: React.FC = () => {
 
   // 흰색 배경 페이지이거나 스크롤되었을 때 scrolled 클래스 적용
   const shouldShowScrolled = isLightPage || isScrolled;
+
+  const handleLogout = async () => {
+    await logout();
+    closeMenu();
+    setIsLoginModalOpen(false);
+    router.push("/");
+    router.refresh();
+  };
+
+  const handleOpenLoginModal = () => {
+    closeMenu();
+    setIsLoginModalOpen(true);
+  };
+
+  const handleCloseLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
 
   return (
     <>
@@ -58,19 +80,36 @@ const Header: React.FC = () => {
           />
         </div>
         <div className={styles.rightArea}>
-          <Link href="#" className={styles.askPrd}>
+          <Link href="/customersupport?tab=inquiry" className={styles.askPrd}>
             제품 문의
           </Link>
-          {/* <div className={styles.adminBtns}>
-            <Link href="#" className={styles.adminBtn}>
-              <img src="/images/icon/admin_ico.png" alt="spg" />
-              어드민 로그인
-            </Link>
-            <Link href="#" className={styles.uploadBtn}>
-              <img src="/images/icon/upload_ico.png" alt="spg" />
-              자료 업로드
-            </Link>
-          </div> */}
+          {!isLoading && (
+            <div className={styles.adminBtns}>
+              {!isLoggedIn && (
+                <button
+                  type="button"
+                  className={styles.adminBtn}
+                  onClick={handleOpenLoginModal}
+                >
+                  Admin Login
+                </button>
+              )}
+              {isLoggedIn && isAdmin && (
+                <Link href="/admin" className={styles.adminBtn} onClick={closeMenu}>
+                  Admin
+                </Link>
+              )}
+              {isLoggedIn && (
+                <button
+                  type="button"
+                  className={styles.adminBtn}
+                  onClick={() => void handleLogout()}
+                >
+                  Logout
+                </button>
+              )}
+            </div>
+          )}
           {/* 검색창 영역 */}
           {/* <div className={styles.searchBox}>
             <div className={styles.searchBtn}>
@@ -83,7 +122,11 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header>
-      <HamburgerMenu isOpen={isMenuOpen} onClose={toggleMenu} />
+      <HamburgerMenu isOpen={isMenuOpen} onClose={closeMenu} />
+      <AdminLoginModal
+        isOpen={isLoginModalOpen}
+        onClose={handleCloseLoginModal}
+      />
     </>
   );
 };

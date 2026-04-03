@@ -25,6 +25,36 @@
   line-height: 1.4;
 }
 
+.categoryTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.categoryTab {
+  border: 1px solid #d9d9d9;
+  background: #fff;
+  color: #666;
+  border-radius: 999px;
+  padding: 1rem 1.8rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.categoryTab:hover {
+  border-color: #173c74;
+  color: #173c74;
+}
+
+.activeCategoryTab {
+  background: #173c74;
+  border-color: #173c74;
+  color: #fff;
+}
+
 /* 검색 영역 */
 .searchBox {
   display: flex;
@@ -180,6 +210,24 @@
   font-weight: 500;
 }
 
+.answerHtml {
+  flex: 1;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+.answerHtml :global(p) {
+  margin: 0 0 1rem;
+}
+
+.answerHtml :global(p:last-child) {
+  margin-bottom: 0;
+}
+
+.answerHtml :global(br) {
+  line-height: 1.7;
+}
+
 .aLabel {
   color: #000;
   font-weight: 600;
@@ -256,6 +304,14 @@
     flex-flow: column;
     align-items: flex-start;
     margin-bottom: 2.5rem;
+  }
+  .categoryTabs {
+    margin-bottom: 2rem;
+    gap: 0.8rem;
+  }
+  .categoryTab {
+    font-size: 1.5rem;
+    padding: 0.9rem 1.5rem;
   }
   .faqTop h2 {
     font-size: 2.2rem;

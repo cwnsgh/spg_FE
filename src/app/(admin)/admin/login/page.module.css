@@ -1,0 +1,14 @@
+.page {
+  min-height: 100vh;
+  padding: 8rem 2rem;
+  background: #f6f8fc;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 4rem 1.6rem;
+  }
+}

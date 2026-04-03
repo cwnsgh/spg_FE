@@ -1,87 +1,78 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import { ApiError, FranchiseItem, getFranchiseList } from "@/api";
 import styles from "./OverseasFacilities.module.css";
 
 interface Facility {
   id: string;
   name: string;
   address: string;
-  position: { x: number; y: number };
   region: string;
   phone: string;
   image: string;
-  googleMapUrl?: string;
+  mapUrl?: string;
+  position?: { x: number; y: number };
 }
 
-const overseasBranches: Facility[] = [
-  {
-    id: "branch-1",
-    name: "SPG USA, INC",
-    address: "1726 Wright Blvd.",
-    position: { x: 25, y: 45 },
-    region: "미주",
-    phone: "00-000-000-0000",
-    image: "/images/facilities/recruit_01.png",
-    googleMapUrl:
-      "https://www.google.com/maps/place/1726+Wright+Blvd,+Schaumburg,+IL+60193+%EB%AF%B8%EA%B5%AD/@41.9939902,-88.1034414,18z/data=!4m5!3m4!1s0x880fa944d8476eed:0x894bbc104d45a11f!8m2!3d41.9939464!4d-88.1023632?shorturl=1",
-  },
-  {
-    id: "branch-2",
-    name: "QINGDAO SUNGSHIN MOTOR CO.,LTD",
-    address: "No.3 YANGHUI ROAD, LANCUN TOWN, JIMO DISTRICT,QINGDAO CITY",
-    position: { x: 77.5, y: 46 },
-    region: "아시아",
-    phone: "00-000-000-0000",
-    image: "/images/facilities/recruit_02.png",
-    googleMapUrl:
-      "https://www.google.com/maps/place/Lancunzhen,+Jimo,+%EC%B9%AD%EB%8B%A4%EC%98%A4%EC%8B%9C+%EC%82%B0%EB%91%A5%EC%84%B1+%EC%A4%91%EA%B5%AD/@36.3783308,120.328263,11z/data=!4m5!3m4!1s0x359677f65d93aec3:0xd7693092ea50620b!8m2!3d36.407693!4d120.185515?shorturl=1",
-  },
-  {
-    id: "branch-3",
-    name: "SPG MOTOR(SUZHOU) CO., LTD",
-    address: "168 HONGYE ROAD, SUZHOU INDUSTRIAL PARK, SUZHOU CHINA",
-    position: { x: 77.3, y: 49 },
-    region: "아시아",
-    phone: "00-000-000-0000",
-    image: "/images/facilities/recruit_03.png",
-    googleMapUrl:
-      "https://www.google.com/maps/place/168+Hong+Ye+Lu,+Wuzhong+Qu,+Suzhou+Shi,+Jiangsu+Sheng,+%EC%A4%91%EA%B5%AD+215001/@30.9758114,121.1216683,7z/data=!4m6!3m5!1s0x35b3a77426cfa871:0x1fc72dc6ac188ef9!8m2!3d31.2791377!4d120.6621552?shorturl=1",
-  },
-  {
-    id: "branch-4",
-    name: "SPG VINA COMPANY LIMITED",
-    address: "LOT NO.L-2A-CN, MY PHUOC INDUSTRIAL PARK 2",
-    position: { x: 74.3, y: 57.5 },
-    region: "아시아",
-    phone: "00-000-000-0000",
-    image: "/images/facilities/recruit_01.png",
-    googleMapUrl:
-      "https://www.google.com/maps/place/My+Phuoc+3+Industrial+Park+Accommodation+GP9/@11.1270981,106.6356935,17z/data=!4m5!3m4!1s0x3174cea45f15ae7f:0x9f0d5cbb7ce116f9!8m2!3d11.1270981!4d106.6378822?shorturl=1",
-  },
-];
+const OVERSEAS_GF_TYPE: Record<"branch" | "dealer", number> = {
+  branch: 1,
+  dealer: 3,
+};
 
-const overseasDealers: Facility[] = [
-  {
-    id: "dealer-1",
-    name: "SPG VINA COMPANY LIMITED",
-    address: "LOT NO.L-2A-CN, MY PHUOC INDUSTRIAL PARK 2",
-    position: { x: 73.3, y: 25.5 },
-    region: "아시아",
-    phone: "00-000-000-0000",
+const DEFAULT_FACILITY_IMAGE = "/images/facilities/recruit_01.png";
+
+const facilityMetaByName: Record<
+  string,
+  { image?: string; position?: { x: number; y: number } }
+> = {
+  "SPG USA, INC": {
     image: "/images/facilities/recruit_01.png",
+    position: { x: 25, y: 45 },
   },
-  {
-    id: "dealer-2",
-    name: "SPG MOTOR(SUZHOU) CO., LTD",
-    address: "168 HONGYE ROAD, SUZHOU INDUSTRIAL PARK, SUZHOU CHINA",
-    position: { x: 77.3, y: 49 },
-    region: "아시아",
-    phone: "00-000-000-0000",
+  "QINGDAO SUNGSHIN MOTOR CO.,LTD": {
     image: "/images/facilities/recruit_02.png",
+    position: { x: 77.5, y: 46 },
   },
-];
+  "SPG MOTOR(SUZHOU) CO., LTD": {
+    image: "/images/facilities/recruit_03.png",
+    position: { x: 77.3, y: 49 },
+  },
+  "SPG VINA COMPANY LIMITED": {
+    image: "/images/facilities/recruit_01.png",
+    position: { x: 74.3, y: 57.5 },
+  },
+};
+
+function mapFranchiseToFacility(item: FranchiseItem): Facility {
+  const meta = facilityMetaByName[item.gf_subject] ?? {};
+
+  return {
+    id: String(item.gf_id),
+    name: item.gf_subject,
+    address: item.gf_addr || item.gf_area || item.gf_nation || "-",
+    region: item.gf_continent || "기타",
+    phone: item.gf_tel || item.gf_contact || "-",
+    image: meta.image ?? DEFAULT_FACILITY_IMAGE,
+    mapUrl: item.gf_map_url || item.gf_url || undefined,
+    position: meta.position,
+  };
+}
+
+function getRegionOrder(region: string) {
+  const orderMap: Record<string, number> = {
+    아시아: 0,
+    북아메리카: 1,
+    남아메리카: 2,
+    유럽: 3,
+    중동: 4,
+    아프리카: 5,
+    오세아니아: 6,
+  };
+
+  return orderMap[region] ?? 99;
+}
 
 export default function OverseasFacilities() {
   const searchParams = useSearchParams();
@@ -91,15 +82,15 @@ export default function OverseasFacilities() {
     (urlCategory === "dealer" ? "dealer" : "branch") as "branch" | "dealer"
   );
   const [selectedFacility, setSelectedFacility] = useState<string | null>(null);
+  const [facilities, setFacilities] = useState<Facility[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
   const [popupPositions, setPopupPositions] = useState<
     Record<string, { left: number; top: number }>
   >({});
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const markerRefs = useRef<Record<string, HTMLDivElement>>({});
   const popupRefs = useRef<Record<string, HTMLDivElement>>({});
-
-  const facilities =
-    activeType === "branch" ? overseasBranches : overseasDealers;
 
   // URL 파라미터 변경 시 상태 업데이트
   useEffect(() => {
@@ -111,12 +102,62 @@ export default function OverseasFacilities() {
   }, [urlCategory]);
 
   useEffect(() => {
+    setSelectedFacility(null);
+  }, [activeType]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadFacilities() {
+      setIsLoading(true);
+      setErrorMessage("");
+
+      try {
+        const listData = await getFranchiseList({
+          gf_type: OVERSEAS_GF_TYPE[activeType],
+          page: 1,
+          limit: 200,
+        });
+
+        if (!isMounted) return;
+
+        setFacilities(listData.items.map(mapFranchiseToFacility));
+      } catch (error) {
+        if (!isMounted) return;
+
+        const message =
+          error instanceof ApiError
+            ? error.message
+            : "해외 사업장 정보를 불러오지 못했습니다.";
+
+        setErrorMessage(message);
+        setFacilities([]);
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadFacilities();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeType]);
+
+  const facilitiesWithMarker = useMemo(
+    () => facilities.filter((facility) => facility.position),
+    [facilities]
+  );
+
+  useEffect(() => {
     if (!selectedFacility) {
       setPopupPositions({});
       return;
     }
 
-    const facility = facilities.find((f) => f.id === selectedFacility);
+    const facility = facilitiesWithMarker.find((f) => f.id === selectedFacility);
     if (!facility) return;
 
     const marker = markerRefs.current[facility.id];
@@ -135,7 +176,7 @@ export default function OverseasFacilities() {
         },
       });
     }
-  }, [facilities, selectedFacility]);
+  }, [facilitiesWithMarker, selectedFacility]);
 
   // 팝업이 렌더링된 후 높이를 측정해서 위치 재계산
   useEffect(() => {
@@ -150,7 +191,7 @@ export default function OverseasFacilities() {
       const popupHeight = popup.offsetHeight;
       if (popupHeight === 0) return; // 아직 높이가 계산되지 않음
 
-      const facility = facilities.find((f) => f.id === selectedFacility);
+      const facility = facilitiesWithMarker.find((f) => f.id === selectedFacility);
       if (!facility) return;
 
       const marker = markerRefs.current[facility.id];
@@ -177,7 +218,7 @@ export default function OverseasFacilities() {
     }, 0);
 
     return () => clearTimeout(timer);
-  }, [selectedFacility, facilities]);
+  }, [selectedFacility, facilitiesWithMarker]);
 
   const handleMarkerClick = (facilityId: string) => {
     setSelectedFacility(selectedFacility === facilityId ? null : facilityId);
@@ -202,7 +243,9 @@ export default function OverseasFacilities() {
   };
 
   // 대륙별로 그룹화
-  const groupedByRegion = facilities.reduce(
+  const groupedByRegion = useMemo(
+    () =>
+      facilities.reduce(
     (acc, facility) => {
       const region = facility.region || "기타";
       if (!acc[region]) {
@@ -212,6 +255,13 @@ export default function OverseasFacilities() {
       return acc;
     },
     {} as Record<string, Facility[]>
+      ),
+    [facilities]
+  );
+
+  const orderedRegions = useMemo(
+    () => Object.keys(groupedByRegion).sort((a, b) => getRegionOrder(a) - getRegionOrder(b)),
+    [groupedByRegion]
   );
 
   return (
@@ -251,7 +301,7 @@ export default function OverseasFacilities() {
         </div>
 
         {/* 마커들 */}
-        {facilities.map((facility) => (
+        {facilitiesWithMarker.map((facility) => (
           <div
             key={facility.id}
             ref={(el) => {
@@ -259,8 +309,8 @@ export default function OverseasFacilities() {
             }}
             className={styles.mapMarker}
             style={{
-              left: `${facility.position.x}%`,
-              top: `${facility.position.y}%`,
+              left: `${facility.position?.x ?? 0}%`,
+              top: `${facility.position?.y ?? 0}%`,
             }}
             onClick={(e) => {
               e.stopPropagation();
@@ -276,7 +326,7 @@ export default function OverseasFacilities() {
         ))}
 
         {/* 팝업들 */}
-        {facilities.map((facility) => {
+        {facilitiesWithMarker.map((facility) => {
           const position = popupPositions[facility.id];
           if (!position || selectedFacility !== facility.id) return null;
 
@@ -307,10 +357,10 @@ export default function OverseasFacilities() {
                 <div className={styles.popupAddressWrapper}>
                   <p className={styles.popupAddress}>{facility.address}</p>
                 </div>
-                {activeType === "branch" && facility.googleMapUrl && (
+                {facility.mapUrl && (
                   <div className={styles.popupButtonWrapper}>
                     <a
-                      href={facility.googleMapUrl}
+                      href={facility.mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.popupDetailBtn}
@@ -327,7 +377,23 @@ export default function OverseasFacilities() {
 
       {/* 대륙별 상세정보 */}
       <div className={styles.facilitiesDetail}>
-        {Object.keys(groupedByRegion).map((region) => (
+        {isLoading && (
+          <p className={styles.statusMessage}>
+            해외 사업장 정보를 불러오는 중입니다.
+          </p>
+        )}
+
+        {!isLoading && errorMessage && (
+          <p className={styles.statusMessage}>{errorMessage}</p>
+        )}
+
+        {!isLoading && !errorMessage && facilities.length === 0 && (
+          <p className={styles.statusMessage}>표시할 해외 사업장이 없습니다.</p>
+        )}
+
+        {!isLoading &&
+          !errorMessage &&
+          orderedRegions.map((region) => (
           <div key={region} className={styles.regionSection}>
             <h2 className={styles.regionTitle}>{region}</h2>
             <div className={styles.facilityCards}>
@@ -357,9 +423,9 @@ export default function OverseasFacilities() {
                         {facility.phone}
                       </p>
                     </div>
-                    {activeType === "branch" && facility.googleMapUrl && (
+                    {facility.mapUrl && (
                       <a
-                        href={facility.googleMapUrl}
+                        href={facility.mapUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.cardMapBtn}

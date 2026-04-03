@@ -1,0 +1,49 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+}
+
+.dialog {
+  position: relative;
+  width: 100%;
+  max-width: 52rem;
+}
+
+.dialog :global(section) {
+  max-width: none;
+}
+
+.closeButton {
+  position: absolute;
+  top: 1.8rem;
+  right: 1.8rem;
+  z-index: 1;
+  width: 4rem;
+  height: 4rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(17, 42, 95, 0.08);
+  color: #112a5f;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    align-items: flex-start;
+    padding: 12rem 1.6rem 2rem;
+  }
+
+  .closeButton {
+    top: 1.4rem;
+    right: 1.4rem;
+  }
+}
