@@ -182,6 +182,16 @@ export default function AdminDashboardLayout({
           </div>
 
           <div className={styles.topbarActions}>
+            <div className={styles.quickLinks}>
+              <Link
+                href="/"
+                target="_blank"
+                rel="noreferrer"
+                className={styles.previewButton}
+              >
+                사이트 홈
+              </Link>
+            </div>
             <div className={styles.userBox}>
               <span className={styles.userName}>{user.mb_name}</span>
               <span className={styles.userMeta}>{user.mb_id}</span>

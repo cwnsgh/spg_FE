@@ -155,6 +155,35 @@
   gap: 1.4rem;
 }
 
+.quickLinks {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.previewButton,
+.previewButtonSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 4.4rem;
+  padding: 0 1.6rem;
+  border-radius: 1.2rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.previewButton {
+  background: #edf3ff;
+  color: #1d5ee8;
+}
+
+.previewButtonSecondary {
+  background: #f4f7fb;
+  color: #4f5d76;
+  border: 1px solid #dbe4f0;
+}
+
 .userBox {
   display: flex;
   flex-direction: column;
@@ -243,6 +272,10 @@
     justify-content: space-between;
   }
 
+  .quickLinks {
+    flex-wrap: wrap;
+  }
+
   .userBox {
     align-items: flex-start;
   }
@@ -262,6 +295,13 @@
     align-items: stretch;
   }
 
+  .quickLinks {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .previewButton,
+  .previewButtonSecondary,
   .logoutButton {
     width: 100%;
   }
