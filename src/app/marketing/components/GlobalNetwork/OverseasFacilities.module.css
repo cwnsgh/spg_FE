@@ -129,6 +129,8 @@
 .popupButtonWrapper {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: 20px;
 }
 
@@ -266,6 +268,13 @@
   filter: brightness(1.15);
 }
 
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 
 @media (max-width: 1050px) {
   .facilityTypeTabs {
@@ -350,6 +359,9 @@
   .cardInfo {
     flex-flow: column;
     align-items: flex-start;
+  }
+  .cardActions {
+    width: 100%;
   }
   .cardAddress,
   .cardPhone {margin-bottom: 1.5rem;}

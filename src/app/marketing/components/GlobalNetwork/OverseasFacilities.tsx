@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { ApiError, FranchiseItem, getFranchiseList } from "@/api";
+import { normalizeExternalUrl } from "@/app/marketing/externalUrl";
 import styles from "./OverseasFacilities.module.css";
 
 interface Facility {
@@ -13,6 +14,7 @@ interface Facility {
   phone: string;
   image: string;
   mapUrl?: string;
+  websiteUrl?: string;
   position?: { x: number; y: number };
 }
 
@@ -55,7 +57,8 @@ function mapFranchiseToFacility(item: FranchiseItem): Facility {
     region: item.gf_continent || "기타",
     phone: item.gf_tel || item.gf_contact || "-",
     image: meta.image ?? DEFAULT_FACILITY_IMAGE,
-    mapUrl: item.gf_map_url || item.gf_url || undefined,
+    mapUrl: item.gf_map_url || undefined,
+    websiteUrl: item.gf_url || undefined,
     position: meta.position,
   };
 }
@@ -328,6 +331,8 @@ export default function OverseasFacilities() {
         {/* 팝업들 */}
         {facilitiesWithMarker.map((facility) => {
           const position = popupPositions[facility.id];
+          const normalizedMapUrl = normalizeExternalUrl(facility.mapUrl);
+          const normalizedWebsiteUrl = normalizeExternalUrl(facility.websiteUrl);
           if (!position || selectedFacility !== facility.id) return null;
 
           return (
@@ -357,16 +362,28 @@ export default function OverseasFacilities() {
                 <div className={styles.popupAddressWrapper}>
                   <p className={styles.popupAddress}>{facility.address}</p>
                 </div>
-                {facility.mapUrl && (
+                {(normalizedMapUrl || normalizedWebsiteUrl) && (
                   <div className={styles.popupButtonWrapper}>
-                    <a
-                      href={facility.mapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.popupDetailBtn}
-                    >
-                      지도 보기
-                    </a>
+                    {normalizedMapUrl && (
+                      <a
+                        href={normalizedMapUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.popupDetailBtn}
+                      >
+                        지도 보기
+                      </a>
+                    )}
+                    {normalizedWebsiteUrl && (
+                      <a
+                        href={normalizedWebsiteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.popupDetailBtn}
+                      >
+                        웹사이트
+                      </a>
+                    )}
                   </div>
                 )}
               </div>
@@ -423,15 +440,30 @@ export default function OverseasFacilities() {
                         {facility.phone}
                       </p>
                     </div>
-                    {facility.mapUrl && (
-                      <a
-                        href={facility.mapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.cardMapBtn}
-                      >
-                        지도 보기
-                      </a>
+                    {(normalizeExternalUrl(facility.mapUrl) ||
+                      normalizeExternalUrl(facility.websiteUrl)) && (
+                      <div className={styles.cardActions}>
+                        {normalizeExternalUrl(facility.mapUrl) && (
+                          <a
+                            href={normalizeExternalUrl(facility.mapUrl)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.cardMapBtn}
+                          >
+                            지도 보기
+                          </a>
+                        )}
+                        {normalizeExternalUrl(facility.websiteUrl) && (
+                          <a
+                            href={normalizeExternalUrl(facility.websiteUrl)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.cardMapBtn}
+                          >
+                            웹사이트
+                          </a>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>

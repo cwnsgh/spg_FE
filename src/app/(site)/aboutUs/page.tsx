@@ -8,16 +8,17 @@ import AboutTabs from "../../aboutUs/components/AboutTabs";
 import aboutUsBanner from "../../../assets/aboutus_banner.png";
 import styles from "../../aboutUs/page.module.css";
 
+const aboutTabs = [
+  { label: "인사말", value: 0 },
+  { label: "경영이념 및 비전", value: 1 },
+  { label: "회사연혁", value: 2 },
+  { label: "채용정보", value: 3 },
+  { label: "찾아오시는 길", value: 4 },
+  { label: "윤리규정", value: 5 },
+];
+
 function AboutUsContent() {
   const searchParams = useSearchParams();
-  const aboutTabs = [
-    { label: "인사말", value: 0 },
-    { label: "경영이념 및 비전", value: 1 },
-    { label: "회사연혁", value: 2 },
-    { label: "채용정보", value: 3 },
-    { label: "찾아오시는 길", value: 4 },
-    { label: "윤리경영", value: 5 },
-  ];
 
   const breadcrumb = useMemo<BreadcrumbItem[]>(() => {
     const baseItems: BreadcrumbItem[] = [

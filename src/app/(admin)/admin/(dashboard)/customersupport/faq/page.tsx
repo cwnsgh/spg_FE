@@ -11,6 +11,7 @@ import {
   saveAdminFaq,
   saveAdminFaqMaster,
 } from "@/api";
+import { useOverlayDismiss } from "@/hooks/useOverlayDismiss";
 import type { AdminFaqItem, AdminFaqMasterItem } from "@/api";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./page.module.css";
@@ -190,6 +191,11 @@ export default function AdminFaqPage() {
     setIsMasterSaving(false);
   };
 
+  const {
+    handleOverlayMouseDown: handleMasterOverlayMouseDown,
+    handleOverlayClick: handleMasterOverlayClick,
+  } = useOverlayDismiss(closeMasterModal);
+
   const handleMasterFieldChange = (
     key: keyof FaqMasterFormState,
     value: string | number
@@ -289,6 +295,11 @@ export default function AdminFaqPage() {
     setFaqFormError("");
     setIsFaqSaving(false);
   };
+
+  const {
+    handleOverlayMouseDown: handleFaqOverlayMouseDown,
+    handleOverlayClick: handleFaqOverlayClick,
+  } = useOverlayDismiss(closeFaqModal);
 
   const handleFaqFieldChange = (key: keyof FaqFormState, value: string | number) => {
     setFaqForm((prev) => ({
@@ -508,7 +519,11 @@ export default function AdminFaqPage() {
       </section>
 
       {isMasterModalOpen && (
-        <div className={styles.modalOverlay} onClick={closeMasterModal}>
+        <div
+          className={styles.modalOverlay}
+          onMouseDown={handleMasterOverlayMouseDown}
+          onClick={handleMasterOverlayClick}
+        >
           <section className={styles.modalCard} onClick={(event) => event.stopPropagation()}>
             <div className={styles.modalHeader}>
               <div>
@@ -646,7 +661,11 @@ export default function AdminFaqPage() {
       )}
 
       {isFaqModalOpen && (
-        <div className={styles.modalOverlay} onClick={closeFaqModal}>
+        <div
+          className={styles.modalOverlay}
+          onMouseDown={handleFaqOverlayMouseDown}
+          onClick={handleFaqOverlayClick}
+        >
           <section className={styles.modalCard} onClick={(event) => event.stopPropagation()}>
             <div className={styles.modalHeader}>
               <div>

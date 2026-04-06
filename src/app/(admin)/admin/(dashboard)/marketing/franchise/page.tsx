@@ -9,6 +9,7 @@ import {
   getAdminFranchiseList,
   updateAdminFranchise,
 } from "@/api";
+import { useOverlayDismiss } from "@/hooks/useOverlayDismiss";
 import type { AdminFranchiseListData, AdminFranchiseSavePayload, FranchiseItem } from "@/api";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./page.module.css";
@@ -313,6 +314,8 @@ export default function AdminFranchisePage() {
     setIsSaving(false);
     setFormError("");
   };
+
+  const { handleOverlayMouseDown, handleOverlayClick } = useOverlayDismiss(closeModal);
 
   const handleFormChange = (
     key: keyof FranchiseFormState,
@@ -675,7 +678,11 @@ export default function AdminFranchisePage() {
       </section>
 
       {isModalOpen && (
-        <div className={styles.modalOverlay} onClick={closeModal}>
+        <div
+          className={styles.modalOverlay}
+          onMouseDown={handleOverlayMouseDown}
+          onClick={handleOverlayClick}
+        >
           <section
             className={styles.modalCard}
             onClick={(event) => event.stopPropagation()}

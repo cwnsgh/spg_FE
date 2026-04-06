@@ -12,7 +12,7 @@
  * - 2: 회사연혁 (CompanyHistory)
  * - 3: 채용정보 (Recruitment)
  * - 4: 찾아오시는 길 (Directions)
- * - 5: 윤리경영 (Ethics)
+ * - 5: 윤리규정 (Ethics)
  * - default: 인사말 (Greeting)
  *
  * 상태 관리:
@@ -82,7 +82,7 @@ export default function AboutTabs() {
       case 4:
         return <Directions />; // 찾아오시는 길
       case 5:
-        return <Ethics />; // 윤리경영
+        return <Ethics />; // 윤리규정
       default:
         return <Greeting />; // 인사말 (기본값)
     }

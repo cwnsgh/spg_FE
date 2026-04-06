@@ -5,11 +5,13 @@ import { ApiResponse } from "./types";
 // 화면에서는 status를 보고 메시지를 분기할 수 있습니다.
 export class ApiError extends Error {
   status: number;
+  isSecret?: boolean;
 
-  constructor(message: string, status = 500) {
+  constructor(message: string, status = 500, options?: { isSecret?: boolean }) {
     super(message);
     this.name = "ApiError";
     this.status = status;
+    this.isSecret = options?.isSecret;
   }
 }
 
@@ -89,7 +91,13 @@ export async function apiRequest<T>(
         ? json.error
         : "요청 처리 중 오류가 발생했습니다.";
 
-    throw new ApiError(message, response.status);
+    const isSecret =
+      typeof json === "object" &&
+      json !== null &&
+      "is_secret" in json &&
+      json.is_secret === true;
+
+    throw new ApiError(message, response.status, { isSecret });
   }
 
   // HTTP 200이어도 백엔드 규약상 ok: false로 내려오는 경우를 한 번 더 잡아줍니다.
@@ -100,7 +108,8 @@ export async function apiRequest<T>(
     json.ok === false &&
     "error" in json
   ) {
-    throw new ApiError(String(json.error), response.status);
+    const isSecret = "is_secret" in json && json.is_secret === true;
+    throw new ApiError(String(json.error), response.status, { isSecret });
   }
 
   // 백엔드가 { ok: true, data: ... } 형태를 쓰는 경우 data만 꺼내서 반환합니다.

@@ -33,15 +33,16 @@
 .subMenu {
   position: absolute;
   top: 123px;
-  left: 0;
+  left: 50%;
+  transform: translateX(-17%);
   display: none;
   min-width: 300px;
+  padding: 1rem;
   background: #fff;
-  border-bottom-left-radius: 2rem;
-  border-bottom-right-radius: 2rem;
+  border-radius: 0 0 2rem 2rem;
   z-index: 2;
   pointer-events: auto;
-  border: 1px solid #f2f2f2;
+  border: 0px 1px 1px 1px solid #f2f2f2;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
@@ -54,29 +55,21 @@
   position: relative;
 }
 
-.subMenu li:first-child a::before {
-  content: "";
-  width: calc(100% + 1rem);
-  height: 2rem;
-  position: absolute;
-  top: -2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #fff;
-  z-index: 1;
-}
-
 .subMenu li a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 17px 35px 17px 40px;
+  padding: 17px 28px 17px 30px;
   line-height: 1;
   font-size: 1.8rem;
   font-weight: 500;
   color: #000;
   text-decoration: none;
   cursor: pointer;
+  border-radius: 1.4rem;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .subMenu li a::after {
@@ -92,6 +85,7 @@
 
 .subMenu li a:hover {
   background-color: #f5f5f5;
+  color: #112e64;
 }
 
 /* 스크롤 시 색상 변경은 Header.module.css에서 처리 */

@@ -213,11 +213,11 @@ export const hamburgerMenuData: HamburgerMenuColumn[] = [
         titleEn: "IR Information",
         bigCateGroups: [
           [
-            { label: "IR 공고", href: "/Irinformation" },
-            { label: "IR 행사", href: "/Irinformation" },
-            { label: "공시정보", href: "/Irinformation" },
-            { label: "IR 콘텐츠", href: "/Irinformation" },
-            { label: "IR 자료실", href: "/Irinformation" },
+            { label: "IR 공고", href: "/Irinformation?tab=1" },
+            { label: "IR 행사", href: "/Irinformation?tab=3" },
+            { label: "공시정보", href: "/Irinformation?tab=0" },
+            { label: "IR 콘텐츠", href: "/Irinformation?tab=2" },
+            { label: "IR 자료실", href: "/Irinformation?tab=4" },
           ],
         ],
       },

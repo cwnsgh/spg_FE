@@ -9,6 +9,7 @@ import {
   getAdminGroupList,
   updateAdminBoard,
 } from "@/api";
+import { useOverlayDismiss } from "@/hooks/useOverlayDismiss";
 import type {
   AdminBoardItem,
   AdminBoardListData,
@@ -241,6 +242,9 @@ export default function AdminBoardsPage() {
     setIsBoardSaving(false);
     setBoardFormError("");
   };
+
+  const { handleOverlayMouseDown, handleOverlayClick } =
+    useOverlayDismiss(closeBoardModal);
 
   const handleBoardFieldChange = (
     key: keyof BoardFormState,
@@ -550,7 +554,11 @@ export default function AdminBoardsPage() {
       </section>
 
       {isBoardModalOpen && (
-        <div className={styles.modalOverlay} onClick={closeBoardModal}>
+        <div
+          className={styles.modalOverlay}
+          onMouseDown={handleOverlayMouseDown}
+          onClick={handleOverlayClick}
+        >
           <section className={styles.modalCard} onClick={(event) => event.stopPropagation()}>
             <div className={styles.modalHeader}>
               <div>

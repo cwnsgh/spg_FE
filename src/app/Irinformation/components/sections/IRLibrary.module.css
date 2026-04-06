@@ -141,6 +141,17 @@
   flex-direction: column;
 }
 
+.stateMessage {
+  padding: 6rem 2rem;
+  text-align: center;
+  font-size: 1.8rem;
+  color: #555;
+}
+
+.errorMessage {
+  color: #c62828;
+}
+
 .tableRow {
   display: grid;
   grid-template-columns: 25% 1fr 1fr 1fr 1fr;

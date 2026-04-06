@@ -62,9 +62,36 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
   {
     title: "IR정보",
     items: [
-      { label: "재무상태표", description: "financial_statement" },
-      { label: "손익계산서", description: "income_statement" },
-      { label: "현금흐름표", description: "cash_flow" },
+      {
+        label: "IR공고",
+        description: "ir_notice posts",
+        href: "/admin/ir/announcement",
+      },
+      {
+        label: "IR콘텐츠",
+        description: "ir_content posts",
+        href: "/admin/ir/content",
+      },
+      {
+        label: "IR행사",
+        description: "ir_event posts",
+        href: "/admin/ir/event",
+      },
+      {
+        label: "재무상태표",
+        description: "financial_statement",
+        href: "/admin/ir/financial-statement",
+      },
+      {
+        label: "손익계산서",
+        description: "income_statement",
+        href: "/admin/ir/income-statement",
+      },
+      {
+        label: "현금흐름표",
+        description: "cash_flow",
+        href: "/admin/ir/cash-flow",
+      },
     ],
   },
   {

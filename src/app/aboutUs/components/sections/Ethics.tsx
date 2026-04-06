@@ -5,7 +5,7 @@ import styles from "./Ethics.module.css";
 export default function Ethics() {
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>윤리경영</h2>
+      <h2 className={styles.title}>윤리규정</h2>
 
       <div className={styles.content}>
         {/* 제1장 총칙 */}

@@ -8,6 +8,7 @@ import {
   getFranchiseAreas,
   getFranchiseList,
 } from "@/api";
+import { normalizeExternalUrl } from "@/app/marketing/externalUrl";
 import styles from "./DomesticFacilities.module.css";
 
 declare global {
@@ -25,7 +26,7 @@ interface Facility {
   phone: string;
   region: string;
   mapUrl?: string;
-  googleMapUrl?: string;
+  websiteUrl?: string;
 }
 
 const NAVER_MAP_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
@@ -44,7 +45,7 @@ function mapFranchiseToFacility(item: FranchiseItem): Facility {
     phone: item.gf_tel || item.gf_contact || "-",
     region: item.gf_area || "기타",
     mapUrl: item.gf_map_url || undefined,
-    googleMapUrl: item.gf_map_url || undefined,
+    websiteUrl: item.gf_url || undefined,
   };
 }
 
@@ -337,8 +338,10 @@ export default function DomesticFacilities() {
   const handleShowMap = (facility: Facility) => {
     showMarkerOnNaverMap(facility.id);
 
-    if (!mapRef.current && facility.mapUrl) {
-      window.open(facility.mapUrl, "_blank", "noopener,noreferrer");
+    const normalizedMapUrl = normalizeExternalUrl(facility.mapUrl);
+
+    if (!mapRef.current && normalizedMapUrl) {
+      window.open(normalizedMapUrl, "_blank", "noopener,noreferrer");
     }
   };
 
@@ -425,6 +428,19 @@ export default function DomesticFacilities() {
                   <h3 className={styles.facilityName}>{facility.name}</h3>
                   <p className={styles.facilityAddress}>{facility.address}</p>
                   <p className={styles.facilityPhone}>{facility.phone}</p>
+                  {normalizeExternalUrl(facility.websiteUrl) && (
+                    <p className={styles.facilityWebsite}>
+                      <span className={styles.websiteLabel}>W.</span>
+                      <a
+                        href={normalizeExternalUrl(facility.websiteUrl)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.websiteLink}
+                      >
+                        {facility.websiteUrl}
+                      </a>
+                    </p>
+                  )}
                   <button
                     onClick={(event) => {
                       event.preventDefault();

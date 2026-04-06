@@ -22,24 +22,27 @@ import { useSearchParams, useRouter } from "next/navigation";
 import styles from "./MainTabs.module.css";
 import GlobalNetwork from "./GlobalNetwork/GlobalNetwork";
 import Customers from "./Customers/Customers";
+import {
+  MARKETING_TAB_VALUES,
+  resolveMarketingTab,
+} from "../marketingTabs";
 
 export default function MainTabs() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // URL 쿼리 파라미터에서 탭 인덱스 읽기 (기본값: 0)
-  const initialTab = searchParams.get("tab");
-  const [activeTab, setActiveTab] = useState<number>(
-    initialTab ? parseInt(initialTab, 10) : 0
-  );
+  const initialTab = resolveMarketingTab(searchParams.get("tab"));
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   // 초기 로딩 시 URL에 tab 파라미터가 없으면 기본값 0으로 설정
   useEffect(() => {
     if (!isInitialized && !searchParams.get("tab")) {
-      router.replace("/marketing?tab=0", { scroll: false });
+      router.replace(`/marketing?tab=${MARKETING_TAB_VALUES.globalNetwork}`, {
+        scroll: false,
+      });
       setIsInitialized(true);
-      setActiveTab(0);
+      setActiveTab(MARKETING_TAB_VALUES.globalNetwork);
     } else if (!isInitialized) {
       setIsInitialized(true);
     }
@@ -49,23 +52,15 @@ export default function MainTabs() {
   useEffect(() => {
     if (!isInitialized) return;
 
-    const tabParam = searchParams.get("tab");
-    if (tabParam) {
-      const tab = parseInt(tabParam, 10);
-      if (!isNaN(tab) && tab >= 0 && tab <= 1) {
-        setActiveTab(tab);
-      }
-    } else {
-      setActiveTab(0);
-    }
+    setActiveTab(resolveMarketingTab(searchParams.get("tab")));
   }, [searchParams, isInitialized]);
 
   // 탭 인덱스에 따라 해당 섹션 컴포넌트 반환
   const renderContent = () => {
     switch (activeTab) {
-      case 0:
+      case MARKETING_TAB_VALUES.globalNetwork:
         return <GlobalNetwork />; // 글로벌 네트워크
-      case 1:
+      case MARKETING_TAB_VALUES.customers:
         return <Customers />; // 주요고객사
       default:
         return <GlobalNetwork />; // 글로벌 네트워크 (기본값)
@@ -75,9 +70,9 @@ export default function MainTabs() {
   // 탭 텍스트 표시
   const getTabLabel = () => {
     switch (activeTab) {
-      case 0:
+      case MARKETING_TAB_VALUES.globalNetwork:
         return "글로벌 네트워크";
-      case 1:
+      case MARKETING_TAB_VALUES.customers:
         return "주요고객사";
       default:
         return "글로벌 네트워크";

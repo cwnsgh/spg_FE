@@ -60,6 +60,7 @@ export interface BoardPostItem {
   datetime: string;
   hit: number;
   is_secret: boolean;
+  is_notice?: boolean;
   status?: string | null;
 }
 
@@ -67,6 +68,19 @@ export interface BoardPostItem {
 export interface BoardPostListData {
   list: BoardPostItem[];
   pagination: Pagination;
+}
+
+export interface BoardInfo {
+  bo_table: string;
+  bo_subject: string;
+  use_editor: boolean;
+  permissions: {
+    list: number;
+    read: number;
+    write: number;
+    reply: number;
+    comment: number;
+  };
 }
 
 // 문의 답변 같은 1:1 답변 데이터입니다.
@@ -93,7 +107,10 @@ export interface BoardPostDetail {
   writer: string;
   datetime: string;
   is_secret: boolean;
+  is_notice?: boolean;
   hit: number;
+  wr_1?: string;
+  wr_2?: string;
   files: BoardFile[];
   answer: BoardAnswer | null;
 }
@@ -110,6 +127,13 @@ export interface BoardPostCreatePayload {
   wr_1?: string;
   agree: "1";
   secret?: "secret";
+}
+
+export interface BoardPostDeletePayload {
+  bo_table: string;
+  wr_id?: number;
+  ids?: number[];
+  wr_password?: string;
 }
 
 // 비밀글 인증용 payload입니다.
@@ -143,4 +167,25 @@ export interface FaqData {
   };
   faq_list: FaqItem[];
   pagination: Pagination;
+}
+
+// IR 재무 데이터에서 선택 가능한 연도 정보입니다.
+export interface IrAvailableYear {
+  gi_id: number;
+  gi_year: string;
+}
+
+// 재무 표 한 줄 데이터입니다.
+export interface IrFinancialRow {
+  label: string;
+  values: string[];
+}
+
+// /front/ir/financials.php 응답 구조입니다.
+export interface IrFinancialsData {
+  category: string;
+  current_year: string;
+  current_gi_id: number;
+  available_years: IrAvailableYear[];
+  financial_data: IrFinancialRow[];
 }
