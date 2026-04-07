@@ -55,6 +55,11 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
         description: "faqs / faq_master",
         href: "/admin/customersupport/faq",
       },
+      {
+        label: "채용 지원자",
+        description: "g5_recurit · applications",
+        href: "/admin/customersupport/recruit",
+      },
       { label: "문의 설정", description: "qa_config" },
       // { label: "FAQ 관리", description: "faqs / faq_master" },
     ],

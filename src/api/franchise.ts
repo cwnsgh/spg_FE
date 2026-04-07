@@ -1,3 +1,7 @@
+/**
+ * 사용자용 가맹점(글로벌 네트워크) API입니다.
+ * 백엔드: `front/franchise/*.php`
+ */
 import { apiRequest } from "./client";
 import { FranchiseItem, FranchiseListData } from "./types";
 

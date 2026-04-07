@@ -1,13 +1,70 @@
 "use client";
 
-import { useState } from "react";
+import {
+  ApiError,
+  getRecruitPostDetail,
+  getRecruitPosts,
+  type RecruitPostDetail,
+  type RecruitPostListItem,
+} from "@/api";
+import { useOverlayDismiss } from "@/hooks/useOverlayDismiss";
 import Image from "next/image";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import RecruitApplyPanel from "./RecruitApplyPanel";
+import RecruitStatusPanel from "./RecruitStatusPanel";
 import styles from "./Recruitment.module.css";
 
+const PAGE_SIZE = 12;
+
+function formatLocationLabel(job: RecruitPostListItem): string {
+  const positions = job.positions ?? [];
+  if (positions.length === 0) return "직무";
+  const jobs = positions.map((p) => p.job).filter(Boolean);
+  if (jobs.length === 0) return "직무";
+  if (jobs.length === 1) return jobs[0];
+  return `${jobs[0]} 외`;
+}
+
+function canApplyByListStatus(status: string): boolean {
+  if (status === "상시접수" || status === "접수중") return true;
+  return status.startsWith("D-");
+}
+
+function buildPageList(totalPages: number, current: number): (number | "gap")[] {
+  if (totalPages <= 1) return [1];
+  if (totalPages <= 9) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+  const set = new Set<number>();
+  set.add(1);
+  set.add(totalPages);
+  for (let p = current - 2; p <= current + 2; p++) {
+    if (p >= 1 && p <= totalPages) set.add(p);
+  }
+  const sorted = [...set].sort((a, b) => a - b);
+  const out: (number | "gap")[] = [];
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) {
+      out.push("gap");
+    }
+    out.push(sorted[i]);
+  }
+  return out;
+}
+
 export default function Recruitment() {
-  const [activeSubTab, setActiveSubTab] = useState(1); // 채용공고를 기본값으로
+  const [activeSubTab, setActiveSubTab] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 5; // 전체 페이지 수
+  const [jobPostings, setJobPostings] = useState<RecruitPostListItem[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [listLoading, setListLoading] = useState(false);
+  const [listError, setListError] = useState("");
+
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [detailError, setDetailError] = useState("");
+  const [detail, setDetail] = useState<RecruitPostDetail | null>(null);
+  const [applyPrefillWrId, setApplyPrefillWrId] = useState<number | null>(null);
 
   const subTabs = [
     { label: "모집안내", value: 0 },
@@ -15,15 +72,6 @@ export default function Recruitment() {
     { label: "입사지원", value: 2 },
     { label: "나의지원현황", value: 3 },
   ];
-
-  // 채용공고 데이터 (예시)
-  const jobPostings = Array.from({ length: 12 }, (_, i) => ({
-    id: i + 1,
-    status: "상시접수",
-    location: i % 3 === 0 ? "무관" : i % 3 === 1 ? "부산" : "성수",
-    title: "2025년 신입/경력사원 채용(상시)",
-    period: "2025-01-01 - 2025-12-31",
-  }));
 
   const recruitmentSteps = [
     { step: 1, title: "1차 서류전형" },
@@ -49,15 +97,81 @@ export default function Recruitment() {
     { icon: "/images/aboutus/icon_5.png", title: "휴양시설 운영" },
   ];
 
+  const fetchJobList = useCallback(async () => {
+    setListLoading(true);
+    setListError("");
+    try {
+      const res = await getRecruitPosts({ page: currentPage, rows: PAGE_SIZE });
+      setJobPostings(res.list ?? []);
+      const tp = res.pagination?.total_pages ?? 1;
+      setTotalPages(Math.max(1, tp));
+      if (currentPage > tp && tp >= 1) {
+        setCurrentPage(tp);
+      }
+    } catch (e) {
+      if (e instanceof ApiError) {
+        setListError(e.message);
+      } else {
+        setListError("채용공고를 불러오지 못했습니다.");
+      }
+      setJobPostings([]);
+      setTotalPages(1);
+    } finally {
+      setListLoading(false);
+    }
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (activeSubTab !== 1) return;
+    void fetchJobList();
+  }, [activeSubTab, fetchJobList]);
+
+  const closeDetail = useCallback(() => {
+    setDetailOpen(false);
+    setDetail(null);
+    setDetailError("");
+  }, []);
+
+  const { handleOverlayMouseDown, handleOverlayClick } = useOverlayDismiss(closeDetail);
+
+  const openDetail = useCallback(async (wrId: number) => {
+    setDetailOpen(true);
+    setDetail(null);
+    setDetailError("");
+    setDetailLoading(true);
+    try {
+      const data = await getRecruitPostDetail(wrId);
+      setDetail(data);
+    } catch (e) {
+      if (e instanceof ApiError) {
+        setDetailError(e.message);
+      } else {
+        setDetailError("공고 상세를 불러오지 못했습니다.");
+      }
+    } finally {
+      setDetailLoading(false);
+    }
+  }, []);
+
+  const pageItems = useMemo(
+    () => buildPageList(totalPages, currentPage),
+    [totalPages, currentPage]
+  );
+
+  const goApplyWithJob = useCallback((wrId: number) => {
+    setApplyPrefillWrId(wrId);
+    setActiveSubTab(2);
+  }, []);
+
   return (
     <div className={styles.container}>
       <h2 className={styles.mainTitle}>채용정보</h2>
 
-      {/* 서브 탭 */}
       <div className={styles.subTabs}>
         {subTabs.map((tab) => (
           <button
             key={tab.value}
+            type="button"
             className={`${styles.subTab} ${
               activeSubTab === tab.value ? styles.active : ""
             }`}
@@ -68,21 +182,24 @@ export default function Recruitment() {
         ))}
       </div>
 
-      {/* 모집안내 콘텐츠 */}
       {activeSubTab === 0 && (
         <div className={styles.content}>
-          {/* 인사제도 방향 */}
           <h3 className={styles.sectionTitle}>모집안내</h3>
           <section className={styles.section}>
             <h4 className={styles.subSectionTitle}>• 인사제도 방향</h4>
-            <p className={styles.description}>임직원 개인의 능력에 따라 승급, 승격, 교육의 기회를 공평하게 가질 수 있는 인사제도 채택으로 공정한 인사를 실시하고 있습니다.</p>
+            <p className={styles.description}>
+              임직원 개인의 능력에 따라 승급, 승격, 교육의 기회를 공평하게 가질 수 있는
+              인사제도 채택으로 공정한 인사를 실시하고 있습니다.
+            </p>
           </section>
 
-          {/* 채용절차 */}
           <section className={styles.section}>
             <h4 className={styles.subSectionTitle}>• 채용절차</h4>
             <div className={styles.description}>
-              <p>당사의 채용 절차를 안내드립니다. 아래 전형 과정을 통해 지원자 여러분을 만나게 됩니다.</p>
+              <p>
+                당사의 채용 절차를 안내드립니다. 아래 전형 과정을 통해 지원자 여러분을 만나게
+                됩니다.
+              </p>
               <div className={styles.recruitmentProcess}>
                 {recruitmentSteps.map((item, index) => (
                   <div key={index} className={styles.processStep}>
@@ -100,7 +217,6 @@ export default function Recruitment() {
             </div>
           </section>
 
-          {/* 제출서류 */}
           <section className={styles.section}>
             <h4 className={styles.subSectionTitle}>• 제출서류</h4>
             <div className={styles.documentsList}>
@@ -112,7 +228,6 @@ export default function Recruitment() {
             </div>
           </section>
 
-          {/* 복리후생 */}
           <section className={styles.section}>
             <h4 className={styles.subSectionTitle}>• 복리후생</h4>
             <div className={styles.benefitsGrid}>
@@ -127,120 +242,257 @@ export default function Recruitment() {
             </div>
           </section>
 
-          {/* 접수 및 문의처 */}
           <section className={styles.section}>
             <h4 className={styles.subSectionTitle}>• 접수 및 문의처</h4>
             <div className={styles.contactInfo}>
               <div className={styles.contactItem}>
                 <img
                   src="/images/aboutus/icon_map.png"
-                  alt="이메일"
+                  alt=""
                   className={styles.contactIcon}
                 />
                 <span>
-                  인천광역시 남동구 청능대로 289번길 45 (고잔동, 남동공단 67B 12L), (우편번호 21633)
+                  인천광역시 남동구 청능대로 289번길 45 (고잔동, 남동공단 67B 12L), (우편번호
+                  21633)
                 </span>
               </div>
               <div className={styles.contactItem}>
                 <img
                   src="/images/aboutus/icon_message.png"
-                  alt="이메일"
+                  alt=""
                   className={styles.contactIcon}
                 />
                 <span>hansh@spg.co.kr</span>
               </div>
             </div>
           </section>
-          {/* <img
-            src="/images/aboutus/main_2.png"
-            alt="모집안내"
-            className={styles.tempImage}
-          /> */}
         </div>
       )}
 
-      {/* 채용공고 콘텐츠 */}
       {activeSubTab === 1 && (
         <div className={styles.jobPostingContent}>
           <p className={styles.introText}>
-            (주)에스피지를 이끌어 갈 인재를 모집합니다.<br/>여러분의 지원을 기다리고
-            있습니다.
+            (주)에스피지를 이끌어 갈 인재를 모집합니다.
+            <br />
+            여러분의 지원을 기다리고 있습니다.
           </p>
 
+          {listError && <p className={styles.recruitError}>{listError}</p>}
+          {listLoading && <p className={styles.recruitLoading}>불러오는 중…</p>}
+
+          {!listLoading && !listError && jobPostings.length === 0 && (
+            <p className={styles.recruitEmpty}>표시할 채용공고가 없습니다.</p>
+          )}
+
           <div className={styles.jobPostingGrid}>
-            {jobPostings.map((job) => (
-              <div key={job.id} className={styles.jobCard}>
-                <div className={styles.jobCardHeader}>
-                  <span className={styles.statusLabel}>{job.status}</span>
-                  <span className={styles.locationLabel}>{job.location}</span>
+            {jobPostings.map((job) => {
+              const canApply = canApplyByListStatus(job.status);
+              return (
+                <div key={job.id} className={styles.jobCard}>
+                  <div className={styles.jobCardHeader}>
+                    <span className={styles.statusLabel}>{job.status}</span>
+                    {job.type ? (
+                      <span className={styles.locationLabel}>{job.type}</span>
+                    ) : (
+                      <span className={styles.locationLabel}>
+                        {formatLocationLabel(job)}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className={styles.jobTitle}>{job.subject}</h3>
+                  <p className={styles.jobPeriod}>{job.period}</p>
+                  <div className={styles.jobCardActions}>
+                    <button
+                      type="button"
+                      className={styles.detailButton}
+                      onClick={() => void openDetail(job.id)}
+                    >
+                      상세보기
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.applyButton}
+                      disabled={!canApply}
+                      onClick={() => goApplyWithJob(job.id)}
+                    >
+                      지원하기
+                    </button>
+                  </div>
                 </div>
-                <h3 className={styles.jobTitle}>{job.title}</h3>
-                <p className={styles.jobPeriod}>{job.period}</p>
-                <div className={styles.jobCardActions}>
-                  <button className={styles.detailButton}>상세보기</button>
-                  <button className={styles.applyButton}>지원하기</button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {/* 페이지네이션 */}
-          <div className={styles.pagination}>
-            <button
-              className={`${styles.paginationArrow} ${
-                currentPage === 1 ? styles.disabled : ""
-              }`}
-              onClick={() => setCurrentPage(1)}
-              disabled={currentPage === 1}
-            >
-              <Image src="/images/icon/first_ico.png" alt="맨 앞으로" width={13} height={13} />
-            </button>
-            <button
-              className={`${styles.paginationArrow} ${
-                currentPage === 1 ? styles.disabled : ""
-              }`}
-              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-              disabled={currentPage === 1}
-            >
-              <Image src="/images/icon/prev_ico.png" alt="앞으로" width={13} height={13} />
-            </button>
-            {[1, 2, 3, 4, 5].map((page) => (
+          {totalPages > 1 && (
+            <div className={styles.pagination}>
               <button
-                key={page}
-                className={`${styles.paginationNumber} ${
-                  currentPage === page ? styles.active : ""
+                type="button"
+                className={`${styles.paginationArrow} ${
+                  currentPage === 1 ? styles.disabled : ""
                 }`}
-                onClick={() => setCurrentPage(page)}
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
               >
-                {page}
+                <Image src="/images/icon/first_ico.png" alt="맨 앞으로" width={13} height={13} />
               </button>
-            ))}
-            <button
-              className={`${styles.paginationArrow} ${
-                currentPage === totalPages ? styles.disabled : ""
-              }`}
-              onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-              disabled={currentPage === totalPages}
-            >
-              <Image src="/images/icon/next_ico.png" alt="뒤로" width={13} height={13} />
-            </button>
-            <button
-              className={`${styles.paginationArrow} ${
-                currentPage === totalPages ? styles.disabled : ""
-              }`}
-              onClick={() => setCurrentPage(totalPages)}
-              disabled={currentPage === totalPages}
-            >
-              <Image src="/images/icon/last_ico.png" alt="맨 뒤로" width={13} height={13} />
-            </button>
-          </div>
+              <button
+                type="button"
+                className={`${styles.paginationArrow} ${
+                  currentPage === 1 ? styles.disabled : ""
+                }`}
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+              >
+                <Image src="/images/icon/prev_ico.png" alt="이전" width={13} height={13} />
+              </button>
+              {pageItems.map((item, idx) =>
+                item === "gap" ? (
+                  <span key={`gap-${idx}`} className={styles.paginationGap}>
+                    …
+                  </span>
+                ) : (
+                  <button
+                    key={item}
+                    type="button"
+                    className={`${styles.paginationNumber} ${
+                      currentPage === item ? styles.active : ""
+                    }`}
+                    onClick={() => setCurrentPage(item)}
+                  >
+                    {item}
+                  </button>
+                )
+              )}
+              <button
+                type="button"
+                className={`${styles.paginationArrow} ${
+                  currentPage === totalPages ? styles.disabled : ""
+                }`}
+                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+              >
+                <Image src="/images/icon/next_ico.png" alt="다음" width={13} height={13} />
+              </button>
+              <button
+                type="button"
+                className={`${styles.paginationArrow} ${
+                  currentPage === totalPages ? styles.disabled : ""
+                }`}
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+              >
+                <Image src="/images/icon/last_ico.png" alt="맨 뒤로" width={13} height={13} />
+              </button>
+            </div>
+          )}
         </div>
       )}
 
-      {/* 입사지원, 나의지원현황은 추후 구현 */}
-      {activeSubTab !== 0 && activeSubTab !== 1 && (
-        <div className={styles.placeholder}>
-          {subTabs[activeSubTab].label} 내용이 여기에 표시됩니다.
+      {activeSubTab === 2 && (
+        <RecruitApplyPanel
+          initialWrId={applyPrefillWrId}
+          onConsumedInitial={() => setApplyPrefillWrId(null)}
+        />
+      )}
+
+      {activeSubTab === 3 && <RecruitStatusPanel />}
+
+      {detailOpen && (
+        <div
+          className={styles.detailModal}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="recruit-detail-title"
+          onMouseDown={handleOverlayMouseDown}
+          onClick={handleOverlayClick}
+        >
+          <div className={styles.detailModalInner}>
+            <div className={styles.detailModalHeader}>
+              <h3 id="recruit-detail-title" className={styles.detailModalTitle}>
+                {detail?.subject ?? "채용공고"}
+              </h3>
+              <button
+                type="button"
+                className={styles.detailClose}
+                onClick={closeDetail}
+                aria-label="닫기"
+              >
+                ×
+              </button>
+            </div>
+            <div className={styles.detailModalBody}>
+              {detailLoading && <p className={styles.recruitLoading}>불러오는 중…</p>}
+              {detailError && <p className={styles.recruitError}>{detailError}</p>}
+              {detail && !detailLoading && (
+                <>
+                  <div className={styles.detailMeta}>
+                    <span className={styles.statusLabel}>{detail.status}</span>
+                    {detail.type ? (
+                      <span className={styles.locationLabel}>{detail.type}</span>
+                    ) : null}
+                    <p className={styles.detailPeriod}>{detail.period?.text}</p>
+                  </div>
+                  {detail.positions?.length ? (
+                    <ul className={styles.detailPositionList}>
+                      {detail.positions.map((p, i) => (
+                        <li key={i}>
+                          <strong>{p.job}</strong>
+                          {p.count ? ` · 모집 ${p.count}` : ""}
+                          {p.work ? (
+                            <>
+                              <br />
+                              <span className={styles.detailSub}>{p.work}</span>
+                            </>
+                          ) : null}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  {detail.notice ? (
+                    <p className={styles.detailNotice}>{detail.notice}</p>
+                  ) : null}
+                  <div
+                    className={styles.detailHtml}
+                    dangerouslySetInnerHTML={{ __html: detail.content }}
+                  />
+                  {detail.apply_method ? (
+                    <section className={styles.detailExtra}>
+                      <h4>접수방법</h4>
+                      <p>{detail.apply_method}</p>
+                    </section>
+                  ) : null}
+                  {detail.process ? (
+                    <section className={styles.detailExtra}>
+                      <h4>전형절차</h4>
+                      <p>{detail.process}</p>
+                    </section>
+                  ) : null}
+                  {detail.contact ? (
+                    <section className={styles.detailExtra}>
+                      <h4>문의</h4>
+                      <p>{detail.contact}</p>
+                    </section>
+                  ) : null}
+                  <div className={styles.detailModalActions}>
+                    <button type="button" className={styles.detailButton} onClick={closeDetail}>
+                      닫기
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.applyButton}
+                      disabled={!detail.can_apply}
+                      onClick={() => {
+                        closeDetail();
+                        goApplyWithJob(detail.id);
+                      }}
+                    >
+                      지원하기
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>

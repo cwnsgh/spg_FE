@@ -1,4 +1,8 @@
-// 바깥에서는 "@/api" 하나만 import해도 되도록 모아둔 진입점 파일입니다.
+/**
+ * 공개 API 모듈 진입점입니다.
+ * 화면에서는 `@/api` 한 곳에서 import 하면 admin / front / auth / 공통 타입을 같이 쓸 수 있습니다.
+ */
+// 관리자(세션 필요, credentials: include)
 export * from "./admin/boards";
 export * from "./admin/category";
 export * from "./admin/faqs";
@@ -7,11 +11,17 @@ export * from "./admin/franchise";
 export * from "./admin/groups";
 export * from "./admin/ir";
 export * from "./admin/qaConfig";
+export * from "./admin/recruitApplications";
+// 회원 세션 (쿠키 포함 요청)
 export * from "./auth";
+// 사용자용 게시판·FAQ 등
 export * from "./board";
-export * from "./client";
-export * from "./config";
 export * from "./faq";
 export * from "./franchise";
 export * from "./ir";
+export * from "./recruit";
+export * from "./recruitSession";
+// 공통
+export * from "./client";
+export * from "./config";
 export * from "./types";

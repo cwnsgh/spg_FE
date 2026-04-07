@@ -1,3 +1,7 @@
+/**
+ * 일부 관리자 API는 `apiRequest`의 `{ ok, data }` 언랩 규칙과 맞지 않아
+ * 전체 JSON을 그대로 받는 `adminRawRequest`를 사용합니다.
+ */
 import { ApiError } from "../client";
 import { toApiUrl } from "../config";
 
@@ -43,6 +47,7 @@ function normalizeBody(body: AdminRequestOptions["body"], headers: Headers) {
   return body as BodyInit;
 }
 
+/** 기본 `credentials: include`, 응답 본문을 `T`로 캐스팅해 반환합니다. */
 export async function adminRawRequest<T>(
   path: string,
   { query, body, headers, credentials = "include", ...init }: AdminRequestOptions = {}

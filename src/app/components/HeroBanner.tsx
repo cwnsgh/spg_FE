@@ -14,10 +14,14 @@
  */
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { Suspense, useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useSearchParams, useRouter } from "next/navigation";
+import {
+  useSearchParams,
+  useRouter,
+  type ReadonlyURLSearchParams,
+} from "next/navigation";
 import Breadcrumb, { BreadcrumbItem } from "./Breadcrumb";
 import styles from "./HeroBanner.module.css";
 
@@ -42,7 +46,8 @@ interface HeroBannerProps {
   basePath?: string; // 탭 변경 시 이동할 경로 (useUrlParams가 true일 때 필요)
 }
 
-export default function HeroBanner({
+/** `useSearchParams` 없이 렌더 (정적 export·프리렌더용). URL 동기화는 `useUrlParams`일 때만 내부 래퍼에서 처리 */
+function HeroBannerBody({
   title,
   backgroundImage,
   categoryLinks,
@@ -53,8 +58,10 @@ export default function HeroBanner({
   useUrlParams = false,
   urlParamKey = "tab",
   basePath,
-}: HeroBannerProps) {
-  const searchParams = useSearchParams();
+  urlParams,
+}: HeroBannerProps & {
+  urlParams: ReadonlyURLSearchParams | null;
+}) {
   const router = useRouter();
   const tabsScrollRef = useRef<HTMLDivElement>(null);
   const activeTabRef = useRef<HTMLButtonElement>(null);
@@ -65,8 +72,8 @@ export default function HeroBanner({
   // URL 파라미터 사용 시 내부 상태 관리
   const [internalActiveTab, setInternalActiveTab] = useState<string | number>(
     () => {
-      if (useUrlParams && searchParams) {
-        return searchParams.get(urlParamKey) || tabs?.[0]?.value || "";
+      if (useUrlParams && urlParams) {
+        return urlParams.get(urlParamKey) || tabs?.[0]?.value || "";
       }
       return tabs?.[0]?.value || "";
     }
@@ -93,8 +100,8 @@ export default function HeroBanner({
 
   // URL 파라미터 동기화
   useEffect(() => {
-    if (useUrlParams && searchParams && tabs) {
-      const tab = searchParams.get(urlParamKey);
+    if (useUrlParams && urlParams && tabs) {
+      const tab = urlParams.get(urlParamKey);
       if (tab) {
         const foundTab = tabs.find((t) => String(t.value) === tab);
         if (foundTab) {
@@ -105,7 +112,7 @@ export default function HeroBanner({
         setInternalActiveTab(tabs[0].value);
       }
     }
-  }, [searchParams, useUrlParams, urlParamKey, tabs]);
+  }, [urlParams, useUrlParams, urlParamKey, tabs]);
 
   useEffect(() => {
     updateScrollState();
@@ -262,4 +269,27 @@ export default function HeroBanner({
       )}
     </div>
   );
+}
+
+function HeroBannerWithUrlParams(props: HeroBannerProps) {
+  const searchParams = useSearchParams();
+  return <HeroBannerBody {...props} urlParams={searchParams} />;
+}
+
+export default function HeroBanner(props: HeroBannerProps) {
+  if (props.useUrlParams) {
+    return (
+      <Suspense
+        fallback={
+          <div className={styles.heroBanner} aria-hidden>
+            <div className={styles.heroContent} />
+          </div>
+        }
+      >
+        <HeroBannerWithUrlParams {...props} />
+      </Suspense>
+    );
+  }
+
+  return <HeroBannerBody {...props} urlParams={null} />;
 }

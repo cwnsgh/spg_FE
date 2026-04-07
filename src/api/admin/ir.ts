@@ -1,3 +1,7 @@
+/**
+ * 관리자 IR 재무 데이터(재무상태표·손익·현금흐름) CRUD입니다.
+ * 세 PHP 엔드포인트를 동일 패턴의 내부 헬퍼로 묶었습니다.
+ */
 import { apiRequest } from "../client";
 import type { Pagination } from "../types";
 
@@ -34,6 +38,7 @@ interface AdminIrListParams {
   limit?: number;
 }
 
+/** 연도별 행 목록 + 페이징 */
 function getAdminIrList(path: AdminIrApiPath, params: AdminIrListParams = {}) {
   return apiRequest<AdminIrListData>(path, {
     query: {
@@ -44,6 +49,7 @@ function getAdminIrList(path: AdminIrApiPath, params: AdminIrListParams = {}) {
   });
 }
 
+/** `gi_id` 기준 단건(연도 + 동적 `gi_N` 컬럼들) */
 function getAdminIrDetail(path: AdminIrApiPath, giId: number) {
   return apiRequest<AdminIrStatementDetail>(path, {
     query: { gi_id: giId },
@@ -51,6 +57,7 @@ function getAdminIrDetail(path: AdminIrApiPath, giId: number) {
   });
 }
 
+/** 신규 연도 행 등록 */
 function createAdminIrStatement(path: AdminIrApiPath, payload: AdminIrSavePayload) {
   return apiRequest<{ ok: true; message: string; gi_id: number }>(path, {
     method: "POST",
@@ -59,6 +66,7 @@ function createAdminIrStatement(path: AdminIrApiPath, payload: AdminIrSavePayloa
   });
 }
 
+/** 기존 연도 행 수정 */
 function updateAdminIrStatement(path: AdminIrApiPath, payload: AdminIrSavePayload) {
   return apiRequest<{ ok: true; message: string }>(path, {
     method: "PUT",
@@ -67,6 +75,7 @@ function updateAdminIrStatement(path: AdminIrApiPath, payload: AdminIrSavePayloa
   });
 }
 
+/** 연도 행 삭제 */
 function deleteAdminIrStatement(path: AdminIrApiPath, giId: number) {
   return apiRequest<{ ok: true; message: string }>(path, {
     method: "DELETE",

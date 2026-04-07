@@ -1,3 +1,7 @@
+/**
+ * 공통 fetch 래퍼(`apiRequest`)와 API 오류 타입(`ApiError`)입니다.
+ * 도메인별 모듈은 이 파일의 `apiRequest`만 호출하는 것을 권장합니다.
+ */
 import { toApiUrl } from "./config";
 import { ApiResponse } from "./types";
 
@@ -61,11 +65,19 @@ function normalizeBody(body: RequestOptions["body"], headers: Headers) {
   return body as BodyInit;
 }
 
-// 프로젝트 전체에서 재사용할 공통 fetch 래퍼입니다.
-// 도메인별 API 파일은 이 함수만 호출하고, 실제 fetch 옵션은 여기서 처리합니다.
+/**
+ * JSON 응답을 파싱하고 `{ ok, data }` 규약이면 `data`만 반환합니다.
+ * param path `toApiUrl`에 넘길 상대 경로 (예: `/front/faq.php`)
+ */
 export async function apiRequest<T>(
   path: string,
-  { query, body, headers, credentials = "same-origin", ...init }: RequestOptions = {}
+  {
+    query,
+    body,
+    headers,
+    credentials = "same-origin",
+    ...init
+  }: RequestOptions = {}
 ): Promise<T> {
   // 헤더를 Headers 인스턴스로 맞춰두면 Content-Type 같은 값을 안전하게 추가할 수 있습니다.
   const nextHeaders = new Headers(headers);
@@ -79,7 +91,9 @@ export async function apiRequest<T>(
     credentials,
   });
 
-  const json = (await response.json()) as ApiResponse<T> | (T & { ok?: boolean });
+  const json = (await response.json()) as
+    | ApiResponse<T>
+    | (T & { ok?: boolean });
 
   // HTTP 자체가 실패한 경우입니다. (예: 400, 401, 500)
   if (!response.ok) {

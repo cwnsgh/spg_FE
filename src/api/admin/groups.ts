@@ -1,3 +1,7 @@
+/**
+ * 관리자 게시판 그룹 CRUD입니다.
+ * 백엔드: `admin/groups.php`
+ */
 import type { Pagination } from "../types";
 import { adminRawRequest } from "./raw";
 

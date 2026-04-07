@@ -1,0 +1,227 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  align-items: flex-end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field label {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.field input,
+.field select {
+  min-width: 14rem;
+  height: 4rem;
+  padding: 0 1.2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.8rem;
+  font-size: 1.4rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-left: auto;
+}
+
+.primaryButton,
+.secondaryButton {
+  height: 4rem;
+  padding: 0 1.6rem;
+  border-radius: 999px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primaryButton {
+  border: 1px solid #111827;
+  background: #111827;
+  color: #fff;
+}
+
+.secondaryButton {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #374151;
+}
+
+.errorBox {
+  padding: 1.2rem 1.6rem;
+  border-radius: 0.8rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.loading {
+  font-size: 1.5rem;
+  color: #6b7280;
+}
+
+.summary {
+  font-size: 1.4rem;
+  color: #6b7280;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  background: #fff;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+}
+
+.table th,
+.table td {
+  padding: 1rem 1.2rem;
+  text-align: left;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: top;
+}
+
+.table th {
+  background: #f9fafb;
+  font-weight: 700;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.muted {
+  color: #9ca3af;
+  font-size: 1.3rem;
+}
+
+.linkRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.linkRow a {
+  font-size: 1.3rem;
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.previewButton {
+  border: 1px solid #0f766e;
+  background: #0f766e;
+  color: #fff;
+  height: 3.2rem;
+  padding: 0 1.1rem;
+  border-radius: 999px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.58);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  padding: 2rem;
+}
+
+.modalCard {
+  width: min(118rem, 100%);
+  height: min(88vh, 92rem);
+  background: #fff;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.28);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.modalHeader strong {
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.modalActions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.modalActions a {
+  font-size: 1.3rem;
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.previewFrame {
+  border: 0;
+  width: 100%;
+  flex: 1;
+  background: #fff;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+.pagination button {
+  min-width: 3.6rem;
+  height: 3.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  background: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 1.4rem;
+  color: #6b7280;
+}

@@ -1,3 +1,7 @@
+/**
+ * 관리자 가맹점(글로벌 네트워크) CRUD입니다.
+ * 백엔드: `admin/franchise.php` (수정은 POST + `_method=PUT` 오버라이드)
+ */
 import { apiRequest } from "../client";
 import { FranchiseItem, Pagination } from "../types";
 
@@ -32,6 +36,7 @@ export interface AdminFranchiseSavePayload {
   gf_certi_del?: boolean;
 }
 
+/** `gf_certi` 파일, `gf_certi_del` 플래그를 백엔드 형식에 맞게 넣습니다. */
 function toFranchiseFormData(payload: AdminFranchiseSavePayload) {
   const formData = new FormData();
 

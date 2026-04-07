@@ -1,3 +1,7 @@
+/**
+ * 관리자 FAQ 마스터(탭/카테고리) CRUD입니다.
+ * 백엔드: `admin/faq_master.php` (이미지 필드는 파일로 전송)
+ */
 import { apiRequest } from "../client";
 
 export interface AdminFaqMasterItem {
@@ -25,6 +29,7 @@ export interface AdminFaqMasterSavePayload {
   fm_timg?: File | null;
 }
 
+/** 이미지 키(`fm_himg`, `fm_timg`)는 File일 때만 append 합니다. */
 function toFaqMasterFormData(payload: AdminFaqMasterSavePayload) {
   const formData = new FormData();
 

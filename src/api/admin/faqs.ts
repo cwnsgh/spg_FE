@@ -1,3 +1,7 @@
+/**
+ * 관리자 FAQ 항목(질문/답변) CRUD입니다.
+ * 백엔드: `admin/faqs.php`
+ */
 import { apiRequest } from "../client";
 
 export interface AdminFaqItem {
@@ -16,6 +20,7 @@ export interface AdminFaqSavePayload {
   fa_order?: number;
 }
 
+/** 빈 값은 제외하고 FormData로 직렬화합니다. */
 function toFaqFormData(payload: AdminFaqSavePayload) {
   const formData = new FormData();
 

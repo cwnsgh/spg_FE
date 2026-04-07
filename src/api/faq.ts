@@ -1,3 +1,7 @@
+/**
+ * 사용자용 FAQ API입니다.
+ * 백엔드: `front/faq.php` (카테고리·검색·페이징)
+ */
 import { apiRequest } from "./client";
 import { FaqData } from "./types";
 

@@ -1,3 +1,7 @@
+/**
+ * 사용자용 게시판 API입니다.
+ * 백엔드: `front/board/posts.php`, `info.php`, `auth.php`, `answers.php`
+ */
 import { apiRequest } from "./client";
 import {
   BoardAuthPayload,

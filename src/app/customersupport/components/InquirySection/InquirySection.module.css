@@ -364,19 +364,23 @@
   white-space: nowrap;
 }
 
+/* 내용이 길 때 뷰포트 밖으로 잘리지 않도록 오버레이 자체를 스크롤합니다. */
 .modalOverlay {
   position: fixed;
   inset: 0;
   z-index: 1200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 2rem 1rem;
   background: rgba(0, 0, 0, 0.55);
 }
 
 .modalContent {
   width: min(48rem, 100%);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: max(2rem, 4vh);
+  margin-bottom: 2rem;
   padding: 3rem;
   border-radius: 2rem;
   background: #fff;
@@ -788,6 +792,8 @@
   }
 
   .modalContent {
+    margin-top: max(1.6rem, 3vh);
+    margin-bottom: 1.6rem;
     padding: 2.4rem 2rem;
   }
 

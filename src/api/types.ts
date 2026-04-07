@@ -1,3 +1,7 @@
+/**
+ * 프론트·백엔드 간 공유 타입 정의입니다.
+ * `apiRequest` 응답 규약, 게시판, FAQ, 가맹점, IR 재무 등 화면에서 재사용합니다.
+ */
 // 백엔드가 공통으로 쓰는 성공 응답 형태입니다.
 export interface ApiSuccess<T> {
   ok: true;
@@ -70,6 +74,7 @@ export interface BoardPostListData {
   pagination: Pagination;
 }
 
+/** `/front/board/info.php` 등에서 내려주는 게시판 메타·권한 레벨입니다. */
 export interface BoardInfo {
   bo_table: string;
   bo_subject: string;
@@ -129,6 +134,7 @@ export interface BoardPostCreatePayload {
   secret?: "secret";
 }
 
+/** 게시글 삭제 시 단건(`wr_id`) 또는 다건(`ids`), 비밀번호 검증용 필드입니다. */
 export interface BoardPostDeletePayload {
   bo_table: string;
   wr_id?: number;

@@ -1,3 +1,7 @@
+/**
+ * 관리자 게시판 설정 CRUD입니다.
+ * 백엔드: `admin/boards.php` (목록 응답은 `adminRawRequest`로 원본 파싱 후 매핑)
+ */
 import type { Pagination } from "../types";
 import { adminRawRequest } from "./raw";
 

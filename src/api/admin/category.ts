@@ -1,3 +1,7 @@
+/**
+ * 관리자 제품/카테고리 트리 API입니다.
+ * 백엔드: `admin/category.php` (생성·수정은 FormData)
+ */
 import { apiRequest } from "../client";
 import type { Pagination } from "../types";
 
@@ -37,6 +41,7 @@ export interface AdminCategoryUpdatePayload {
   gc_thum?: File | null;
 }
 
+/** 백엔드가 기대하는 필드명으로 FormData를 만듭니다. */
 function toCategoryFormData(action: "create", payload: AdminCategoryCreatePayload): FormData;
 function toCategoryFormData(action: "update", payload: AdminCategoryUpdatePayload): FormData;
 function toCategoryFormData(

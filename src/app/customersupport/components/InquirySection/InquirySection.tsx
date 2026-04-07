@@ -5,7 +5,6 @@ import {
   BoardInfo,
   BoardPostItem,
   authenticateBoardPost,
-  createBoardPost,
   getBoardInfo,
   getBoardPosts,
 } from "@/api";
@@ -13,20 +12,16 @@ import { useOverlayDismiss } from "@/hooks/useOverlayDismiss";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { ChangeEvent } from "react";
 import styles from "./InquirySection.module.css";
+import {
+  INQUIRY_BOARD_TABLE,
+  INQUIRY_CATEGORY_PRESETS,
+  INQUIRY_COPY,
+  type InquiryLanguage,
+  getInquiryDetailPath,
+  resolveInquiryLanguage,
+} from "./inquiryShared";
 
-const INQUIRY_BOARD_TABLE = {
-  ko: "cus_res",
-  en: "cus_res_en",
-} as const;
-
-const INQUIRY_CATEGORY_PRESETS: Record<InquiryLanguage, string[]> = {
-  ko: ["영업지원", "기술지원", "품질 및 AS"],
-  en: ["Sales Support", "Technical Support", "Quality & A/S"],
-};
-
-type InquiryLanguage = keyof typeof INQUIRY_BOARD_TABLE;
 type SearchType = "subject" | "content";
 
 interface SecretTarget {
@@ -34,49 +29,6 @@ interface SecretTarget {
   subject: string;
   boardTable: string;
   language: InquiryLanguage;
-}
-
-interface InquiryWriteFormState {
-  category: string;
-  subject: string;
-  writer: string;
-  isSecret: boolean;
-  password: string;
-  passwordConfirm: string;
-  content: string;
-  agree: boolean;
-}
-
-interface PendingAttachment {
-  id: string;
-  file: File;
-}
-
-function resolveInquiryLanguage(value: string | null): InquiryLanguage {
-  return value === "en" ? "en" : "ko";
-}
-
-function getInquiryDetailPath(language: InquiryLanguage, id: number) {
-  return `/customersupport/inquiry/${language}/${id}`;
-}
-
-function createInitialInquiryWriteForm(
-  language: InquiryLanguage,
-  categories: string[]
-): InquiryWriteFormState {
-  const nextCategories =
-    categories.length > 0 ? categories : INQUIRY_CATEGORY_PRESETS[language];
-
-  return {
-    category: nextCategories[0] ?? "",
-    subject: "",
-    writer: "",
-    isSecret: false,
-    password: "",
-    passwordConfirm: "",
-    content: "",
-    agree: false,
-  };
 }
 
 function buildPaginationItems(currentPage: number, totalPages: number) {
@@ -108,7 +60,7 @@ function buildPaginationItems(currentPage: number, totalPages: number) {
 export default function InquirySection() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, isAdmin, isLoading: isAuthLoading } = useAuth();
+  const { user, isAdmin } = useAuth();
   const queryLanguage = useMemo(
     () => resolveInquiryLanguage(searchParams.get("lang")),
     [searchParams]
@@ -133,22 +85,8 @@ export default function InquirySection() {
   const [secretPassword, setSecretPassword] = useState("");
   const [secretErrorMessage, setSecretErrorMessage] = useState("");
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-  const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
-  const [writeForm, setWriteForm] = useState<InquiryWriteFormState>(() =>
-    createInitialInquiryWriteForm("ko", INQUIRY_CATEGORY_PRESETS.ko)
-  );
-  const [writeAttachments, setWriteAttachments] = useState<PendingAttachment[]>([]);
-  const [writeFormErrorMessage, setWriteFormErrorMessage] = useState("");
-  const [isWriting, setIsWriting] = useState(false);
   const currentBoardTable = INQUIRY_BOARD_TABLE[activeLanguage];
   const currentUserLevel = user?.mb_level ?? 1;
-  const writeCategories = useMemo(
-    () =>
-      availableCategories.length > 0
-        ? availableCategories
-        : INQUIRY_CATEGORY_PRESETS[activeLanguage],
-    [activeLanguage, availableCategories]
-  );
   const canWriteInquiry = useMemo(() => {
     if (!boardInfo) {
       return false;
@@ -164,20 +102,8 @@ export default function InquirySection() {
     setIsAuthenticating(false);
   }, []);
 
-  const closeWriteModal = useCallback(() => {
-    setIsWriteModalOpen(false);
-    setWriteForm(createInitialInquiryWriteForm(activeLanguage, writeCategories));
-    setWriteAttachments([]);
-    setWriteFormErrorMessage("");
-    setIsWriting(false);
-  }, [activeLanguage, writeCategories]);
-
   const { handleOverlayMouseDown, handleOverlayClick } =
     useOverlayDismiss(closeSecretModal);
-  const {
-    handleOverlayMouseDown: handleWriteOverlayMouseDown,
-    handleOverlayClick: handleWriteOverlayClick,
-  } = useOverlayDismiss(closeWriteModal);
 
   useEffect(() => {
     setActiveLanguage(queryLanguage);
@@ -189,12 +115,6 @@ export default function InquirySection() {
     setSearchKeyword("");
     setSubmittedKeyword("");
     setCurrentPage(1);
-    setWriteForm(
-      createInitialInquiryWriteForm(activeLanguage, INQUIRY_CATEGORY_PRESETS[activeLanguage])
-    );
-    setWriteAttachments([]);
-    setIsWriteModalOpen(false);
-    setWriteFormErrorMessage("");
   }, [activeLanguage]);
 
   useEffect(() => {
@@ -298,88 +218,14 @@ export default function InquirySection() {
     [currentPage, totalPages]
   );
 
-  useEffect(() => {
-    setWriteForm((prev) => {
-      if (writeCategories.includes(prev.category)) {
-        return prev;
-      }
-
-      return {
-        ...prev,
-        category: writeCategories[0] ?? "",
-      };
-    });
-  }, [writeCategories]);
-
   const handleSearch = () => {
     setSubmittedKeyword(searchKeyword);
     setCurrentPage(1);
   };
 
-  const ensureWritePermission = useCallback(() => {
-    if (isAuthLoading || isBoardInfoLoading) {
-      setWriteFormErrorMessage("권한 정보를 확인하는 중입니다.");
-      return false;
-    }
-
-    if (!boardInfo) {
-      setWriteFormErrorMessage("제품문의 권한 정보를 불러오지 못했습니다.");
-      return false;
-    }
-
-    if (!(isAdmin || currentUserLevel >= boardInfo.permissions.write)) {
-      setWriteFormErrorMessage("제품문의를 등록할 권한이 없습니다.");
-      return false;
-    }
-
-    return true;
-  }, [boardInfo, currentUserLevel, isAdmin, isAuthLoading, isBoardInfoLoading]);
-
-  const openWriteModal = useCallback(() => {
-    if (!ensureWritePermission()) {
-      return;
-    }
-
-    setWriteForm(createInitialInquiryWriteForm(activeLanguage, writeCategories));
-    setWriteAttachments([]);
-    setWriteFormErrorMessage("");
-    setIsWriteModalOpen(true);
-  }, [activeLanguage, ensureWritePermission, writeCategories]);
-
-  const handleWriteFieldChange = useCallback(
-    (key: keyof InquiryWriteFormState, value: string | boolean) => {
-      setWriteForm((prev) => ({
-        ...prev,
-        [key]: value,
-      }));
-    },
-    []
-  );
-
-  const handleWriteAttachmentChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const nextFiles = Array.from(event.target.files ?? []);
-
-      if (nextFiles.length === 0) {
-        return;
-      }
-
-      setWriteAttachments((prev) => [
-        ...prev,
-        ...nextFiles.map((file, index) => ({
-          id: `${file.name}-${file.size}-${file.lastModified}-${prev.length + index}`,
-          file,
-        })),
-      ]);
-
-      event.target.value = "";
-    },
-    []
-  );
-
-  const handleRemoveWriteAttachment = useCallback((targetId: string) => {
-    setWriteAttachments((prev) => prev.filter((attachment) => attachment.id !== targetId));
-  }, []);
+  const goToWritePage = useCallback(() => {
+    router.push(`/customersupport/inquiry/write?lang=${activeLanguage}`);
+  }, [activeLanguage, router]);
 
   const handlePostClick = useCallback(
     (item: BoardPostItem) => {
@@ -433,104 +279,7 @@ export default function InquirySection() {
     }
   }, [closeSecretModal, router, secretPassword, secretTarget]);
 
-  const handleWriteSubmit = useCallback(async () => {
-    if (!ensureWritePermission()) {
-      return;
-    }
-
-    const trimmedCategory = writeForm.category.trim();
-    const trimmedSubject = writeForm.subject.trim();
-    const trimmedWriter = writeForm.writer.trim();
-    const trimmedPassword = writeForm.password.trim();
-    const trimmedContent = writeForm.content.trim();
-
-    if (!trimmedCategory) {
-      setWriteFormErrorMessage("구분을 선택해 주세요.");
-      return;
-    }
-
-    if (!trimmedSubject) {
-      setWriteFormErrorMessage("제목을 입력해 주세요.");
-      return;
-    }
-
-    if (!trimmedWriter) {
-      setWriteFormErrorMessage("이름을 입력해 주세요.");
-      return;
-    }
-
-    if (!trimmedPassword) {
-      setWriteFormErrorMessage("비밀번호를 입력해 주세요.");
-      return;
-    }
-
-    if (trimmedPassword !== writeForm.passwordConfirm.trim()) {
-      setWriteFormErrorMessage("비밀번호 확인이 일치하지 않습니다.");
-      return;
-    }
-
-    if (!trimmedContent) {
-      setWriteFormErrorMessage("내용을 입력해 주세요.");
-      return;
-    }
-
-    if (!writeForm.agree) {
-      setWriteFormErrorMessage("개인정보 수집 및 이용에 동의해 주세요.");
-      return;
-    }
-
-    setIsWriting(true);
-    setWriteFormErrorMessage("");
-
-    try {
-      const formData = new FormData();
-      formData.set("bo_table", currentBoardTable);
-      formData.set("ca_name", trimmedCategory);
-      formData.set("wr_subject", trimmedSubject);
-      formData.set("wr_content", trimmedContent);
-      formData.set("wr_name", trimmedWriter);
-      formData.set("wr_password", trimmedPassword);
-      formData.set("agree", "1");
-
-      if (writeForm.isSecret) {
-        formData.set("secret", "secret");
-      }
-
-      writeAttachments.forEach((attachment) => {
-        formData.append("bf_file[]", attachment.file);
-      });
-
-      const response = await createBoardPost(formData);
-      const nextPostId = Number(response.wr_id ?? response.id ?? 0);
-
-      closeWriteModal();
-
-      if (nextPostId > 0) {
-        router.push(getInquiryDetailPath(activeLanguage, nextPostId));
-        return;
-      }
-
-      setCurrentPage(1);
-      setSubmittedKeyword("");
-      setSearchKeyword("");
-    } catch (error) {
-      const message =
-        error instanceof ApiError
-          ? error.message
-          : "제품문의를 등록하지 못했습니다.";
-      setWriteFormErrorMessage(message);
-    } finally {
-      setIsWriting(false);
-    }
-  }, [
-    activeLanguage,
-    closeWriteModal,
-    currentBoardTable,
-    ensureWritePermission,
-    router,
-    writeAttachments,
-    writeForm,
-  ]);
+  const inquiryCopy = INQUIRY_COPY[activeLanguage];
 
   return (
     <section className={styles.productInquiry}>
@@ -582,17 +331,17 @@ export default function InquirySection() {
         <div className={styles.toolbarInfo}>
           {!canWriteInquiry && !isBoardInfoLoading && (
             <p className={styles.toolbarMessage}>
-              현재 설정에서는 제품문의 등록 권한이 없습니다.
+              {inquiryCopy.toolbarNoWrite}
             </p>
           )}
         </div>
         <button
           type="button"
           className={styles.writeButton}
-          onClick={openWriteModal}
+          onClick={goToWritePage}
           disabled={!canWriteInquiry || isBoardInfoLoading}
         >
-          문의하기
+          {inquiryCopy.writeButton}
         </button>
       </div>
 
@@ -783,199 +532,6 @@ export default function InquirySection() {
                 disabled={isAuthenticating}
               >
                 {isAuthenticating ? "확인 중..." : "확인"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isWriteModalOpen && (
-        <div
-          className={styles.modalOverlay}
-          onMouseDown={handleWriteOverlayMouseDown}
-          onClick={handleWriteOverlayClick}
-        >
-          <div
-            className={`${styles.modalContent} ${styles.writeModalContent}`}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className={styles.writeModalHeader}>
-              <div>
-                <h3 className={styles.modalTitle}>제품문의 작성</h3>
-                <p className={styles.modalDescription}>
-                  비회원도 문의를 등록할 수 있으며, 입력한 비밀번호로 수정/삭제가 가능합니다.
-                </p>
-              </div>
-              <button
-                type="button"
-                className={styles.writeModalCloseButton}
-                onClick={closeWriteModal}
-              >
-                닫기
-              </button>
-            </div>
-
-            <div className={styles.writeFormGrid}>
-              <label className={styles.writeField}>
-                <span>구분</span>
-                <select
-                  value={writeForm.category}
-                  onChange={(event) =>
-                    handleWriteFieldChange("category", event.target.value)
-                  }
-                >
-                  {writeCategories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label className={`${styles.writeField} ${styles.fullField}`}>
-                <span>제목</span>
-                <input
-                  type="text"
-                  value={writeForm.subject}
-                  onChange={(event) =>
-                    handleWriteFieldChange("subject", event.target.value)
-                  }
-                  placeholder="제목을 입력해 주세요"
-                />
-              </label>
-
-              <label className={styles.writeField}>
-                <span>이름</span>
-                <input
-                  type="text"
-                  value={writeForm.writer}
-                  onChange={(event) =>
-                    handleWriteFieldChange("writer", event.target.value)
-                  }
-                  placeholder="이름을 입력해 주세요"
-                />
-              </label>
-
-              <div className={`${styles.writeField} ${styles.checkField}`}>
-                <span>비밀글 여부</span>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={writeForm.isSecret}
-                    onChange={(event) =>
-                      handleWriteFieldChange("isSecret", event.target.checked)
-                    }
-                  />
-                  <span>비밀글로 등록</span>
-                </label>
-              </div>
-
-              <label className={styles.writeField}>
-                <span>비밀번호</span>
-                <input
-                  type="password"
-                  value={writeForm.password}
-                  onChange={(event) =>
-                    handleWriteFieldChange("password", event.target.value)
-                  }
-                  placeholder="수정/삭제에 사용할 비밀번호"
-                />
-              </label>
-
-              <label className={styles.writeField}>
-                <span>비밀번호 확인</span>
-                <input
-                  type="password"
-                  value={writeForm.passwordConfirm}
-                  onChange={(event) =>
-                    handleWriteFieldChange("passwordConfirm", event.target.value)
-                  }
-                  placeholder="비밀번호를 다시 입력해 주세요"
-                />
-              </label>
-
-              <label className={`${styles.writeField} ${styles.fullField}`}>
-                <span>내용</span>
-                <textarea
-                  value={writeForm.content}
-                  onChange={(event) =>
-                    handleWriteFieldChange("content", event.target.value)
-                  }
-                  placeholder="문의 내용을 입력해 주세요"
-                />
-              </label>
-
-              <div className={`${styles.writeField} ${styles.fullField}`}>
-                <span>첨부파일</span>
-                <div className={styles.fileField}>
-                  <label className={styles.fileSelectButton}>
-                    파일 선택
-                    <input
-                      type="file"
-                      multiple
-                      className={styles.hiddenFileInput}
-                      onChange={handleWriteAttachmentChange}
-                    />
-                  </label>
-                  <p className={styles.fileFieldHint}>
-                    필요한 경우 문의 관련 파일을 함께 첨부해 주세요.
-                  </p>
-                </div>
-                {writeAttachments.length > 0 && (
-                  <ul className={styles.pendingFileList}>
-                    {writeAttachments.map((attachment) => (
-                      <li key={attachment.id}>
-                        <span>{attachment.file.name}</span>
-                        <button
-                          type="button"
-                          className={styles.fileRemoveButton}
-                          onClick={() => handleRemoveWriteAttachment(attachment.id)}
-                        >
-                          제거
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
-              <div
-                className={`${styles.writeField} ${styles.fullField} ${styles.checkField}`}
-              >
-                <span>개인정보 수집 동의</span>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={writeForm.agree}
-                    onChange={(event) =>
-                      handleWriteFieldChange("agree", event.target.checked)
-                    }
-                  />
-                  <span>개인정보 수집 및 이용에 동의합니다.</span>
-                </label>
-              </div>
-            </div>
-
-            {writeFormErrorMessage && (
-              <p className={styles.modalError}>{writeFormErrorMessage}</p>
-            )}
-
-            <div className={styles.modalActions}>
-              <button
-                type="button"
-                className={styles.modalSecondaryButton}
-                onClick={closeWriteModal}
-                disabled={isWriting}
-              >
-                취소
-              </button>
-              <button
-                type="button"
-                className={styles.modalPrimaryButton}
-                onClick={() => void handleWriteSubmit()}
-                disabled={isWriting}
-              >
-                {isWriting ? "등록 중..." : "등록"}
               </button>
             </div>
           </div>

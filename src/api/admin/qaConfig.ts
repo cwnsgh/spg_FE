@@ -1,3 +1,7 @@
+/**
+ * 1:1 문의(QA) 게시판 전역 설정 조회·수정입니다.
+ * 백엔드: `admin/qa_config.php`
+ */
 import { apiRequest } from "../client";
 
 export interface AdminQaConfig {
