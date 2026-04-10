@@ -7,9 +7,11 @@ import {
   type RecruitPostDetail,
   type RecruitPostListItem,
 } from "@/api";
+import RecruitPostDetailView from "@/components/recruit/RecruitPostDetailView";
 import { useOverlayDismiss } from "@/hooks/useOverlayDismiss";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import RecruitApplyPanel from "./RecruitApplyPanel";
 import RecruitStatusPanel from "./RecruitStatusPanel";
 import styles from "./Recruitment.module.css";
@@ -65,6 +67,33 @@ export default function Recruitment() {
   const [detailError, setDetailError] = useState("");
   const [detail, setDetail] = useState<RecruitPostDetail | null>(null);
   const [applyPrefillWrId, setApplyPrefillWrId] = useState<number | null>(null);
+  const [portalReady, setPortalReady] = useState(false);
+
+  useEffect(() => {
+    setPortalReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!detailOpen) return;
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevBodyOverflow = body.style.overflow;
+    const prevBodyPaddingRight = body.style.paddingRight;
+    const gutter = window.innerWidth - html.clientWidth;
+
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    if (gutter > 0) {
+      body.style.paddingRight = `${gutter}px`;
+    }
+
+    return () => {
+      html.style.overflow = prevHtmlOverflow;
+      body.style.overflow = prevBodyOverflow;
+      body.style.paddingRight = prevBodyPaddingRight;
+    };
+  }, [detailOpen]);
 
   const subTabs = [
     { label: "모집안내", value: 0 },
@@ -397,104 +426,66 @@ export default function Recruitment() {
 
       {activeSubTab === 3 && <RecruitStatusPanel />}
 
-      {detailOpen && (
-        <div
-          className={styles.detailModal}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="recruit-detail-title"
-          onMouseDown={handleOverlayMouseDown}
-          onClick={handleOverlayClick}
-        >
-          <div className={styles.detailModalInner}>
-            <div className={styles.detailModalHeader}>
-              <h3 id="recruit-detail-title" className={styles.detailModalTitle}>
-                {detail?.subject ?? "채용공고"}
-              </h3>
-              <button
-                type="button"
-                className={styles.detailClose}
-                onClick={closeDetail}
-                aria-label="닫기"
-              >
-                ×
-              </button>
-            </div>
-            <div className={styles.detailModalBody}>
-              {detailLoading && <p className={styles.recruitLoading}>불러오는 중…</p>}
-              {detailError && <p className={styles.recruitError}>{detailError}</p>}
-              {detail && !detailLoading && (
-                <>
-                  <div className={styles.detailMeta}>
-                    <span className={styles.statusLabel}>{detail.status}</span>
-                    {detail.type ? (
-                      <span className={styles.locationLabel}>{detail.type}</span>
-                    ) : null}
-                    <p className={styles.detailPeriod}>{detail.period?.text}</p>
-                  </div>
-                  {detail.positions?.length ? (
-                    <ul className={styles.detailPositionList}>
-                      {detail.positions.map((p, i) => (
-                        <li key={i}>
-                          <strong>{p.job}</strong>
-                          {p.count ? ` · 모집 ${p.count}` : ""}
-                          {p.work ? (
-                            <>
-                              <br />
-                              <span className={styles.detailSub}>{p.work}</span>
-                            </>
-                          ) : null}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                  {detail.notice ? (
-                    <p className={styles.detailNotice}>{detail.notice}</p>
-                  ) : null}
-                  <div
-                    className={styles.detailHtml}
-                    dangerouslySetInnerHTML={{ __html: detail.content }}
+      {portalReady &&
+        detailOpen &&
+        createPortal(
+          <div
+            className={styles.detailModal}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="recruit-detail-title"
+            onMouseDown={handleOverlayMouseDown}
+            onClick={handleOverlayClick}
+          >
+            <div
+              className={styles.detailModalInner}
+              onMouseDown={(e) => e.stopPropagation()}
+              role="document"
+            >
+              <div className={styles.detailModalHeader}>
+                <h3 id="recruit-detail-title" className={styles.detailModalTitle}>
+                  {detail?.subject ?? "채용공고"}
+                </h3>
+                <button
+                  type="button"
+                  className={styles.detailClose}
+                  onClick={closeDetail}
+                  aria-label="닫기"
+                >
+                  ×
+                </button>
+              </div>
+              <div className={styles.detailModalBody}>
+                {detailLoading && <p className={styles.recruitLoading}>불러오는 중…</p>}
+                {detailError && <p className={styles.recruitError}>{detailError}</p>}
+                {detail && !detailLoading ? (
+                  <RecruitPostDetailView
+                    detail={detail}
+                    actions={
+                      <div className={styles.detailModalActions}>
+                        <button type="button" className={styles.detailButton} onClick={closeDetail}>
+                          목록보기
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.detailApplyRed}
+                          disabled={!detail.can_apply}
+                          onClick={() => {
+                            closeDetail();
+                            goApplyWithJob(detail.id);
+                          }}
+                        >
+                          지원하기
+                        </button>
+                      </div>
+                    }
                   />
-                  {detail.apply_method ? (
-                    <section className={styles.detailExtra}>
-                      <h4>접수방법</h4>
-                      <p>{detail.apply_method}</p>
-                    </section>
-                  ) : null}
-                  {detail.process ? (
-                    <section className={styles.detailExtra}>
-                      <h4>전형절차</h4>
-                      <p>{detail.process}</p>
-                    </section>
-                  ) : null}
-                  {detail.contact ? (
-                    <section className={styles.detailExtra}>
-                      <h4>문의</h4>
-                      <p>{detail.contact}</p>
-                    </section>
-                  ) : null}
-                  <div className={styles.detailModalActions}>
-                    <button type="button" className={styles.detailButton} onClick={closeDetail}>
-                      닫기
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.applyButton}
-                      disabled={!detail.can_apply}
-                      onClick={() => {
-                        closeDetail();
-                        goApplyWithJob(detail.id);
-                      }}
-                    >
-                      지원하기
-                    </button>
-                  </div>
-                </>
-              )}
+                ) : null}
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

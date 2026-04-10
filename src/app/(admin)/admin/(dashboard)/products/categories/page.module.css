@@ -1,0 +1,1005 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.heroCard,
+.tableCard {
+  padding: 2.4rem;
+  border-radius: 2rem;
+  background: #fff;
+  box-shadow: 0 14px 36px rgba(17, 42, 95, 0.06);
+}
+
+.eyebrow {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #7a89a5;
+}
+
+.title {
+  margin-top: 0.8rem;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #172033;
+}
+
+.description {
+  margin-top: 0.8rem;
+  font-size: 1.4rem;
+  color: #5f6b82;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 16rem;
+  height: 4.2rem;
+  padding: 0 1.2rem;
+  border: 1px solid #e3ebf6;
+  border-radius: 0.8rem;
+  font-size: 1.35rem;
+}
+
+.primaryButton,
+.secondaryButton,
+.ghostButton,
+.dangerButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  height: 4.2rem;
+  padding: 0 1.6rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primaryButton {
+  background: #172033;
+  color: #fff;
+}
+
+.secondaryButton {
+  background: #edf3ff;
+  color: #1d5ee8;
+}
+
+.ghostButton {
+  background: #f4f7fb;
+  color: #5f6b82;
+}
+
+.dangerButton {
+  background: #fff0f0;
+  color: #c0392b;
+}
+
+.tableWrap {
+  overflow: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.35rem;
+}
+
+.table th,
+.table td {
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid #eef2f8;
+  text-align: left;
+}
+
+.table th {
+  color: #7a89a5;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.badgeOn {
+  background: #e8f7ee;
+  color: #1e8449;
+}
+
+.badgeOff {
+  background: #f4f4f4;
+  color: #888;
+}
+
+.rowActions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.errorBox {
+  padding: 1.2rem 1.6rem;
+  background: #fff4f4;
+  border: 1px solid #f0cccc;
+  border-radius: 0.8rem;
+  color: #a33;
+  font-size: 1.35rem;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.modalCard {
+  width: min(84rem, 100%);
+  max-height: 92vh;
+  overflow: auto;
+  padding: 2.75rem 3.25rem;
+  border-radius: 1.25rem;
+  background: #fcfcfd;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset,
+    0 4px 6px -1px rgba(15, 23, 42, 0.05),
+    0 24px 48px -12px rgba(15, 23, 42, 0.12);
+  scrollbar-gutter: stable;
+}
+
+.modalTitle {
+  margin: 0 0 0.35rem;
+  font-size: 1.85rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.formGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.65rem;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 1.28rem;
+  font-weight: 650;
+  color: #334155;
+  letter-spacing: -0.01em;
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: 0.85rem 1.05rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.7rem;
+  font-size: 1.32rem;
+  background: #fff;
+  color: #0f172a;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.input:hover,
+.textarea:hover,
+.select:hover {
+  border-color: #cbd5e1;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+.textarea {
+  min-height: 6.5rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid #e8ecf4;
+}
+
+.modalActions .primaryButton {
+  min-width: 8rem;
+  padding: 0 1.85rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+}
+
+.modalActions .ghostButton {
+  padding: 0 1.35rem;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+}
+
+.modalActions .ghostButton:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.inlineError {
+  margin-top: 0.4rem;
+  font-size: 1.25rem;
+  color: #c0392b;
+}
+
+.loading {
+  padding: 2rem;
+  text-align: center;
+  color: #7a89a5;
+}
+
+.treeNameCell {
+  min-width: 22rem;
+}
+
+.treeInner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.depthTag {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.6rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 0.4rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  vertical-align: middle;
+}
+
+.depth1 {
+  background: #e8f4fd;
+  color: #1565c0;
+}
+
+.depth2 {
+  background: #f3e8ff;
+  color: #6a1b9a;
+}
+
+.depth3 {
+  background: #e8f7ee;
+  color: #2e7d32;
+}
+
+.depthN {
+  background: #f0f0f0;
+  color: #555;
+}
+
+.nameKo {
+  font-weight: 700;
+  color: #172033;
+}
+
+.pathLine {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.8rem;
+  margin-bottom: 1.2rem;
+  padding: 1rem 1.2rem;
+  background: #f8fafc;
+  border-radius: 0.8rem;
+  font-size: 1.25rem;
+  color: #64748b;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.workbench {
+  display: grid;
+  grid-template-columns: minmax(17rem, 32%) 1fr;
+  gap: 1.6rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .workbench {
+    grid-template-columns: 1fr;
+  }
+}
+
+.treePanel,
+.detailPanel {
+  padding: 1.2rem 1.4rem;
+  border: 1px solid #e8edf5;
+  border-radius: 1.2rem;
+  background: #fbfcfe;
+  min-height: 14rem;
+}
+
+.panelTitle {
+  margin: 0 0 0.5rem;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #172033;
+}
+
+.panelHint {
+  margin: 0 0 0.8rem;
+  font-size: 1.2rem;
+  color: #7a89a5;
+  line-height: 1.45;
+}
+
+.treeScroll {
+  max-height: min(60vh, 42rem);
+  overflow: auto;
+  padding-right: 0.4rem;
+}
+
+.treeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.25rem;
+  border-radius: 0.55rem;
+  transition: background 0.12s ease;
+}
+
+.treeRow:hover {
+  background: #f1f5f9;
+}
+
+.treeRowSelected {
+  background: #e8f4fd !important;
+  outline: 1px solid #90caf9;
+}
+
+.treeToggle {
+  flex-shrink: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: none;
+  border-radius: 0.4rem;
+  background: #edf2f7;
+  color: #475569;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.treeToggle:hover {
+  background: #e2e8f0;
+}
+
+.treeToggleSpacer {
+  width: 2.2rem;
+  flex-shrink: 0;
+}
+
+.treeLabel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  padding: 0.35rem 0.5rem;
+  border: none;
+  border-radius: 0.45rem;
+  background: transparent;
+  font-size: 1.3rem;
+  text-align: left;
+  cursor: pointer;
+  color: #1e293b;
+}
+
+.depthTagMini {
+  flex-shrink: 0;
+  padding: 0.08rem 0.4rem;
+  border-radius: 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.treeNameText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.treeFileBadge {
+  flex-shrink: 0;
+  padding: 0.12rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1d4ed8;
+  background: #edf3ff;
+  border: 1px solid #bfdbfe;
+}
+
+.searchHitRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.6rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #e8edf5;
+  border-radius: 0.55rem;
+  background: #fff;
+  font-size: 1.25rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.searchHitPath {
+  flex-basis: 100%;
+  font-size: 1.1rem;
+  color: #94a3b8;
+}
+
+.detailLead {
+  margin: 0 0 1.2rem;
+  font-size: 1.35rem;
+  color: #5f6b82;
+  line-height: 1.55;
+}
+
+.detailHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.detailActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.breadcrumb {
+  margin: 0.2rem 0 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.subTitle {
+  margin: 0 0 0.6rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.childSectionHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem 1rem;
+  margin-bottom: 0.65rem;
+}
+
+.childSectionHeader .subTitle {
+  margin: 0;
+  flex: 1;
+  min-width: 12rem;
+}
+
+.modalFormLead {
+  margin: 0;
+  padding: 1rem 1.2rem 1rem 1.15rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #3b82f6;
+  font-size: 1.26rem;
+  line-height: 1.55;
+  color: #475569;
+}
+
+.modalSection {
+  padding: 1.5rem 1.65rem 1.6rem;
+  border-radius: 1rem;
+  border: 1px solid #e8ecf4;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.modalSectionHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.stepBadge {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 0.5rem;
+  border-radius: 0.65rem;
+  background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+}
+
+.modalSectionHeadText {
+  min-width: 0;
+  flex: 1;
+  padding-top: 0.1rem;
+}
+
+.modalSectionTitle {
+  margin: 0;
+  font-size: 1.38rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.modalSectionHint {
+  margin: 0.4rem 0 0;
+  font-size: 1.22rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.modalSectionBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.modalNamePair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.15rem 1.5rem;
+}
+
+.modalFieldRow {
+  display: grid;
+  grid-template-columns: minmax(0, 14rem) minmax(0, 16rem);
+  gap: 1.15rem 1.5rem;
+  align-items: end;
+}
+
+@media (max-width: 768px) {
+  .modalNamePair {
+    grid-template-columns: 1fr;
+  }
+
+  .modalFieldRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .modalCard {
+    padding: 1.65rem 1.35rem;
+    border-radius: 1rem;
+  }
+
+  .modalTitle {
+    font-size: 1.55rem;
+  }
+}
+
+.childList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.childItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid #eef2f8;
+}
+
+.childSelectBtn {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  padding: 0.35rem 0.5rem;
+  border: none;
+  border-radius: 0.45rem;
+  background: #fff;
+  font-size: 1.3rem;
+  text-align: left;
+  cursor: pointer;
+  color: #172033;
+}
+
+.childSelectBtn:hover {
+  background: #f8fafc;
+}
+
+.childName {
+  font-weight: 700;
+}
+
+.childEn {
+  font-size: 1.15rem;
+  color: #94a3b8;
+}
+
+.childRowActions {
+  flex-shrink: 0;
+}
+
+.modalContext {
+  margin: 0.5rem 0 1.35rem;
+  padding: 1rem 1.2rem;
+  background: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e8ecf4;
+  font-size: 1.26rem;
+  color: #475569;
+  line-height: 1.55;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.detailsBlock {
+  border: 1px solid #e8edf5;
+  border-radius: 0.75rem;
+  background: #fff;
+  overflow: hidden;
+}
+
+.detailsSummary {
+  padding: 0.75rem 1rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: #f4f7fb;
+  color: #334155;
+}
+
+.detailsBody {
+  padding: 1rem 1rem 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fileBlockTitle {
+  margin: 0 0 0.65rem;
+  font-size: 1.22rem;
+  font-weight: 650;
+  color: #64748b;
+  letter-spacing: -0.01em;
+}
+
+.existingFiles ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.existingFileRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1rem 1.15rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e8ecf4;
+  background: #fafbfd;
+  font-size: 1.2rem;
+}
+
+.existingFileTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.75rem 1rem;
+}
+
+.existingFileTitleInputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.65rem 0.85rem;
+  flex: 1;
+  min-width: min(100%, 18rem);
+}
+
+.fileOriginName {
+  font-size: 1.1rem;
+  color: #64748b;
+  padding-left: 0.15rem;
+}
+
+.fileTitleStrike {
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.inlineCheck {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  color: #c0392b;
+}
+
+.inlineCheckMuted {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  font-size: 1.22rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.fileTitle {
+  font-weight: 700;
+  color: #172033;
+}
+
+.pendingFiles {
+  margin-top: 0.65rem;
+}
+
+.pendingRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 0.75rem 1rem;
+  align-items: start;
+  padding: 1rem 1.1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e8ecf4;
+  background: #fafbfd;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 960px) {
+  .pendingRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .existingFileTitleInputs {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pendingName {
+  font-size: 1.18rem;
+  font-weight: 600;
+  color: #475569;
+  grid-column: 1 / -1;
+  word-break: break-all;
+}
+
+.pendingRow .ghostButton {
+  align-self: center;
+  white-space: nowrap;
+}
+
+.depth1Info {
+  margin-top: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.65rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-size: 1.22rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.fileEmptyCta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.fileEmptyCta .primaryButton {
+  flex-shrink: 0;
+}
+
+.panelFileSection {
+  margin-bottom: 1.2rem;
+  padding: 1rem 1.1rem;
+  border-radius: 0.65rem;
+  border: 1px solid #e2e8f0;
+  background: #fafbfc;
+}
+
+.panelFileTableWrap {
+  overflow: auto;
+  max-width: 100%;
+}
+
+.panelFileTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.2rem;
+}
+
+.panelFileTable th,
+.panelFileTable td {
+  padding: 0.55rem 0.65rem;
+  border-bottom: 1px solid #e8edf5;
+  text-align: left;
+  vertical-align: top;
+}
+
+.panelFileTable th {
+  color: #64748b;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.monoMuted {
+  font-size: 1.1rem;
+  color: #64748b;
+  word-break: break-all;
+}
+
+.panelFileLink {
+  font-weight: 700;
+  color: #1d5ee8;
+  text-decoration: none;
+}
+
+.panelFileLink:hover {
+  text-decoration: underline;
+}
+
+.nameHint {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.filePickWrap {
+  margin-bottom: 0.25rem;
+}
+
+.filePickSurface {
+  padding: 1.35rem 1.5rem;
+  border-radius: 0.9rem;
+  border: 1px dashed #a5b4fc;
+  background: linear-gradient(165deg, #f8faff 0%, #fff 45%, #fafbfd 100%);
+}
+
+.filePickLabelText {
+  margin: 0 0 0.75rem;
+  font-size: 1.28rem;
+  font-weight: 650;
+  color: #334155;
+}
+
+.filePickRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem 1.25rem;
+}
+
+.filePickBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.35rem;
+  border-radius: 999px;
+  border: 1px solid #2563eb;
+  background: #fff;
+  color: #1d4ed8;
+  font-size: 1.26rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.12);
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease;
+}
+
+.filePickBtn:hover {
+  background: #eff6ff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+}
+
+.filePickBtn:active {
+  transform: scale(0.98);
+}
+
+.filePickStatus {
+  font-size: 1.22rem;
+  font-weight: 600;
+  color: #0d9488;
+  line-height: 1.45;
+  max-width: 32rem;
+}
+
+.pickedNameList {
+  margin: 0.85rem 0 0;
+  padding-left: 1.35rem;
+  font-size: 1.2rem;
+  color: #475569;
+  line-height: 1.55;
+}

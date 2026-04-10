@@ -352,22 +352,24 @@
 .detailModal {
   position: fixed;
   inset: 0;
-  z-index: 2000;
+  /* 헤더(99999~100000) 위에 표시 */
+  z-index: 100010;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: rgba(0, 0, 0, 0.5);
+  padding-top: max(2rem, env(safe-area-inset-top, 0px));
+  background: rgba(0, 0, 0, 0.55);
 }
 
 .detailModalInner {
-  width: min(90rem, 100%);
-  max-height: min(90vh, 900px);
+  width: min(112rem, 100%);
+  max-height: min(90vh, 960px);
   display: flex;
   flex-direction: column;
   background: #fff;
   border-radius: 1.6rem;
-  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
 
@@ -383,10 +385,11 @@
 
 .detailModalTitle {
   margin: 0;
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: 700;
   line-height: 1.35;
   word-break: keep-all;
+  color: #1a6ecc;
 }
 
 .detailClose {
@@ -406,48 +409,228 @@
   background: #e5e7eb;
 }
 
+.previewNote {
+  margin: 0 0 1.6rem;
+  padding: 1rem 1.2rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.55;
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 0.75rem;
+}
+
 .detailModalBody {
   padding: 2rem 2.4rem 2.4rem;
   overflow-y: auto;
   flex: 1;
   min-height: 0;
+  /* 한 줄(span) · 불릿(ul) · HTML 블록 들여쓰기 통일 */
+  --recruit-rich-indent: 1.75rem;
 }
 
-.detailMeta {
-  margin-bottom: 2rem;
-}
-
-.detailMeta .statusLabel,
-.detailMeta .locationLabel {
-  margin-right: 0.8rem;
-}
-
-.detailPeriod {
-  margin: 1.2rem 0 0;
-  font-size: 1.6rem;
-  color: #6b7280;
-  font-weight: 600;
-}
-
-.detailPositionList {
-  margin: 0 0 2rem;
-  padding-left: 1.8rem;
-  font-size: 1.6rem;
-  line-height: 1.7;
-}
-
-.detailSub {
-  font-weight: 500;
-  color: #4b5563;
-}
-
-.detailNotice {
-  padding: 1.2rem 1.6rem;
-  margin-bottom: 2rem;
-  border-radius: 1rem;
-  background: #f0f7ff;
+.detailSummaryTable {
+  width: 100%;
+  border-collapse: collapse;
   font-size: 1.5rem;
-  line-height: 1.6;
+  margin-bottom: 2.4rem;
+  border: 1px solid #d0d0d0;
+  table-layout: fixed;
+}
+
+.detailSummaryTable th {
+  width: 22%;
+  background: #f2f2f2;
+  padding: 1.2rem 1rem;
+  font-weight: 700;
+  text-align: center;
+  border: 1px solid #d0d0d0;
+  vertical-align: middle;
+  color: #111;
+}
+
+.detailSummaryTable td {
+  padding: 1.2rem 1.4rem;
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  vertical-align: top;
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+/* 참고사항: 직무표용 들여쓰기·타이포 제거 → 위 행들과 같은 시작선·글자 크기 */
+.detailSummaryNoticeCell {
+  --recruit-rich-indent: 0;
+}
+
+.detailSummaryNoticeCell .cellPlainSpan,
+.detailSummaryNoticeCell .cellRich,
+.detailSummaryNoticeCell .cellDash {
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+.detailSummaryNoticeCell .cellBulletList {
+  padding-inline-start: 1.25rem;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+.detailSummaryNoticeCell .cellBulletList li {
+  text-align: left;
+}
+
+.detailPositionsWrap {
+  overflow-x: auto;
+  margin-bottom: 2.4rem;
+  border: 1px solid #ccc;
+  border-radius: 0.4rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.detailPositionsTable {
+  width: 100%;
+  min-width: 88rem;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+}
+
+.detailPositionsTable th {
+  background: #f0f0f0;
+  padding: 1rem 0.7rem;
+  font-weight: 700;
+  text-align: center;
+  border: 1px solid #ccc;
+  color: #111;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.detailPositionsTable td {
+  padding: 1rem 0.8rem;
+  border: 1px solid #ccc;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: 600;
+  color: #222;
+}
+
+.detailTdSimple {
+  text-align: center;
+}
+
+.detailCellText {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.detailTdRich {
+  text-align: left !important;
+  min-width: 12rem;
+  max-width: 22rem;
+  font-weight: 500;
+  vertical-align: middle;
+}
+
+.cellDash {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding-inline-start: var(--recruit-rich-indent, 1.75rem);
+  vertical-align: middle;
+  color: #9ca3af;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* 한 줄(span) · ul · HTML 모두 동일 시작 여백 */
+.cellPlainSpan {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding-inline-start: var(--recruit-rich-indent, 1.75rem);
+  vertical-align: middle;
+  font-size: 1.4rem;
+  line-height: 1.65;
+  font-weight: 500;
+  color: #333;
+  text-align: left;
+}
+
+.cellBulletList {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding-inline-start: var(--recruit-rich-indent, 1.75rem);
+  text-align: left;
+  vertical-align: middle;
+  font-size: 1.4rem;
+  line-height: 1.65;
+  font-weight: 500;
+  color: #333;
+  list-style-position: outside;
+}
+
+.cellBulletList li {
+  margin-bottom: 0.35rem;
+}
+
+.cellBulletList li:last-child {
+  margin-bottom: 0;
+}
+
+.cellRich {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding-inline-start: var(--recruit-rich-indent, 1.75rem);
+  vertical-align: middle;
+  font-size: 1.4rem;
+  line-height: 1.65;
+  font-weight: 500;
+  color: #333;
+  word-break: break-word;
+  text-align: left;
+}
+
+.cellRich :global(ul),
+.cellRich :global(ol) {
+  margin: 0.4rem 0 0;
+  padding-inline-start: 0;
+  list-style-position: outside;
+}
+
+.cellRich :global(p) {
+  margin: 0 0 0.4rem;
+}
+
+.cellRich :global(p:last-child) {
+  margin-bottom: 0;
+}
+
+.detailNoPositions {
+  margin: 0 0 2rem;
+  padding: 1.2rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #6b7280;
+  background: #f9fafb;
+  border-radius: 0.6rem;
 }
 
 .detailHtml {
@@ -487,21 +670,50 @@
   white-space: pre-wrap;
 }
 
+.detailExtraBody {
+  font-size: 1.5rem;
+  line-height: 1.75;
+  color: #222;
+}
+
 .detailModalActions {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: flex-end;
+  gap: 1.2rem;
+  justify-content: center;
   margin-top: 2.4rem;
   padding-top: 2rem;
   border-top: 1px solid #eee;
 }
 
-.detailModalActions .detailButton,
-.detailModalActions .applyButton {
+.detailModalActions .detailButton {
   flex: 0 0 auto;
-  min-width: 12rem;
+  min-width: 14rem;
   margin-top: 0;
+}
+
+.detailApplyRed {
+  flex: 0 0 auto;
+  min-width: 14rem;
+  padding: 1.8rem 2.4rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  background: #c62828;
+  border: 1px solid #b71c1c;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.detailApplyRed:hover:not(:disabled) {
+  background: #b71c1c;
+  border-color: #a01515;
+}
+
+.detailApplyRed:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 /* 채용공고 */
@@ -839,6 +1051,30 @@
   .contactItem span {
     word-break: keep-all;
     line-height: 1.4;
+  }
+
+  .detailModal {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  }
+
+  .detailModalInner {
+    width: 100%;
+    max-height: min(92vh, 900px);
+    margin-top: 0.5rem;
+  }
+
+  .detailModalTitle {
+    font-size: 1.9rem;
+  }
+
+  .detailSummaryTable {
+    font-size: 1.35rem;
+  }
+
+  .detailSummaryTable th {
+    width: 30%;
   }
 }
 

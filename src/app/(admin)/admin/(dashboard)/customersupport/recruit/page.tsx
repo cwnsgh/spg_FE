@@ -2,6 +2,7 @@
 
 import {
   ApiError,
+  API_BASE_URL,
   BACKEND_ORIGIN,
   getAdminRecruitApplications,
   type RecruitApplicationRow,
@@ -91,9 +92,45 @@ export default function AdminRecruitApplicationsPage() {
   };
 
   const link = (path: string) => `${BACKEND_ORIGIN}${path}`;
+  const usesDevProxy = API_BASE_URL.startsWith("/api/proxy");
+
+  const fileOpenHref = (url: string) => {
+    const u = url?.trim() ?? "";
+    if (!u) return "#";
+    if (u.startsWith("http://") || u.startsWith("https://")) return u;
+    return link(u.startsWith("/") ? u : `/${u}`);
+  };
+
+  const printOpenHref = (url: string) => {
+    const u = url?.trim() ?? "";
+    if (!u) return "#";
+
+    const toProxyPath = (pathWithQuery: string) => {
+      const normalized = pathWithQuery.startsWith("/") ? pathWithQuery : `/${pathWithQuery}`;
+      const withoutApiPrefix = normalized.startsWith("/api/")
+        ? normalized.slice(4)
+        : normalized === "/api"
+          ? "/"
+          : normalized;
+      return `${API_BASE_URL}${withoutApiPrefix}`;
+    };
+
+    if (u.startsWith("http://") || u.startsWith("https://")) {
+      if (!usesDevProxy) return u;
+      try {
+        const parsed = new URL(u);
+        return toProxyPath(`${parsed.pathname}${parsed.search}`);
+      } catch {
+        return u;
+      }
+    }
+
+    if (usesDevProxy) return toProxyPath(u);
+    return link(u.startsWith("/") ? u : `/${u}`);
+  };
   const openPrintPreview = (row: RecruitApplicationRow) => {
     setPreviewTitle(`지원서 미리보기 · #${row.re_id} ${row.applicant.name ? `(${row.applicant.name})` : ""}`);
-    setPreviewUrl(link(row.links.print_url));
+    setPreviewUrl(printOpenHref(row.links.print_url));
   };
   const closePreview = () => {
     setPreviewUrl("");
@@ -198,35 +235,76 @@ export default function AdminRecruitApplicationsPage() {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>re_id</th>
-              <th>공고</th>
-              <th>직무</th>
+              <th style={{ width: "3.2rem" }} />
+              <th>상태</th>
+              <th>공고명</th>
+              <th>모집분야</th>
+              <th>응시분야</th>
               <th>지원자</th>
               <th>연락처</th>
-              <th>상태</th>
               <th>제출일</th>
-              <th>기존 시스템</th>
+              <th>관리</th>
             </tr>
           </thead>
           <tbody>
             {list.length === 0 && !loading ? (
               <tr>
-                <td colSpan={8} className={styles.muted}>
+                <td colSpan={9} className={styles.muted}>
                   데이터가 없습니다.
                 </td>
               </tr>
             ) : (
               list.map((row: RecruitApplicationRow) => (
                 <tr key={row.re_id}>
-                  <td>{row.re_id}</td>
+                  <td>
+                    <input type="checkbox" aria-label={`지원자 선택 ${row.applicant.name || row.re_id}`} />
+                  </td>
+                  <td>
+                    <select
+                      className={styles.statusSelect}
+                      value={row.re_status}
+                      disabled
+                      aria-label={`상태 ${row.applicant.name || row.re_id}`}
+                    >
+                      {statusOptions.map((s) => (
+                        <option key={s.value} value={s.value}>
+                          {s.label}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
                   <td>
                     <div>{row.post.subject || "—"}</div>
-                    <div className={styles.muted}>wr_id {row.post.wr_id}</div>
+                    {row.files_preview?.length ? (
+                      <div className={styles.fileBadges}>
+                        {row.files_preview.map((f) => {
+                          const label = f.pf_source?.trim() || f.pf_file || "첨부";
+                          const href = fileOpenHref(f.url);
+                          return (
+                            <a
+                              key={f.pf_id}
+                              href={href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className={styles.fileBadge}
+                              title={label}
+                            >
+                              {label}
+                            </a>
+                          );
+                        })}
+                      </div>
+                    ) : null}
                   </td>
+                  <td>{row.re_type || "무관"}</td>
                   <td>{row.re_work || "—"}</td>
-                  <td>{row.applicant.name || "—"}</td>
+                  <td>
+                    <div>{row.applicant.name || "—"}</div>
+                    <div className={styles.muted}>
+                      {row.applicant.sex || "—"} {row.applicant.birth || ""}
+                    </div>
+                  </td>
                   <td>{row.applicant.phone || "—"}</td>
-                  <td>{row.re_status_text}</td>
                   <td>{row.applied_date_text || row.applied_at?.slice(0, 10) || "—"}</td>
                   <td>
                     <div className={styles.linkRow}>
@@ -237,7 +315,7 @@ export default function AdminRecruitApplicationsPage() {
                       >
                         미리보기
                       </button>
-                      <a href={link(row.links.print_url)} target="_blank" rel="noreferrer">
+                      <a href={printOpenHref(row.links.print_url)} target="_blank" rel="noreferrer">
                         새창 인쇄
                       </a>
                     </div>

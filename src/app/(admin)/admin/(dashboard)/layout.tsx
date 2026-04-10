@@ -22,8 +22,16 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
   {
     title: "제품소개",
     items: [
-      { label: "제품 카테고리", description: "상품/카테고리 구조" },
-      { label: "제품 콘텐츠", description: "상세 소개 관리" },
+      {
+        label: "제품 카테고리",
+        description: "spg_product_category",
+        href: "/admin/products/categories",
+      },
+      {
+        label: "제품 콘텐츠",
+        description: "spg_products · 매핑·첨부",
+        href: "/admin/products",
+      },
     ],
   },
   {
@@ -54,6 +62,11 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
         label: "FAQ 관리",
         description: "faqs / faq_master",
         href: "/admin/customersupport/faq",
+      },
+      {
+        label: "채용공고",
+        description: "manage_posts · 등록/수정",
+        href: "/admin/customersupport/recruit-posts",
       },
       {
         label: "채용 지원자",
@@ -112,6 +125,15 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
 function isItemActive(pathname: string, href?: string) {
   if (!href) return false;
   if (href === "/admin") return pathname === href;
+  // `/admin/products` 는 `/admin/products/categories` 의 접두어이므로 startsWith 만 쓰면 둘 다 켜짐
+  if (href === "/admin/products") return pathname === "/admin/products";
+  // `recruit-posts` 가 `recruit` 접두어로 잡히지 않도록 구분
+  if (href === "/admin/customersupport/recruit") {
+    return pathname === href;
+  }
+  if (href === "/admin/customersupport/recruit-posts") {
+    return pathname === href || pathname.startsWith(`${href}/`);
+  }
   return pathname.startsWith(href);
 }
 

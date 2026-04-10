@@ -1,0 +1,541 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: min(132rem, 100%);
+}
+
+.backRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.backLink {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #0f766e;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.subTitle {
+  margin: 0.35rem 0 0;
+  font-size: 1.35rem;
+  color: #64748b;
+}
+
+.successBox,
+.errorBox {
+  padding: 1rem 1.4rem;
+  border-radius: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.successBox {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.errorBox {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.loading {
+  font-size: 1.45rem;
+  color: #64748b;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* 레거시 스타일: 한 장에 밀도 있게 */
+.legacySheet {
+  background: #fff;
+  border: 1px solid #c5c9d0;
+  border-radius: 0.35rem;
+  overflow: hidden;
+}
+
+.formTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.35rem;
+}
+
+.formTable th {
+  width: 13.5rem;
+  max-width: 30%;
+  padding: 0.65rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  background: #eef1f5;
+  border: 1px solid #d1d5db;
+  vertical-align: top;
+  line-height: 1.45;
+}
+
+.formTable td {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #d1d5db;
+  vertical-align: top;
+  background: #fff;
+}
+
+.formTable input[type="text"],
+.formTable input[type="number"],
+.formTable input[type="date"],
+.formTable select,
+.formTable textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #b8c0cc;
+  border-radius: 0.3rem;
+  font-size: 1.35rem;
+  font-family: inherit;
+  background: #fff;
+}
+
+.formTable textarea {
+  min-height: 6.5rem;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.formTable input:focus,
+.formTable select:focus,
+.formTable textarea:focus {
+  outline: none;
+  border-color: #0f766e;
+  box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.15);
+}
+
+.inline2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .inline2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.inlineField label,
+.inlineField .inlineLabel {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 0.35rem;
+}
+
+.periodPair {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.periodPair input[type="date"] {
+  width: auto;
+  min-width: 12rem;
+  flex: 1 1 12rem;
+}
+
+.periodSep {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.checkInline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.checkInline input {
+  width: 1.65rem;
+  height: 1.65rem;
+  margin-top: 0.2rem;
+  accent-color: #0f766e;
+  flex-shrink: 0;
+}
+
+.checkInline label {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  line-height: 1.45;
+}
+
+.cellHint {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 1.15rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.fieldExample {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 1.15rem;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
+.blockHeading {
+  margin: 0;
+  padding: 0.65rem 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
+  background: #f1f5f9;
+  border-top: 1px solid #d1d5db;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.tableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.positionTable {
+  width: 100%;
+  min-width: 78rem;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 1.25rem;
+}
+
+.positionTable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 0.5rem 0.45rem;
+  text-align: center;
+  font-weight: 700;
+  color: #1e293b;
+  background: #e2e8f0;
+  border: 1px solid #cbd5e1;
+  white-space: nowrap;
+}
+
+.positionTable tbody td {
+  padding: 0.35rem;
+  border: 1px solid #cbd5e1;
+  vertical-align: middle;
+  background: #fff;
+}
+
+.positionTable input,
+.positionTable textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #b8c0cc;
+  border-radius: 0.25rem;
+  font-size: 1.25rem;
+  font-family: inherit;
+}
+
+.positionTable textarea {
+  min-height: 5rem;
+  resize: vertical;
+  display: block;
+  line-height: 1.4;
+}
+
+.positionTable input:focus,
+.positionTable textarea:focus {
+  outline: none;
+  border-color: #0f766e;
+}
+
+/* 좁게: 직무·모집인원·근무형태·주요업무·근무지 (합계 약 36%) */
+.colJob {
+  width: 7%;
+}
+
+.colCount {
+  width: 5%;
+}
+
+.colWork {
+  width: 9%;
+}
+
+.colBusiness {
+  width: 8%;
+}
+
+.colLocation {
+  width: 8%;
+}
+
+/* 넓게: 모집분야·자격요건 */
+.colContent {
+  width: 29%;
+  min-width: 18rem;
+}
+
+.colRequired {
+  width: 29%;
+  min-width: 18rem;
+}
+
+/* 관리 버튼 열 */
+.colActions {
+  width: 5%;
+  min-width: 5.5rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.posActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: stretch;
+}
+
+.posIconBtn {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 0.25rem 0.35rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.posIconBtn:hover:not(:disabled) {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.posIconBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.posIconBtnDanger {
+  color: #b91c1c;
+  border-color: #fecaca;
+  background: #fff;
+}
+
+.posIconBtnDanger:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+.addRowBar {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid #d1d5db;
+  background: #fafbfc;
+}
+
+.addRowBtn {
+  border: 1px dashed #94a3b8;
+  background: #fff;
+  color: #475569;
+  padding: 0.45rem 1rem;
+  border-radius: 0.35rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.addRowBtn:hover {
+  border-color: #0f766e;
+  color: #0f766e;
+  background: #f0fdfa;
+}
+
+.footerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.primaryButton,
+.secondaryButton,
+.dangerOutline {
+  height: 3.8rem;
+  padding: 0 1.6rem;
+  border-radius: 0.5rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.primaryButton {
+  border: 1px solid #0f766e;
+  background: #0f766e;
+  color: #fff;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: #0d9488;
+  border-color: #0d9488;
+}
+
+.secondaryButton {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: #f8fafc;
+}
+
+.dangerOutline {
+  border: 1px solid #dc2626;
+  background: #fff;
+  color: #b91c1c;
+}
+
+.dangerOutline:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.dangerOutline:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.dangerBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #fecaca;
+  border-radius: 0.35rem;
+  background: #fffafb;
+}
+
+.dangerBar p {
+  margin: 0;
+  flex: 1 1 16rem;
+  font-size: 1.25rem;
+  color: #7f1d1d;
+}
+
+a.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+/* 직무 행 삭제 확인 */
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100011;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.confirmDialog {
+  width: min(40rem, 100%);
+  padding: 1.75rem 2rem;
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 1.25rem 3rem rgba(15, 23, 42, 0.2);
+}
+
+.confirmTitle {
+  margin: 0 0 0.75rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.confirmBody {
+  margin: 0 0 1.5rem;
+  font-size: 1.35rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.confirmActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.confirmCancel {
+  min-height: 3.6rem;
+  padding: 0 1.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  background: #fff;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+}
+
+.confirmCancel:hover {
+  background: #f8fafc;
+}
+
+.confirmDanger {
+  min-height: 3.6rem;
+  padding: 0 1.5rem;
+  border: 1px solid #dc2626;
+  border-radius: 0.5rem;
+  background: #dc2626;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+}
+
+.confirmDanger:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}

@@ -3,6 +3,12 @@
   background-color: #fff;
 }
 
+.loadingMsg {
+  padding: 4rem var(--layout-side-pc-sub);
+  font-size: 1.6rem;
+  color: #666;
+}
+
 .breadcrumbArea {
   margin-bottom: 50px;
 }

@@ -1,13 +1,12 @@
 .productMain {
-  width: 75%;
+  width: 100%;
 }
 
 /* 제품 그리드 */
 .productGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5%;
-  row-gap: 2%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.4rem;
 }
 
 .emptyState {
@@ -29,7 +28,8 @@
   transition: transform 0.3s;
   text-decoration: none;
   color: inherit;
-  display: block;
+  display: flex;
+  flex-direction: column;
 }
 
 .productItem:hover {
@@ -37,19 +37,24 @@
   transform: translateY(-2px);
 }
 
-
 .productImageWrap {
   width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
 }
 
 .productImage {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 20px 20px 0px 0px;
 }
 
 .productBottom {
   display: flex;
   justify-content: space-between;
-  padding: 10px 8% 35px 10%;
+  padding: 32px 8% 35px 10%;
 }
 
 .productInfo {
@@ -99,9 +104,9 @@
   background: #ccc;
 }
 .productItem:hover .productLinkBtn::after {
-  opacity: 1; filter: invert(1);
+  opacity: 1;
+  filter: invert(1);
 }
-
 
 /* 페이지네이션 */
 .pagination {
@@ -150,41 +155,40 @@
   border-color: #161616;
 }
 
-
 @media (max-width: 1050px) {
-    .productGrid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2%;
-      row-gap: 1%;
-    }
-    .productMain {
-      width: 100%;
-    }
+  .productGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+  }
+  .productMain {
+    width: 100%;
+  }
 
-    .productName {
-      margin-bottom: 0.7rem;
-      font-size: 1.8rem;
-    }
-    .productNameEn {
-      font-size: 1.45rem;
-    }
-    .productBottom {
-      display: block;
-      padding: 1rem 8% 2rem;
-    }
-    .productLinkBtn {
-      margin-top: 1.5rem;
-      width: 20%;
-    }
+  .productName {
+    margin-bottom: 0.7rem;
+    font-size: 1.8rem;
+  }
+  .productNameEn {
+    font-size: 1.45rem;
+  }
+  .productBottom {
+    display: block;
+    padding: 1rem 8% 2rem;
+  }
+  .productLinkBtn {
+    margin-top: 1.5rem;
+    width: 20%;
+  }
 
-    .pagination {
-      margin-top: 10rem;
-    }
-    .paginationBtn {
-      width: 3rem; height: 3rem;
-      font-size: 1.8rem !important;
-    }
-    .productLinkBtn::after {
-      width: 46%;
-    }
+  .pagination {
+    margin-top: 10rem;
+  }
+  .paginationBtn {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.8rem !important;
+  }
+  .productLinkBtn::after {
+    width: 46%;
+  }
 }

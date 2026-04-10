@@ -6,18 +6,34 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { hamburgerMenuData } from "../../../data/menuData";
+import {
+  hamburgerMenuData,
+  type HamburgerMenuColumn,
+} from "../../../data/menuData";
 import styles from "./HamburgerMenu.module.css";
 
 interface HamburgerMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  /** API 1뎁스 기준으로 채운 제품 첫 컬럼 (없으면 `menuData` 정적 첫 컬럼) */
+  productColumnOverride?: HamburgerMenuColumn | null;
 }
 
 const DEFAULT_OPEN_SECTION = "product";
 
-const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
+const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
+  isOpen,
+  onClose,
+  productColumnOverride,
+}) => {
   const [openSection, setOpenSection] = useState<string | null>(null);
+
+  const columns = React.useMemo(() => {
+    if (productColumnOverride) {
+      return [productColumnOverride, ...hamburgerMenuData.slice(1)];
+    }
+    return hamburgerMenuData;
+  }, [productColumnOverride]);
 
   useEffect(() => {
     setOpenSection(isOpen ? DEFAULT_OPEN_SECTION : null);
@@ -40,7 +56,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
       onClick={onClose}
     >
       <ul className={styles.hamInner} onClick={(e) => e.stopPropagation()}>
-        {hamburgerMenuData.map((column, columnIndex) => (
+        {columns.map((column, columnIndex) => (
           <li key={columnIndex} className={styles.menuColumn}>
             {/* 첫 번째 컬럼: 기본은 열림, 모바일에서 닫기/열기 가능 */}
             {column.title && column.bigCateGroups && (

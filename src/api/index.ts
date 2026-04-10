@@ -12,6 +12,8 @@ export * from "./admin/groups";
 export * from "./admin/ir";
 export * from "./admin/qaConfig";
 export * from "./admin/recruitApplications";
+export * from "./admin/recruitPosts";
+export * from "./admin/spgProduct";
 // 회원 세션 (쿠키 포함 요청)
 export * from "./auth";
 // 사용자용 게시판·FAQ 등
@@ -19,6 +21,7 @@ export * from "./board";
 export * from "./faq";
 export * from "./franchise";
 export * from "./ir";
+export * from "./product";
 export * from "./recruit";
 export * from "./recruitSession";
 // 공통

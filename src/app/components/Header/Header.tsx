@@ -4,12 +4,13 @@
  */
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useHeaderScroll } from "../../../hooks/useHeaderScroll";
 import { useHamburgerMenu } from "../../../hooks/useHamburgerMenu";
-import { gnbMenuData } from "../../../data/menuData";
+import { gnbMenuData, type HamburgerMenuColumn } from "../../../data/menuData";
+import { fetchProductCategoryTree } from "@/api/product";
 import { useAuth } from "@/contexts/AuthContext";
 import AdminLoginModal from "@/app/components/Auth/AdminLoginModal";
 import GNB from "./GNB";
@@ -33,6 +34,55 @@ const Header: React.FC = () => {
     useHeaderScroll();
   const { isMenuOpen, toggleMenu, closeMenu } = useHamburgerMenu();
   const { isLoggedIn, isAdmin, isLoading, logout } = useAuth();
+
+  /** GNB 메뉴(제품소개 서브는 API로 채움) */
+  const [gnbMenuWithProducts, setGnbMenuWithProducts] = useState(gnbMenuData);
+
+  /** 햄버거 첫 컬럼: 백엔드 1뎁스(`tree` 루트) 카테고리명 */
+  const [productColumnOverride, setProductColumnOverride] =
+    useState<HamburgerMenuColumn | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchProductCategoryTree()
+      .then((data) => {
+        if (cancelled) return;
+        const roots = data.tree ?? [];
+        if (!roots.length) return;
+
+        const subMenu = roots.map((r) => ({
+          label: r.name_ko,
+          href: `/products?tab=${r.ca_id}`,
+        }));
+
+        const firstHref = subMenu[0]?.href ?? "/products";
+
+        setGnbMenuWithProducts((prev) =>
+          prev.map((item) =>
+            item.label === "제품소개"
+              ? { ...item, href: firstHref, subMenu }
+              : item
+          )
+        );
+
+        setProductColumnOverride({
+          title: "제품소개",
+          titleEn: "Products",
+          bigCateGroups: [
+            roots.map((r) => ({
+              label: r.name_ko,
+              href: `/products?tab=${r.ca_id}`,
+            })),
+          ],
+        });
+      })
+      .catch(() => {
+        /* 정적 메뉴 유지 */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // 현재 페이지가 흰색 배경 페이지인지 확인
   const isLightPage = LIGHT_BACKGROUND_PAGES.some((page) =>
@@ -72,7 +122,7 @@ const Header: React.FC = () => {
             </Link>
           </h1>
           <GNB
-            menuData={gnbMenuData}
+            menuData={gnbMenuWithProducts}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             isScrolled={shouldShowScrolled}
@@ -122,7 +172,11 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header>
-      <HamburgerMenu isOpen={isMenuOpen} onClose={closeMenu} />
+      <HamburgerMenu
+        isOpen={isMenuOpen}
+        onClose={closeMenu}
+        productColumnOverride={productColumnOverride}
+      />
       <AdminLoginModal
         isOpen={isLoginModalOpen}
         onClose={handleCloseLoginModal}

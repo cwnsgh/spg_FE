@@ -1,0 +1,443 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.6rem;
+}
+
+.pageHeaderText h1 {
+  margin: 0 0 0.4rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.pageHeaderText p {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.headerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.headerActions a.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  align-items: flex-end;
+  padding: 1.6rem;
+  background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 1.2rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.field label {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.field input,
+.field select {
+  min-width: 14rem;
+  height: 4rem;
+  padding: 0 1.2rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  font-size: 1.4rem;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+}
+
+.actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-left: auto;
+}
+
+.primaryButton,
+.secondaryButton,
+.dangerButton,
+.ghostButton {
+  height: 4rem;
+  padding: 0 1.6rem;
+  border-radius: 0.75rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.primaryButton {
+  border: 1px solid #0f766e;
+  background: #0f766e;
+  color: #fff;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: #0d9488;
+  border-color: #0d9488;
+}
+
+.secondaryButton {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.dangerButton {
+  border: 1px solid #dc2626;
+  background: #fff;
+  color: #b91c1c;
+}
+
+.dangerButton:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+.ghostButton {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #0f766e;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  height: auto;
+  padding: 0.4rem 0.8rem;
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.dangerButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.successBox {
+  padding: 1.2rem 1.6rem;
+  border-radius: 0.85rem;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 1.35rem;
+  font-weight: 600;
+  border: 1px solid #a7f3d0;
+}
+
+.errorBox {
+  padding: 1.2rem 1.6rem;
+  border-radius: 0.85rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 1.35rem;
+  font-weight: 600;
+  border: 1px solid #fecaca;
+}
+
+.loading {
+  font-size: 1.45rem;
+  color: #64748b;
+}
+
+.summary {
+  font-size: 1.35rem;
+  color: #64748b;
+}
+
+.bulkBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.4rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+}
+
+.bulkBar span {
+  font-size: 1.35rem;
+  color: #475569;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.2rem;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.35rem;
+}
+
+.table th,
+.table td {
+  padding: 1rem 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.centerCell {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.table th {
+  background: #f8fafc;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+  font-size: 1.25rem;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:hover td {
+  background: #fafbfc;
+}
+
+.orderInput {
+  width: 5.5rem;
+  height: 3.6rem;
+  padding: 0 0.6rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6rem;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.orderInput:focus {
+  outline: none;
+  border-color: #0f766e;
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.statusPillAlways {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.statusPillOpen {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.statusPillClosed {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.useBadge {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0f766e;
+}
+
+.useBadgeOff {
+  color: #94a3b8;
+}
+
+.muted {
+  color: #94a3b8;
+  font-size: 1.25rem;
+}
+
+.previewList {
+  margin: 0.25rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 1.25rem;
+  color: #64748b;
+}
+
+.cellStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cellTitle {
+  font-weight: 600;
+  color: #0f172a;
+  max-width: 28rem;
+  line-height: 1.45;
+}
+
+.rowActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.rowDeleteButton {
+  height: 4rem;
+  padding: 0 1.2rem;
+  border-radius: 0.75rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  border: 1px solid #dc2626;
+  background: #fff;
+  color: #b91c1c;
+  cursor: pointer;
+}
+
+.rowDeleteButton:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+.rowDeleteButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rowActions a.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.linkMuted {
+  font-size: 1.25rem;
+  color: #64748b;
+}
+
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100020;
+  background: rgba(15, 23, 42, 0.52);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.confirmModal {
+  width: min(48rem, 100%);
+  border-radius: 1.2rem;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.confirmModal h3 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: #0f172a;
+}
+
+.confirmModal p {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #475569;
+  line-height: 1.55;
+}
+
+.confirmInput {
+  height: 4.2rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  padding: 0 1.1rem;
+  font-size: 1.4rem;
+}
+
+.confirmInput:focus {
+  outline: none;
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+.pagination button {
+  min-width: 3.6rem;
+  height: 3.6rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.65rem;
+  background: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 1.35rem;
+  color: #64748b;
+}

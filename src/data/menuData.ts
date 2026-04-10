@@ -1,19 +1,14 @@
 /**
  * 헤더 메뉴 데이터
+ * - `제품소개` 서브메뉴(1뎁스 카테고리명)는 `Header`에서 API로 받아 `subMenu`를 채웁니다.
  */
 import { MenuItem } from "../types";
-import { productTabs } from "../app/products/data/productData";
-
-const productGnbSubMenu: MenuItem[] = productTabs.map((tab) => ({
-  label: tab.label,
-  href: `/products?tab=${tab.value}`,
-}));
 
 export const gnbMenuData: MenuItem[] = [
   {
     label: "제품소개",
-    href: "/products?tab=0",
-    subMenu: productGnbSubMenu,
+    href: "/products",
+    subMenu: [],
   },
   {
     label: "마케팅",

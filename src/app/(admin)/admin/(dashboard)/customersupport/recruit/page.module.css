@@ -98,7 +98,7 @@
   padding: 1rem 1.2rem;
   text-align: left;
   border-bottom: 1px solid #f3f4f6;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .table th {
@@ -115,6 +115,45 @@
 .muted {
   color: #9ca3af;
   font-size: 1.3rem;
+}
+
+.statusSelect {
+  height: 3.4rem;
+  min-width: 7.6rem;
+  padding: 0 0.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.55rem;
+  font-size: 1.3rem;
+  background: #fff;
+}
+
+.fileBadges {
+  margin-top: 0.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.fileBadge {
+  max-width: 22rem;
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.45rem;
+  background: #f3f4f6;
+  color: #1d4ed8;
+  font-size: 1.2rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+}
+
+.fileBadge:hover {
+  background: #e5e7eb;
+  color: #1e40af;
 }
 
 .linkRow {
