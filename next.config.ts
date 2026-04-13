@@ -44,6 +44,14 @@ const nextConfig: NextConfig = isDev
             source: "/api/proxy/:path*",
             destination: "https://dustinsub.mycafe24.com/api/:path*",
           },
+          /**
+           * 카페24 정적 PDF는 `X-Frame-Options: sameorigin`이라 다른 도메인 iframe에 못 넣음.
+           * 개발 시 iframe `src`를 동일 출처로 맞추기 위해 `/data/...` 등을 백엔드로 프록시.
+           */
+          {
+            source: "/__backend_asset/:path*",
+            destination: "https://dustinsub.mycafe24.com/:path*",
+          },
         ];
       },
     }

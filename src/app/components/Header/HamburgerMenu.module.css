@@ -16,13 +16,16 @@
 
 .hamMenu.active {
   display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 0 4rem;
+  box-sizing: border-box;
 }
 
 .hamInner {
   width: 73%;
   display: flex;
-  padding-top: 30px;
-  margin-top: 130px;
+  margin-top: 0;
 }
 
 .menuColumn {
@@ -112,10 +115,10 @@
 
 .smallCate li a {
   color: #888;
-  font-size: 1.7rem;
+  font-size: 1.55rem;
   font-weight: 600;
-  line-height: 1.2;
-  padding: 12px 0;
+  line-height: 1.25;
+  padding: 0.55rem 0;
   display: block;
   letter-spacing: -0.02em;
   transition: color 0.2s ease;
@@ -156,16 +159,22 @@
     margin-top: 3rem;
   }
 
-  .productMenu {
-    display: block;
+  /* 제품소개: API/정적 모두 2묶음이면 좌우 2열로 세로 길이 완화 */
+  .menuColumn:first-child .productMenu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1.2rem;
+    align-items: start;
   }
 
   .productGroup {
     display: block;
-    padding-left: 1.25rem;
+    padding-left: 0.5rem;
+    min-width: 0;
   }
 
-  .menuColumn .menu .bigCate > li .smallCate {
+  /* 제품소개(productMenu)는 2뎁스 표시. 그 외 섹션만 소분류 숨김(데이터에 거의 없음) */
+  .menuColumn .menu:not(.productMenu) .bigCate > li .smallCate {
     display: none;
   }
 
@@ -247,7 +256,8 @@
   }
 
   .menuColumn > h2.open + .menu {
-    max-height: 1000px;
+    max-height: min(12000px, 520vh);
+    overflow: visible;
     opacity: 1;
     margin-top: 2rem;
   }

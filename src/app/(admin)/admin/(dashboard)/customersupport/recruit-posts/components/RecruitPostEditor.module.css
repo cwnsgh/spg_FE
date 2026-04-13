@@ -249,7 +249,7 @@
 .positionTable tbody td {
   padding: 0.35rem;
   border: 1px solid #cbd5e1;
-  vertical-align: middle;
+  vertical-align: top;
   background: #fff;
 }
 
@@ -266,10 +266,17 @@
 }
 
 .positionTable textarea {
-  min-height: 5rem;
+  min-height: 9rem;
   resize: vertical;
   display: block;
-  line-height: 1.4;
+  line-height: 1.45;
+}
+
+/* 직무(모집직무) — 한 줄 인풋이지만 입력 영역 높이 확보 */
+.colJob input {
+  min-height: 4.8rem;
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
 }
 
 .positionTable input:focus,

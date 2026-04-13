@@ -173,6 +173,19 @@ export default function InquirySection() {
         setItems(data.list);
         setTotalPages(data.pagination.total_pages);
 
+        if (process.env.NODE_ENV === "development") {
+          console.log("[제품문의 목록]", {
+            lang: activeLanguage,
+            bo_table: currentBoardTable,
+            page: currentPage,
+            category: activeCategory,
+            keyword: submittedKeyword.trim() || undefined,
+            pagination: data.pagination,
+            count: data.list.length,
+            list: data.list,
+          });
+        }
+
         if (activeCategory === "all" && !submittedKeyword.trim()) {
           const nextCategories = Array.from(
             new Set([
@@ -222,6 +235,24 @@ export default function InquirySection() {
     setSubmittedKeyword(searchKeyword);
     setCurrentPage(1);
   };
+
+  const selectInquiryLanguage = useCallback(
+    (lang: InquiryLanguage) => {
+      setActiveLanguage(lang);
+      const next = new URLSearchParams(searchParams.toString());
+      next.set("tab", next.get("tab") ?? "inquiry");
+      if (lang === "ko") {
+        next.delete("lang");
+      } else {
+        next.set("lang", "en");
+      }
+      const qs = next.toString();
+      router.replace(qs ? `/customersupport?${qs}` : "/customersupport", {
+        scroll: false,
+      });
+    },
+    [router, searchParams]
+  );
 
   const goToWritePage = useCallback(() => {
     router.push(`/customersupport/inquiry/write?lang=${activeLanguage}`);
@@ -285,27 +316,42 @@ export default function InquirySection() {
     <section className={styles.productInquiry}>
       <h2 className={styles.section_title}>제품문의</h2>
 
-      <div className={styles.languageTabs}>
-        <button
-          type="button"
-          className={`${styles.languageTab} ${
-            activeLanguage === "ko" ? styles.activeLanguageTab : ""
-          }`}
-          onClick={() => router.push("/customersupport?tab=inquiry&lang=ko")}
-        >
-          KR
-        </button>
-        <button
-          type="button"
-          className={`${styles.languageTab} ${
-            activeLanguage === "en" ? styles.activeLanguageTab : ""
-          }`}
-          onClick={() => router.push("/customersupport?tab=inquiry&lang=en")}
-        >
-          EN
-        </button>
+      <div className={styles.langSwitch} role="tablist" aria-label="언어 선택">
+        <div className={styles.langSwitchTrack}>
+          <span
+            className={styles.langSwitchThumb}
+            data-active={activeLanguage}
+            aria-hidden
+          />
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeLanguage === "ko"}
+            className={`${styles.langSwitchBtn} ${
+              activeLanguage === "ko" ? styles.langSwitchBtnOn : ""
+            }`}
+            onClick={() => selectInquiryLanguage("ko")}
+          >
+            KR
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeLanguage === "en"}
+            className={`${styles.langSwitchBtn} ${
+              activeLanguage === "en" ? styles.langSwitchBtnOn : ""
+            }`}
+            onClick={() => selectInquiryLanguage("en")}
+          >
+            EN
+          </button>
+        </div>
       </div>
 
+      <div
+        key={activeLanguage}
+        className={styles.inquiryContent}
+      >
       {/* 카테고리 탭 */}
       <div className={styles.categoryWrap}>
         <div className={styles.categoryTabs}>
@@ -327,40 +373,36 @@ export default function InquirySection() {
         </div>
       </div>
 
-      <div className={styles.toolbar}>
-        <div className={styles.toolbarInfo}>
-          {!canWriteInquiry && !isBoardInfoLoading && (
-            <p className={styles.toolbarMessage}>
-              {inquiryCopy.toolbarNoWrite}
-            </p>
-          )}
+      {!canWriteInquiry && !isBoardInfoLoading ? (
+        <div className={styles.toolbar}>
+          <p className={styles.toolbarMessage}>{inquiryCopy.toolbarNoWrite}</p>
         </div>
-        <button
-          type="button"
-          className={styles.writeButton}
-          onClick={goToWritePage}
-          disabled={!canWriteInquiry || isBoardInfoLoading}
-        >
-          {inquiryCopy.writeButton}
-        </button>
-      </div>
+      ) : null}
 
-      {/* 검색 영역 */}
-      <div className={styles.searchArea}>
+      {/* 검색 + 문의하기 */}
+      <div className={styles.searchRow}>
         <div className={styles.searchBox}>
           <select
             className={styles.searchSelect}
             value={searchType}
             onChange={(e) => setSearchType(e.target.value as SearchType)}
           >
-            <option value="subject">제목</option>
-            <option value="content">내용</option>
+            <option value="subject">
+              {activeLanguage === "en" ? "Subject" : "제목"}
+            </option>
+            <option value="content">
+              {activeLanguage === "en" ? "Content" : "내용"}
+            </option>
           </select>
           <div className={styles.searchInputWrap}>
             <input
               type="text"
               className={styles.searchInput}
-              placeholder="검색어를 입력해 주세요"
+              placeholder={
+                activeLanguage === "en"
+                  ? "Enter a search keyword"
+                  : "검색어를 입력해 주세요"
+              }
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
               onKeyPress={(e) => {
@@ -370,11 +412,19 @@ export default function InquirySection() {
             <button
               className={styles.searchBtn}
               type="button"
-              aria-label="검색"
+              aria-label={activeLanguage === "en" ? "Search" : "검색"}
               onClick={handleSearch}
             ></button>
           </div>
         </div>
+        <button
+          type="button"
+          className={styles.writeButton}
+          onClick={goToWritePage}
+          disabled={!canWriteInquiry || isBoardInfoLoading}
+        >
+          {inquiryCopy.writeButton}
+        </button>
       </div>
 
       {/* 게시판 리스트 */}
@@ -484,6 +534,7 @@ export default function InquirySection() {
           </button>
         </div>
       )}
+      </div>
 
       {secretTarget && (
         <div

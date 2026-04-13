@@ -173,6 +173,7 @@ export interface PendingAttachment {
   file: File;
 }
 
+/** `lang` 쿼리가 없거나 `en`이 아니면 국문 게시판(`ko`)으로 처리합니다. */
 export function resolveInquiryLanguage(value: string | null): InquiryLanguage {
   return value === "en" ? "en" : "ko";
 }
@@ -181,8 +182,12 @@ export function getInquiryDetailPath(language: InquiryLanguage, id: number) {
   return `/customersupport/inquiry/${language}/${id}`;
 }
 
+/** 목록으로 돌아갈 때: 국문은 `lang` 생략(기본 ko), 영문만 `lang=en` 유지. */
 export function getInquiryListPath(language: InquiryLanguage) {
-  return `/customersupport?tab=inquiry&lang=${language}`;
+  if (language === "en") {
+    return `/customersupport?tab=inquiry&lang=en`;
+  }
+  return `/customersupport?tab=inquiry`;
 }
 
 export function createInitialInquiryWriteForm(

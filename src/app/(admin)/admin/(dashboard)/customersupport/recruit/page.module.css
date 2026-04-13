@@ -91,6 +91,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 1.4rem;
+  table-layout: fixed;
 }
 
 .table th,
@@ -106,6 +107,31 @@
   font-weight: 700;
   color: #374151;
   white-space: nowrap;
+}
+
+.colPost {
+  width: 30rem;
+}
+
+.colType,
+.colWork {
+  width: 11rem;
+}
+
+.colApplicant {
+  width: 11rem;
+}
+
+.colPhone {
+  width: 12rem;
+}
+
+.colDate {
+  width: 10rem;
+}
+
+.colHistory {
+  width: 9rem;
 }
 
 .table tr:last-child td {
@@ -130,12 +156,15 @@
 .fileBadges {
   margin-top: 0.55rem;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.4rem;
+  max-width: 25rem;
+  align-items: center;
+  overflow: hidden;
 }
 
 .fileBadge {
-  max-width: 22rem;
+  max-width: 11rem;
   display: inline-block;
   padding: 0.25rem 0.6rem;
   border-radius: 0.45rem;
@@ -156,17 +185,26 @@
   color: #1e40af;
 }
 
-.linkRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  align-items: center;
+.fileMore {
+  flex-shrink: 0;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid #dbeafe;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 1.15rem;
+  font-weight: 700;
 }
 
-.linkRow a {
-  font-size: 1.3rem;
-  color: #2563eb;
-  text-decoration: underline;
+.postCell {
+  max-width: 26rem;
+}
+
+.postTitle {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .previewButton {

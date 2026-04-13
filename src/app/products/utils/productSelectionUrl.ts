@@ -66,3 +66,39 @@ export function replaceProductsUrl(sel: ProductSelection) {
   const url = buildProductsUrl(sel);
   window.history.replaceState(window.history.state, "", url);
 }
+
+function categoryInSubtree(
+  node: ProductCategoryNode,
+  caId: number
+): boolean {
+  if (node.ca_id === caId) return true;
+  for (const ch of node.children ?? []) {
+    if (categoryInSubtree(ch, caId)) return true;
+  }
+  return false;
+}
+
+/** `caId`가 속한 1차(루트) `ca_id` — 제품 상세 히어로 탭 하이라이트용 */
+export function findRootCaIdForCategory(
+  roots: ProductCategoryNode[],
+  caId: number
+): number | null {
+  for (const root of roots) {
+    if (categoryInSubtree(root, caId)) return root.ca_id;
+  }
+  return null;
+}
+
+/** 상품에 연결된 분류 중 트리에 있는 것으로 활성 1차 탭 결정 */
+export function resolveActiveRootTabForProduct(
+  roots: ProductCategoryNode[],
+  categoryRefs: { ca_id: number }[] | undefined | null
+): number | null {
+  if (!roots.length) return null;
+  if (!categoryRefs?.length) return roots[0].ca_id;
+  for (const c of categoryRefs) {
+    const rootId = findRootCaIdForCategory(roots, c.ca_id);
+    if (rootId != null) return rootId;
+  }
+  return roots[0].ca_id;
+}

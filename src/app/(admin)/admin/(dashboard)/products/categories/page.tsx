@@ -16,6 +16,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type ReactNode,
 } from "react";
 import {
   buildCategoryTree,
@@ -29,6 +30,37 @@ import {
 import styles from "./page.module.css";
 import { CategoryFormModal } from "./CategoryFormModal";
 
+/** 목록 API에 file_count가 없을 때, 상세 API로 1·2뎁스 첨부 개수만 보강 (PHP 변경 없음) */
+const CATEGORY_FILE_COUNT_CHUNK = 8;
+
+async function enrichCategoryFileCounts(
+  rows: AdminSpgCategoryRow[]
+): Promise<AdminSpgCategoryRow[]> {
+  const targets = rows.filter((r) => r.depth === 1 || r.depth === 2);
+  if (targets.length === 0) return rows;
+
+  const counts = new Map<number, number>();
+  for (let i = 0; i < targets.length; i += CATEGORY_FILE_COUNT_CHUNK) {
+    const chunk = targets.slice(i, i + CATEGORY_FILE_COUNT_CHUNK);
+    const pairs = await Promise.all(
+      chunk.map(async (r) => {
+        try {
+          const d = await getAdminSpgCategory(r.ca_id);
+          return [r.ca_id, d.files?.length ?? 0] as const;
+        } catch {
+          return [r.ca_id, 0] as const;
+        }
+      })
+    );
+    pairs.forEach(([id, n]) => counts.set(id, n));
+  }
+
+  return rows.map((r) => {
+    if (r.depth !== 1 && r.depth !== 2) return r;
+    return { ...r, file_count: counts.get(r.ca_id) ?? 0 };
+  });
+}
+
 function depthTagClass(depth: number): string {
   if (depth === 1) return styles.depth1;
   if (depth === 2) return styles.depth2;
@@ -41,6 +73,37 @@ function addChildButtonLabel(parentDepth: number): string {
   if (parentDepth === 1) return "2차(중분류) 추가";
   if (parentDepth === 2) return "3차(소분류) 추가";
   return `뎁스 ${parentDepth + 1} 추가`;
+}
+
+/** 1·2뎁스만 카테고리 첨부 가능 — 트리/검색에서 자료 유무 표시 */
+function renderCategoryFileBadge(
+  depth: number,
+  fileCount: number | undefined
+): ReactNode {
+  if (depth !== 1 && depth !== 2) return null;
+  if (fileCount === undefined) return null;
+  const n = Number(fileCount);
+  if (Number.isNaN(n)) return null;
+  const title =
+    depth === 1
+      ? n > 0
+        ? "대분류 공통 자료(첨부)"
+        : "공통 자료 없음 — 항목 선택 후 「공통 자료·정보 수정」→ 모달 2번에서 추가"
+      : n > 0
+        ? "이 중분류 전용 자료(첨부)"
+        : "중분류 자료 없음 — 항목 선택 후 「중분류 자료·정보 수정」→ 모달 2번에서 추가";
+  if (n > 0) {
+    return (
+      <span className={styles.treeFileBadge} title={title}>
+        자료 {n}
+      </span>
+    );
+  }
+  return (
+    <span className={styles.treeFileEmpty} title={title}>
+      자료 없음
+    </span>
+  );
 }
 
 const TreeRows = memo(function TreeRows({
@@ -65,7 +128,7 @@ const TreeRows = memo(function TreeRows({
               selectedCaId === n.ca_id ? styles.treeRowSelected : ""
             }`}
             style={{
-              paddingLeft: `${Math.max(0, n.depth - 1)}rem`,
+              paddingLeft: `${Math.max(0, n.depth)}rem`,
             }}
           >
             {n.children.length > 0 ? (
@@ -95,16 +158,7 @@ const TreeRows = memo(function TreeRows({
                 {depthShortLabel(n.depth)}
               </span>
               <span className={styles.treeNameText}>{n.name_ko}</span>
-              {n.depth === 1 &&
-                n.file_count != null &&
-                Number(n.file_count) > 0 && (
-                  <span
-                    className={styles.treeFileBadge}
-                    title="등록된 공통 자료"
-                  >
-                    자료 {Number(n.file_count)}
-                  </span>
-                )}
+              {renderCategoryFileBadge(n.depth, n.file_count)}
             </button>
           </div>
           {n.children.length > 0 && expandedIds.has(n.ca_id) && (
@@ -123,7 +177,6 @@ const TreeRows = memo(function TreeRows({
 });
 
 export default function AdminProductCategoriesPage() {
-
   const [allRows, setAllRows] = useState<AdminSpgCategoryRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -151,7 +204,8 @@ export default function AdminProductCategoriesPage() {
     setError("");
     try {
       const data = await getAdminSpgCategories();
-      setAllRows(data);
+      const enriched = await enrichCategoryFileCounts(data);
+      setAllRows(enriched);
     } catch (e) {
       setError(
         e instanceof ApiError ? e.message : "목록을 불러오지 못했습니다."
@@ -310,12 +364,14 @@ export default function AdminProductCategoriesPage() {
         <p className={styles.eyebrow}>제품소개 · 관리</p>
         <h1 className={styles.title}>제품 카테고리</h1>
         <p className={styles.description}>
-          <strong>1차(1뎁스)</strong>는 사이트 상단 탭·
-          <strong>공통 PDF(자료)</strong>용 대분류입니다. 트리에서 1차를 고른 뒤
-          오른쪽 <strong>「공통 자료·정보 수정」</strong>을 누르면 PDF를 바로
-          올릴 수 있습니다 (제품 등록과는 별개입니다). 제품은{" "}
-          <strong>2·3차</strong>에서 등록합니다. 왼쪽 트리에서 항목을 누르면
-          오른쪽에 <strong>직속 하위만</strong> 보입니다.
+          <strong>1차(1뎁스)</strong>는 상단 탭·<strong>공통 PDF</strong>용,
+          <strong>2차(2뎁스)</strong>는 중분류 전용 자료(사이트 왼쪽 등)를 둘 수
+          있습니다. 트리에서 이름 오른쪽 <strong>자료 N</strong> 또는{" "}
+          <strong>자료 없음</strong>으로 첨부 여부를 바로 볼 수 있습니다. 자료
+          넣기: 항목 선택 → 오른쪽{" "}
+          <strong>「공통/중분류 자료·정보 수정」</strong> → 모달{" "}
+          <strong>2번</strong> 칸. 제품 등록은 <strong>2·3차</strong>에서 하며,
+          트리 클릭 시 오른쪽에는 <strong>직속 하위만</strong> 보입니다.
         </p>
         <div className={styles.legend}>
           <span>
@@ -335,33 +391,26 @@ export default function AdminProductCategoriesPage() {
 
       <section className={styles.tableCard}>
         <div className={styles.toolbar}>
-          <input
-            type="search"
-            className={styles.searchInput}
-            placeholder="이름 검색 — 트리 대신 일치 항목만 목록으로"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") applySearch();
-            }}
-          />
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={() => applySearch()}
-          >
-            검색
-          </button>
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={() => {
-              setSearchInput("");
-              setSearch("");
-            }}
-          >
-            검색 해제
-          </button>
+          <div className={styles.searchInputWrap}>
+            <input
+              type="search"
+              className={styles.searchInput}
+              placeholder="이름 검색 — 트리 대신 일치 항목만 목록으로"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") applySearch();
+              }}
+            />
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => applySearch()}
+            >
+              검색
+            </button>
+          </div>
+
           <button
             type="button"
             className={styles.primaryButton}
@@ -380,8 +429,10 @@ export default function AdminProductCategoriesPage() {
             <div className={styles.treePanel}>
               <h3 className={styles.panelTitle}>카테고리 트리</h3>
               <p className={styles.panelHint}>
-                ▶/▼ 는 펼침. 이름 줄 클릭 시 오른쪽에서 하위 관리.{" "}
-                <strong>1뎁스</strong>는 탭 이름 + 공통 PDF를 두는 곳입니다.
+                ▶/▼ 는 펼침. 이름 줄을 누르면 오른쪽에서 하위·자료를 관리합니다.
+                1·2뎁스 이름 옆 <strong>자료 N</strong> /{" "}
+                <strong>자료 없음</strong>은 첨부 개수입니다 (클릭 전에도
+                표시됩니다).
               </p>
               {!searchActive ? (
                 <div className={styles.treeScroll}>
@@ -417,6 +468,7 @@ export default function AdminProductCategoriesPage() {
                         {depthShortLabel(r.depth)}
                       </span>
                       <span>{r.name_ko}</span>
+                      {renderCategoryFileBadge(r.depth, r.file_count)}
                       <span className={styles.searchHitPath}>
                         {getCategoryFullPath(allRows, r.ca_id)}
                       </span>
@@ -434,10 +486,12 @@ export default function AdminProductCategoriesPage() {
                 <>
                   <h3 className={styles.panelTitle}>작업 영역</h3>
                   <p className={styles.detailLead}>
-                    트리나 검색 결과에서 카테고리를 선택하면, 여기에{" "}
-                    <strong>그 아래 하위 목록</strong>과 수정·삭제·하위 추가가
-                    나타납니다. <strong>1차 대분류</strong>를 고르면 공통 PDF도
-                    여기서 관리할 수 있습니다.
+                    트리나 검색에서 항목을 고르면{" "}
+                    <strong>직속 하위 목록</strong>과 수정·삭제·하위 추가가
+                    나타납니다. <strong>1·2뎁스</strong>는 오른쪽에서{" "}
+                    <strong>자료 미리보기</strong>와{" "}
+                    <strong>「자료·정보 수정」</strong>으로 PDF를 넣을 수
+                    있습니다.
                   </p>
                   <button
                     type="button"
@@ -471,12 +525,24 @@ export default function AdminProductCategoriesPage() {
                           <strong>2번</strong> 칸에서 PDF를 넣고 저장하세요.
                         </div>
                       )}
+                      {selectedRow?.depth === 2 && (
+                        <div className={styles.depth1Info}>
+                          <strong>
+                            2차(중분류) 전용 자료는 여기서 올립니다.
+                          </strong>{" "}
+                          대분류 공통 자료와는 별개입니다. 절차:{" "}
+                          <strong>①</strong> 아래 「이 중분류 자료」 확인 →{" "}
+                          <strong>②</strong>{" "}
+                          <strong>「중분류 자료·정보 수정」</strong> → 모달{" "}
+                          <strong>2번</strong> 칸에서 파일을 추가·저장하세요.
+                        </div>
+                      )}
                     </div>
                     <div className={styles.detailActions}>
                       <button
                         type="button"
                         className={
-                          selectedRow?.depth === 1
+                          selectedRow?.depth === 1 || selectedRow?.depth === 2
                             ? styles.primaryButton
                             : styles.secondaryButton
                         }
@@ -484,7 +550,9 @@ export default function AdminProductCategoriesPage() {
                       >
                         {selectedRow?.depth === 1
                           ? "공통 자료·정보 수정"
-                          : "이 항목 수정"}
+                          : selectedRow?.depth === 2
+                            ? "중분류 자료·정보 수정"
+                            : "이 항목 수정"}
                       </button>
                       <button
                         type="button"
@@ -496,24 +564,42 @@ export default function AdminProductCategoriesPage() {
                     </div>
                   </div>
 
-                  {selectedRow?.depth === 1 && (
+                  {(selectedRow?.depth === 1 || selectedRow?.depth === 2) && (
                     <div className={styles.panelFileSection}>
-                      <h4 className={styles.subTitle}>공통 자료 (미리보기)</h4>
+                      <h4 className={styles.subTitle}>
+                        {selectedRow.depth === 1
+                          ? "공통 자료 (미리보기)"
+                          : "이 중분류 자료 (미리보기)"}
+                      </h4>
                       {detailLoading ? (
                         <p className={styles.pathLine}>불러오는 중…</p>
                       ) : !selectedDetail?.files?.length ? (
                         <div className={styles.fileEmptyCta}>
                           <p className={styles.pathLine}>
-                            아직 공통 PDF가 없습니다. 아래 버튼은 수정 화면을
-                            열고, 모달 <strong>2번</strong> 칸에서 PDF를 넣으면
-                            됩니다.
+                            {selectedRow.depth === 1 ? (
+                              <>
+                                아직 공통 PDF가 없습니다.{" "}
+                                <strong>「공통 자료·정보 수정」</strong>을 누른
+                                뒤 모달 <strong>2번</strong> 칸에서 넣으면
+                                됩니다.
+                              </>
+                            ) : (
+                              <>
+                                아직 이 중분류에 붙은 자료가 없습니다. 위의{" "}
+                                <strong>「중분류 자료·정보 수정」</strong>을
+                                누른 뒤 모달 <strong>2번</strong> 칸에서 PDF
+                                등을 추가하세요.
+                              </>
+                            )}
                           </p>
                           <button
                             type="button"
                             className={styles.primaryButton}
                             onClick={() => void openEdit(selectedCaId)}
                           >
-                            공통 PDF 올리기
+                            {selectedRow.depth === 1
+                              ? "공통 PDF 올리기"
+                              : "중분류 자료 올리기"}
                           </button>
                         </div>
                       ) : (
@@ -553,16 +639,6 @@ export default function AdminProductCategoriesPage() {
                       )}
                     </div>
                   )}
-
-                  {selectedRow &&
-                    selectedRow.depth > 1 &&
-                    (selectedDetail?.files?.length ?? 0) > 0 && (
-                      <p className={styles.pathLine}>
-                        이 분류에 첨부{" "}
-                        <strong>{selectedDetail?.files?.length}</strong>개 (수정
-                        모달에서 관리)
-                      </p>
-                    )}
 
                   <div className={styles.childSectionHeader}>
                     <h4 className={styles.subTitle}>

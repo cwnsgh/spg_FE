@@ -19,6 +19,15 @@ interface ProductGridProps {
 
 const itemsPerPage = 6;
 
+/** API에서 name / nameEn이 동일 문자열로 내려올 때 회색 줄이 한 번 더 나오는 경우 제거 */
+function pickCardSubtitle(name: string, nameEn: string): string | null {
+  const a = name.trim().toLowerCase().replace(/\s+/g, " ");
+  const b = nameEn.trim().toLowerCase().replace(/\s+/g, " ");
+  if (!b) return null;
+  if (a === b) return null;
+  return nameEn.trim();
+}
+
 export default function ProductGrid({ products }: ProductGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -194,30 +203,39 @@ export default function ProductGrid({ products }: ProductGridProps) {
         {currentProducts.length === 0 && (
           <div className={styles.emptyState}>등록된 제품이 없습니다.</div>
         )}
-        {currentProducts.map((product) => (
-          <Link
-            key={product.id}
-            href={product.detailUrl}
-            className={styles.productItem}
-          >
-            <div className={styles.productImageWrap}>
-              <Image
-                src={product.image}
-                alt={product.name}
-                className={styles.productImage}
-                width={400}
-                height={300}
-              />
-            </div>
-            <div className={styles.productBottom}>
-              <div className={styles.productInfo}>
-                <div className={styles.productName}>{product.name}</div>
-                <div className={styles.productNameEn}>{product.nameEn}</div>
+        {currentProducts.map((product) => {
+          const subtitle = pickCardSubtitle(product.name, product.nameEn);
+          const fullLabel = subtitle
+            ? `${product.name} — ${subtitle}`
+            : product.name;
+          return (
+            <Link
+              key={product.id}
+              href={product.detailUrl}
+              className={styles.productItem}
+              title={fullLabel}
+            >
+              <div className={styles.productImageWrap}>
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  className={styles.productImage}
+                  width={400}
+                  height={300}
+                />
               </div>
-              <div className={styles.productLinkBtn}></div>
-            </div>
-          </Link>
-        ))}
+              <div className={styles.productBottom}>
+                <div className={styles.productInfo}>
+                  <div className={styles.productName}>{product.name}</div>
+                  {subtitle ? (
+                    <div className={styles.productNameEn}>{subtitle}</div>
+                  ) : null}
+                </div>
+                <div className={styles.productLinkBtn}></div>
+              </div>
+            </Link>
+          );
+        })}
       </div>
 
       {/* 페이지네이션 */}

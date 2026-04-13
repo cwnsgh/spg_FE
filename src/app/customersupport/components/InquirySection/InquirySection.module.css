@@ -11,35 +11,78 @@
   text-align: center;
 }
 
-.languageTabs {
+/* KR / EN 슬라이딩 토글 (컴팩트 필 형태) */
+.langSwitch {
   display: flex;
   justify-content: center;
-  gap: 1.2rem;
-  margin-bottom: 2.4rem;
+  margin-bottom: 2rem;
 }
 
-.languageTab {
-  min-width: 11rem;
-  padding: 1.2rem 2rem;
-  border: 1px solid #d9d9d9;
+.langSwitchTrack {
+  position: relative;
+  display: flex;
+  width: fit-content;
+  padding: 3px;
+  border: 1px solid #e5e5e5;
   border-radius: 999px;
   background: #fff;
-  color: #666;
-  font-size: 1.6rem;
-  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.langSwitchThumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 999px;
+  background: #161616;
+  z-index: 0;
+  pointer-events: none;
+  transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.langSwitchThumb[data-active="en"] {
+  left: calc(50% + 0px);
+}
+
+.langSwitchBtn {
+  position: relative;
+  z-index: 1;
+  min-width: 5.6rem;
+  padding: 0.55rem 1.25rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #444;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: color 0.25s ease;
 }
 
-.languageTab:hover {
-  border-color: #333;
-  color: #333;
+.langSwitchBtn:hover {
+  color: #161616;
 }
 
-.languageTab.activeLanguageTab {
-  background: #111;
-  border-color: #111;
+.langSwitchBtnOn {
   color: #fff;
+}
+
+.inquiryContent {
+  animation: inquiryContentEnter 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes inquiryContentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 카테고리 탭 */
@@ -76,34 +119,29 @@
 }
 
 .toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.6rem;
-  margin-bottom: 2rem;
-}
-
-.toolbarInfo {
-  flex: 1;
+  margin-bottom: 1.2rem;
 }
 
 .toolbarMessage {
   color: #a64b4b;
   font-size: 1.4rem;
   font-weight: 600;
+  margin: 0;
 }
 
 .writeButton {
-  min-width: 14rem;
-  height: 4.8rem;
+  flex-shrink: 0;
+  min-width: 12rem;
+  height: 4.6rem;
   padding: 0 2rem;
   border: 1px solid #161616;
   border-radius: 999px;
   background: #161616;
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 1.45rem;
   font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .writeButton:disabled {
@@ -111,24 +149,33 @@
   cursor: not-allowed;
 }
 
-/* 검색 영역 */
-.searchArea {
+/* 검색 + 문의하기 한 줄 (오른쪽 정렬) */
+.searchRow {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  margin-left: auto;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .searchBox {
   display: flex;
   align-items: center;
   gap: 10%;
-  margin-bottom: 20px;
-  width: 28%;
+  flex: 0 1 auto;
+  width: min(100%, 52rem);
+  min-width: min(100%, 28rem);
+  max-width: 52rem;
   border: 1px solid #ebebeb;
-  height: 46px;
+  height: 4.6rem;
   border-radius: 50px;
   overflow: hidden;
-  padding-left: 25px;
-  padding-right: 17px;
+  padding-left: 2rem;
+  padding-right: 1.6rem;
+  background: #fff;
 }
 
 .searchSelect {
@@ -189,7 +236,7 @@
 
 .boardHeader {
   display: grid;
-  grid-template-columns: 10% 6.5% 54% 8% 8.5% 13%;
+  grid-template-columns: 10% 12.5% 48% 8% 8.5% 13%;
   padding: 2rem 1rem;
   border-bottom: 1px solid #e5e5e5;
   text-align: center;
@@ -203,7 +250,7 @@
 
 .boardItem {
   display: grid;
-  grid-template-columns: 10% 6.5% 54% 8% 8.5% 13%;
+  grid-template-columns: 10% 12.5% 48% 8% 8.5% 13%;
   padding: 1.8rem 1rem;
   font-size: 1.4rem;
   color: #666;
@@ -283,6 +330,14 @@
 
 .boardCell.category {
   color: #000;
+}
+
+.cellCategory {
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+  line-height: 1.35;
+  text-align: center;
+  word-break: keep-all;
 }
 
 .statusBtn {
@@ -663,20 +718,18 @@
   .section_title {
     font-size: 4rem; margin: 2rem 0 4rem;
   }
-  .languageTabs {
+  .langSwitch {
     justify-content: flex-start;
-    margin-bottom: 2rem;
+    margin-bottom: 1.6rem;
   }
-  .toolbar {
+  .searchRow {
     flex-direction: column;
     align-items: stretch;
+    gap: 1rem;
   }
   .writeButton {
     width: 100%;
-  }
-  .languageTab {
-    min-width: 10rem;
-    font-size: 1.5rem;
+    min-width: unset;
   }
   .categoryWrap {
     overflow-x: auto;

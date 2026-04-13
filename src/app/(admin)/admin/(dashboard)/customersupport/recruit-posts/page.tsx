@@ -49,7 +49,8 @@ function DeleteConfirmModal({
         <p>
           삭제된 채용공고와 연결된 지원서/첨부 파일도 함께 삭제됩니다.
           <br />
-          정말 삭제하려면 아래에 <strong>삭제하겠습니다</strong> 를 입력해주세요.
+          정말 삭제하려면 아래에 <strong>삭제하겠습니다</strong> 를
+          입력해주세요.
         </p>
         <input
           className={styles.confirmInput}
@@ -97,7 +98,6 @@ export default function AdminRecruitPostsPage() {
 
   const [orderDraft, setOrderDraft] = useState<Record<number, number>>({});
   const [selected, setSelected] = useState<Set<number>>(new Set());
-  const [sortSaving, setSortSaving] = useState(false);
   const [deleteBusy, setDeleteBusy] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteTargetIds, setDeleteTargetIds] = useState<number[]>([]);
@@ -179,28 +179,6 @@ export default function AdminRecruitPostsPage() {
     const n = Number(value);
     if (Number.isNaN(n)) return;
     setOrderDraft((d) => ({ ...d, [wrId]: n }));
-  };
-
-  const saveSort = async () => {
-    if (list.length === 0) return;
-    setSortSaving(true);
-    setError("");
-    setSuccess("");
-    try {
-      const items = list.map((r) => ({
-        wr_id: r.wr_id,
-        order_no: orderDraft[r.wr_id] ?? r.order_no,
-      }));
-      const res = await sortAdminRecruitManagePosts(items);
-      if (res.message) setSuccess(res.message);
-      else setSuccess("정렬순서가 저장되었습니다.");
-      setRefreshKey((k) => k + 1);
-    } catch (e) {
-      if (e instanceof ApiError) setError(e.message);
-      else setError("정렬 저장에 실패했습니다.");
-    } finally {
-      setSortSaving(false);
-    }
   };
 
   const openDeleteModal = (ids: number[]) => {
@@ -357,14 +335,6 @@ export default function AdminRecruitPostsPage() {
             onClick={() => openDeleteModal([...selected])}
           >
             선택 삭제
-          </button>
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            disabled={sortSaving || list.length === 0}
-            onClick={() => void saveSort()}
-          >
-            {sortSaving ? "순서 저장 중…" : "현재 페이지 순서 저장"}
           </button>
         </div>
       ) : null}

@@ -10,7 +10,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { useHeaderScroll } from "../../../hooks/useHeaderScroll";
 import { useHamburgerMenu } from "../../../hooks/useHamburgerMenu";
 import { gnbMenuData, type HamburgerMenuColumn } from "../../../data/menuData";
-import { fetchProductCategoryTree } from "@/api/product";
+import {
+  fetchProductCategoryTree,
+  type ProductCategoryNode,
+} from "@/api/product";
+import { buildProductsUrl } from "@/app/products/utils/productSelectionUrl";
 import { useAuth } from "@/contexts/AuthContext";
 import AdminLoginModal from "@/app/components/Auth/AdminLoginModal";
 import GNB from "./GNB";
@@ -50,9 +54,47 @@ const Header: React.FC = () => {
         const roots = data.tree ?? [];
         if (!roots.length) return;
 
+        /** 제품 목록은 `tab`=1뎁스 ca_id, `sub`=2뎁스 ca_id (`parseProductSelection` 규약) */
+        const mapNodeToHamburgerItem = (r: ProductCategoryNode) => {
+          const href = buildProductsUrl({
+            rootId: r.ca_id,
+            subId: null,
+            d3Id: null,
+          });
+          const children = r.children?.filter((c) => c?.ca_id != null) ?? [];
+          const smallCategories =
+            children.length > 0
+              ? children.map((c) => ({
+                  label: c.name_ko,
+                  href: buildProductsUrl({
+                    rootId: r.ca_id,
+                    subId: c.ca_id,
+                    d3Id: null,
+                  }),
+                }))
+              : undefined;
+          return { label: r.name_ko, href, smallCategories };
+        };
+
+        /** 햄버거 `productMenu` 2열 그리드에 맞춰 1뎁스를 좌/우로 나눕니다. */
+        const splitRootsForHamburger = (
+          nodes: ProductCategoryNode[]
+        ): ReturnType<typeof mapNodeToHamburgerItem>[][] => {
+          const rows = nodes.map(mapNodeToHamburgerItem);
+          if (rows.length <= 1) {
+            return [rows];
+          }
+          const mid = Math.ceil(rows.length / 2);
+          return [rows.slice(0, mid), rows.slice(mid)];
+        };
+
         const subMenu = roots.map((r) => ({
           label: r.name_ko,
-          href: `/products?tab=${r.ca_id}`,
+          href: buildProductsUrl({
+            rootId: r.ca_id,
+            subId: null,
+            d3Id: null,
+          }),
         }));
 
         const firstHref = subMenu[0]?.href ?? "/products";
@@ -68,12 +110,7 @@ const Header: React.FC = () => {
         setProductColumnOverride({
           title: "제품소개",
           titleEn: "Products",
-          bigCateGroups: [
-            roots.map((r) => ({
-              label: r.name_ko,
-              href: `/products?tab=${r.ca_id}`,
-            })),
-          ],
+          bigCateGroups: splitRootsForHamburger(roots),
         });
       })
       .catch(() => {

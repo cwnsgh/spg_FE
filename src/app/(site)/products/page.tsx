@@ -248,9 +248,10 @@ function ProductsContentInner() {
     [rows]
   );
 
+  /** 목록 상단 큰 제목: 히어로 1뎁스 탭과 동일하게 루트(대분류)만 표시 */
   const currentTitle = {
-    korean: validSub?.name_ko ?? validRoot?.name_ko ?? "",
-    english: validSub?.name_en ?? validRoot?.name_en ?? "",
+    korean: validRoot?.name_ko ?? "",
+    english: validRoot?.name_en ?? "",
   };
 
   const breadcrumbItems = useMemo<BreadcrumbItem[]>(() => {
@@ -338,6 +339,7 @@ function ProductsContentInner() {
               onSubCategoryChange={handleSubChange}
               subCategories={navigationSubCategories}
               categoryFiles={validRoot.files ?? []}
+              subCategoryFiles={validSub.files ?? []}
             />
           ) : null}
 

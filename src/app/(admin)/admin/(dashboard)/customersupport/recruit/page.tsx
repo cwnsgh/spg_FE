@@ -5,11 +5,32 @@ import {
   API_BASE_URL,
   BACKEND_ORIGIN,
   getAdminRecruitApplications,
+  type RecruitApplicationFilePreview,
   type RecruitApplicationRow,
   type RecruitApplicationsResponse,
 } from "@/api";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
+
+/** pt_file에 동일 pf_file(또는 url)이 여러 번 쌓이면 배지가 중복 — 화면에서는 한 번만 */
+function dedupeRecruitFilesPreview(
+  files: RecruitApplicationFilePreview[] | undefined
+): RecruitApplicationFilePreview[] {
+  if (!files?.length) return [];
+  const seen = new Set<string>();
+  const out: RecruitApplicationFilePreview[] = [];
+  for (const f of files) {
+    const pathKey = (f.pf_file ?? "").trim().toLowerCase();
+    const urlKey = (f.url ?? "").trim().toLowerCase();
+    const key = pathKey || urlKey;
+    if (key) {
+      if (seen.has(key)) continue;
+      seen.add(key);
+    }
+    out.push(f);
+  }
+  return out;
+}
 
 export default function AdminRecruitApplicationsPage() {
   const [page, setPage] = useState(1);
@@ -27,6 +48,7 @@ export default function AdminRecruitApplicationsPage() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [previewUrl, setPreviewUrl] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  const previewFrameRef = useRef<HTMLIFrameElement | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -136,6 +158,17 @@ export default function AdminRecruitApplicationsPage() {
     setPreviewUrl("");
     setPreviewTitle("");
   };
+  const printPreview = () => {
+    const frame = previewFrameRef.current;
+    if (frame?.contentWindow) {
+      frame.contentWindow.focus();
+      frame.contentWindow.print();
+      return;
+    }
+    if (previewUrl) {
+      window.open(previewUrl, "_blank", "noopener,noreferrer");
+    }
+  };
 
   return (
     <div className={styles.page}>
@@ -237,13 +270,13 @@ export default function AdminRecruitApplicationsPage() {
             <tr>
               <th style={{ width: "3.2rem" }} />
               <th>상태</th>
-              <th>공고명</th>
-              <th>모집분야</th>
-              <th>응시분야</th>
-              <th>지원자</th>
-              <th>연락처</th>
-              <th>제출일</th>
-              <th>관리</th>
+              <th className={styles.colPost}>공고명</th>
+              <th className={styles.colType}>모집분야</th>
+              <th className={styles.colWork}>응시분야</th>
+              <th className={styles.colApplicant}>지원자</th>
+              <th className={styles.colPhone}>연락처</th>
+              <th className={styles.colDate}>제출일</th>
+              <th className={styles.colHistory}>이력내역</th>
             </tr>
           </thead>
           <tbody>
@@ -254,7 +287,11 @@ export default function AdminRecruitApplicationsPage() {
                 </td>
               </tr>
             ) : (
-              list.map((row: RecruitApplicationRow) => (
+              list.map((row: RecruitApplicationRow) => {
+                const previewFiles = dedupeRecruitFilesPreview(row.files_preview);
+                const previewFilesTop = previewFiles.slice(0, 2);
+                const previewFilesRemain = Math.max(0, previewFiles.length - previewFilesTop.length);
+                return (
                 <tr key={row.re_id}>
                   <td>
                     <input type="checkbox" aria-label={`지원자 선택 ${row.applicant.name || row.re_id}`} />
@@ -273,16 +310,18 @@ export default function AdminRecruitApplicationsPage() {
                       ))}
                     </select>
                   </td>
-                  <td>
-                    <div>{row.post.subject || "—"}</div>
-                    {row.files_preview?.length ? (
+                  <td className={styles.postCell}>
+                    <div className={styles.postTitle} title={row.post.subject || "—"}>
+                      {row.post.subject || "—"}
+                    </div>
+                    {previewFiles.length ? (
                       <div className={styles.fileBadges}>
-                        {row.files_preview.map((f) => {
+                        {previewFilesTop.map((f) => {
                           const label = f.pf_source?.trim() || f.pf_file || "첨부";
                           const href = fileOpenHref(f.url);
                           return (
                             <a
-                              key={f.pf_id}
+                              key={`${f.pf_id}-${f.pf_file}`}
                               href={href}
                               target="_blank"
                               rel="noreferrer"
@@ -293,6 +332,9 @@ export default function AdminRecruitApplicationsPage() {
                             </a>
                           );
                         })}
+                        {previewFilesRemain > 0 ? (
+                          <span className={styles.fileMore}>+{previewFilesRemain}개</span>
+                        ) : null}
                       </div>
                     ) : null}
                   </td>
@@ -307,21 +349,17 @@ export default function AdminRecruitApplicationsPage() {
                   <td>{row.applicant.phone || "—"}</td>
                   <td>{row.applied_date_text || row.applied_at?.slice(0, 10) || "—"}</td>
                   <td>
-                    <div className={styles.linkRow}>
-                      <button
-                        type="button"
-                        className={styles.previewButton}
-                        onClick={() => openPrintPreview(row)}
-                      >
-                        미리보기
-                      </button>
-                      <a href={printOpenHref(row.links.print_url)} target="_blank" rel="noreferrer">
-                        새창 인쇄
-                      </a>
-                    </div>
+                    <button
+                      type="button"
+                      className={styles.previewButton}
+                      onClick={() => openPrintPreview(row)}
+                    >
+                      이력내역
+                    </button>
                   </td>
                 </tr>
-              ))
+                );
+              })
             )}
           </tbody>
         </table>
@@ -336,12 +374,16 @@ export default function AdminRecruitApplicationsPage() {
                 <a href={previewUrl} target="_blank" rel="noreferrer">
                   새창으로 열기
                 </a>
+                <button type="button" className={styles.secondaryButton} onClick={printPreview}>
+                  인쇄
+                </button>
                 <button type="button" className={styles.secondaryButton} onClick={closePreview}>
                   닫기
                 </button>
               </div>
             </div>
             <iframe
+              ref={previewFrameRef}
               title="지원서 인쇄 미리보기"
               src={previewUrl}
               className={styles.previewFrame}

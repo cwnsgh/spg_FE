@@ -94,6 +94,68 @@
   color: #161616 !important;
 }
 
+/* 2뎁스(선택 중분류) 전용 자료 — 대분류 블록 바로 아래, 시각적으로 한 단계 낮춤 */
+.subFilesSection {
+  margin-top: 1.8rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid #e8e8e8;
+}
+
+.subFilesLabel {
+  margin: 0 0 12px;
+  padding: 0 6px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #8a8a8a;
+  text-transform: none;
+}
+
+.subFilesNav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subFileItem {
+  padding: 16px 12px;
+  font-size: 1.55rem;
+  font-weight: 500;
+  color: #5c5c5c;
+  letter-spacing: -0.03rem;
+  border-radius: 16px;
+  border: 1px dashed #d4d4d4;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.subFileItem:hover {
+  background: #f0f4fa;
+  border-color: #b8c5d9;
+  color: #122e64;
+}
+
+.subFileItem::after {
+  content: "";
+  background: url("/images/icon/arrow_01.png") no-repeat;
+  width: 1.35rem;
+  aspect-ratio: 75 / 48;
+  display: block;
+  background-size: cover;
+  opacity: 0.35;
+  transform: rotate(-45deg);
+  flex-shrink: 0;
+}
+
+.subFileItem:hover::after {
+  opacity: 0.55;
+}
 
 @media (max-width: 1050px) {
   .commonNav {
@@ -142,5 +204,31 @@
   .commonNav > a::after,
   .commonItem::after {
     opacity: 0.6;
+  }
+
+  .subFilesSection {
+    margin-top: 1.4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #ececec;
+  }
+
+  .subFilesLabel {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
+
+  .subFilesNav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .subFileItem {
+    flex: 1 1 calc(50% - 0.25rem);
+    min-width: 12rem;
+    padding: 1.4rem 1rem;
+    font-size: 1.45rem;
+    border-radius: 1rem;
   }
 }

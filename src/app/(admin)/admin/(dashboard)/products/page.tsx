@@ -7,8 +7,10 @@ import {
   getAdminSpgProduct,
   getAdminSpgProducts,
   type AdminSpgCategoryRow,
+  type AdminSpgProductDetail,
   type AdminSpgProductRow,
 } from "@/api";
+import { toBackendAssetUrl } from "@/api/config";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ProductFormModal } from "./ProductFormModal";
 import styles from "./page.module.css";
@@ -75,6 +77,18 @@ async function enrichMissingCaIds(
   return { rows: merged, skipped };
 }
 
+function featuresPreviewText(features: unknown): string {
+  if (features == null) return "";
+  if (Array.isArray(features)) {
+    return features
+      .map((x) => (typeof x === "string" ? x.trim() : String(x)))
+      .filter(Boolean)
+      .join("\n");
+  }
+  if (typeof features === "string") return features.trim();
+  return "";
+}
+
 function filterSubtreeRoots(
   roots: CategoryTreeNode[],
   targetId: number
@@ -100,17 +114,21 @@ function CategoryProductTree({
   onAddProduct,
   onEditProduct,
   onDeleteProduct,
+  onSelectProduct,
   productsByCaId,
   categoryRows,
+  selectedPrId,
 }: {
   nodes: CategoryTreeNode[];
   expandedIds: Set<number>;
   toggleExpand: (id: number) => void;
   selectedCaId: number | null;
+  selectedPrId: number | null;
   onSelectCategory: (id: number) => void;
   onAddProduct: (caId: number) => void;
   onEditProduct: (prId: number) => void;
   onDeleteProduct: (prId: number) => void;
+  onSelectProduct: (prId: number, caId: number) => void;
   productsByCaId: Map<number, AdminSpgProductRow[]>;
   categoryRows: AdminSpgCategoryRow[];
 }) {
@@ -195,30 +213,46 @@ function CategoryProductTree({
                     {prods.map((p) => (
                       <li
                         key={p.pr_id}
-                        className={styles.ptreeProductRow}
+                        className={`${styles.ptreeProductRow} ${
+                          selectedPrId === p.pr_id
+                            ? styles.ptreeProductRowSelected
+                            : ""
+                        }`}
                         style={{
                           paddingLeft: `${productIndent}rem`,
                         }}
                       >
-                        <span className={styles.ptreeProductTag}>제품</span>
-                        <span className={styles.ptreeProductName}>
-                          {p.name_ko}
-                        </span>
-                        <span className={styles.ptreeProductId}>
-                          #{p.pr_id}
-                        </span>
+                        <button
+                          type="button"
+                          className={styles.ptreeProductSelect}
+                          onClick={() => onSelectProduct(p.pr_id, n.ca_id)}
+                        >
+                          <span className={styles.ptreeProductTag}>제품</span>
+                          <span className={styles.ptreeProductName}>
+                            {p.name_ko}
+                          </span>
+                          <span className={styles.ptreeProductId}>
+                            #{p.pr_id}
+                          </span>
+                        </button>
                         <div className={styles.ptreeProductActions}>
                           <button
                             type="button"
                             className={`${styles.ptreeActionBtn} ${styles.ptreeActionBtnGhost}`}
-                            onClick={() => onEditProduct(p.pr_id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onEditProduct(p.pr_id);
+                            }}
                           >
                             수정
                           </button>
                           <button
                             type="button"
                             className={`${styles.ptreeActionBtn} ${styles.ptreeActionBtnDanger}`}
-                            onClick={() => onDeleteProduct(p.pr_id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onDeleteProduct(p.pr_id);
+                            }}
                           >
                             삭제
                           </button>
@@ -233,10 +267,12 @@ function CategoryProductTree({
                     expandedIds={expandedIds}
                     toggleExpand={toggleExpand}
                     selectedCaId={selectedCaId}
+                    selectedPrId={selectedPrId}
                     onSelectCategory={onSelectCategory}
                     onAddProduct={onAddProduct}
                     onEditProduct={onEditProduct}
                     onDeleteProduct={onDeleteProduct}
+                    onSelectProduct={onSelectProduct}
                     productsByCaId={productsByCaId}
                     categoryRows={categoryRows}
                   />
@@ -262,6 +298,13 @@ export default function AdminProductsPage() {
 
   const [expandedIds, setExpandedIds] = useState<Set<number>>(() => new Set());
   const [selectedCaId, setSelectedCaId] = useState<number | null>(null);
+  const [selectedPrId, setSelectedPrId] = useState<number | null>(null);
+  const [previewDetail, setPreviewDetail] = useState<AdminSpgProductDetail | null>(
+    null
+  );
+  const [previewLoading, setPreviewLoading] = useState(false);
+  /** 모달 저장 후 같은 제품 미리보기 다시 로드 */
+  const [previewRev, setPreviewRev] = useState(0);
   const [enrichNote, setEnrichNote] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -351,6 +394,30 @@ export default function AdminProductsPage() {
     void fetchProducts();
   }, [fetchProducts]);
 
+  useEffect(() => {
+    if (selectedPrId == null) {
+      setPreviewDetail(null);
+      setPreviewLoading(false);
+      return;
+    }
+    let cancelled = false;
+    setPreviewLoading(true);
+    setPreviewDetail(null);
+    void getAdminSpgProduct(selectedPrId)
+      .then((d) => {
+        if (!cancelled) setPreviewDetail(d);
+      })
+      .catch(() => {
+        if (!cancelled) setPreviewDetail(null);
+      })
+      .finally(() => {
+        if (!cancelled) setPreviewLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedPrId, previewRev]);
+
   const displayProducts = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return products;
@@ -388,6 +455,24 @@ export default function AdminProductsPage() {
     if (selectedCaId == null) return [];
     return productsByCaId.get(selectedCaId) ?? [];
   }, [productsByCaId, selectedCaId]);
+
+  const selectedListProduct = useMemo(
+    () =>
+      selectedPrId == null
+        ? null
+        : (products.find((p) => p.pr_id === selectedPrId) ?? null),
+    [products, selectedPrId]
+  );
+
+  const selectCategoryOnly = (caId: number) => {
+    setSelectedCaId(caId);
+    setSelectedPrId(null);
+  };
+
+  const selectProductFromTree = (prId: number, caId: number) => {
+    setSelectedCaId(caId);
+    setSelectedPrId(prId);
+  };
 
   const toggleTreeExpand = (id: number) => {
     setExpandedIds((prev) => {
@@ -429,6 +514,7 @@ export default function AdminProductsPage() {
     if (!window.confirm("이 상품을 삭제할까요?")) return;
     try {
       await deleteAdminSpgProduct(prId, false);
+      if (selectedPrId === prId) setSelectedPrId(null);
       void fetchProducts();
     } catch (err) {
       alert(err instanceof ApiError ? err.message : "삭제에 실패했습니다.");
@@ -444,7 +530,9 @@ export default function AdminProductsPage() {
           왼쪽은 <strong>카테고리 트리</strong>입니다.{" "}
           <strong>2·3차 분류</strong> 줄 오른쪽 <strong>+ 제품</strong>으로 그
           분류에 바로 등록할 수 있고(1차 대분류에는 없음), 펼치면 연결된 제품이
-          그 아래에 붙어 나옵니다. 분류 줄을 누르면 오른쪽 상세 표가 갱신됩니다.
+          그 아래에 붙어 나옵니다. 분류 줄을 누르면 오른쪽에 그 분류 제품 목록이
+          나오고, <strong>제품 줄</strong>을 누르면 같은 칸에서 해당 제품
+          미리보기가 열립니다.
         </p>
         <p className={styles.legendBox}>
           목록에 분류 ID가 안 내려오는 구 서버에서는, 로딩 시 제품 상세를 잠깐씩
@@ -518,8 +606,8 @@ export default function AdminProductsPage() {
             <div className={styles.productTreePanel}>
               <h3 className={styles.panelHeading}>카테고리 · 제품 트리</h3>
               <p className={styles.panelSub}>
-                ▶/▼ 펼침 · 줄 클릭 시 오른쪽 상세 · <strong>+ 제품</strong>은
-                2·3차 분류에서만 표시
+                ▶/▼ 펼침 · 분류 클릭 → 오른쪽 목록 · 제품 이름 클릭 → 미리보기 ·{" "}
+                <strong>+ 제품</strong>은 2·3차만
               </p>
               <div className={styles.productTreeScroll}>
                 {treeRootsToShow.length === 0 ? (
@@ -530,10 +618,12 @@ export default function AdminProductsPage() {
                     expandedIds={expandedIds}
                     toggleExpand={toggleTreeExpand}
                     selectedCaId={selectedCaId}
-                    onSelectCategory={setSelectedCaId}
+                    selectedPrId={selectedPrId}
+                    onSelectCategory={selectCategoryOnly}
                     onAddProduct={openCreateUnderCategory}
                     onEditProduct={(id) => void openEdit(id)}
                     onDeleteProduct={(id) => void handleDelete(id)}
+                    onSelectProduct={selectProductFromTree}
                     productsByCaId={productsByCaId}
                     categoryRows={categories}
                   />
@@ -546,10 +636,24 @@ export default function AdminProductsPage() {
                   </p>
                   <ul className={styles.unmappedList}>
                     {uncategorized.map((p) => (
-                      <li key={p.pr_id} className={styles.unmappedRow}>
-                        <span>
+                      <li
+                        key={p.pr_id}
+                        className={`${styles.unmappedRow} ${
+                          selectedPrId === p.pr_id
+                            ? styles.ptreeProductRowSelected
+                            : ""
+                        }`}
+                      >
+                        <button
+                          type="button"
+                          className={styles.unmappedNameBtn}
+                          onClick={() => {
+                            setSelectedCaId(null);
+                            setSelectedPrId(p.pr_id);
+                          }}
+                        >
                           #{p.pr_id} {p.name_ko}
-                        </span>
+                        </button>
                         <button
                           type="button"
                           className={`${styles.ptreeActionBtn} ${styles.ptreeActionBtnGhost}`}
@@ -565,12 +669,146 @@ export default function AdminProductsPage() {
             </div>
 
             <div className={styles.productDetailPanel}>
-              {selectedCaId == null ? (
+              {selectedPrId != null ? (
                 <>
-                  <h3 className={styles.panelHeading}>분류 상세</h3>
+                  <div className={styles.detailHead}>
+                    <div>
+                      <h3 className={styles.panelHeading}>제품 미리보기</h3>
+                      <p className={styles.detailMeta}>
+                        왼쪽에서 고른 제품 · ID #{selectedPrId}
+                      </p>
+                    </div>
+                    <div className={styles.productPreviewActions}>
+                      <button
+                        type="button"
+                        className={styles.secondaryButton}
+                        onClick={() => setSelectedPrId(null)}
+                      >
+                        {selectedCaId != null ? "목록으로" : "닫기"}
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.primaryButton}
+                        onClick={() => void openEdit(selectedPrId)}
+                      >
+                        수정
+                      </button>
+                    </div>
+                  </div>
+                  {previewLoading ? (
+                    <p className={styles.panelSub}>불러오는 중…</p>
+                  ) : !previewDetail && !selectedListProduct ? (
+                    <p className={styles.panelSub}>
+                      제품 정보를 찾을 수 없습니다.
+                    </p>
+                  ) : (
+                    <div className={styles.productPreview}>
+                      <div className={styles.productPreviewTop}>
+                        <div className={styles.productPreviewImageWrap}>
+                          {(previewDetail?.image_url || selectedListProduct?.image_url)?.trim() ? (
+                            <img
+                              className={styles.productPreviewImage}
+                              src={toBackendAssetUrl(
+                                (previewDetail?.image_url ||
+                                  selectedListProduct?.image_url) as string
+                              )}
+                              alt=""
+                            />
+                          ) : (
+                            <span className={styles.productPreviewImagePlaceholder}>
+                              대표 이미지 없음
+                            </span>
+                          )}
+                        </div>
+                        <div className={styles.productPreviewBody}>
+                          <h4 className={styles.productPreviewTitle}>
+                            {previewDetail?.name_ko ??
+                              selectedListProduct?.name_ko ??
+                              "—"}
+                          </h4>
+                          <p className={styles.productPreviewSub}>
+                            {previewDetail?.name_en ??
+                              selectedListProduct?.name_en ??
+                              ""}
+                          </p>
+                          <span
+                            className={`${styles.badge} ${
+                              (previewDetail ?? selectedListProduct)?.is_active
+                                ? styles.badgeOn
+                                : styles.badgeOff
+                            }`}
+                          >
+                            {(previewDetail ?? selectedListProduct)?.is_active
+                              ? "노출 ON"
+                              : "노출 OFF"}
+                          </span>
+                          {(previewDetail?.summary_ko ||
+                            selectedListProduct?.summary_ko) && (
+                            <p className={styles.productPreviewSummary}>
+                              [요약 KO]{" "}
+                              {previewDetail?.summary_ko ??
+                                selectedListProduct?.summary_ko}
+                            </p>
+                          )}
+                          {(previewDetail?.summary_en ||
+                            selectedListProduct?.summary_en) && (
+                            <p className={styles.productPreviewSummary}>
+                              [요약 EN]{" "}
+                              {previewDetail?.summary_en ??
+                                selectedListProduct?.summary_en}
+                            </p>
+                          )}
+                          {featuresPreviewText(previewDetail?.features_ko) ? (
+                            <p className={styles.productPreviewSummary}>
+                              [특징 KO] {featuresPreviewText(previewDetail?.features_ko)}
+                            </p>
+                          ) : null}
+                          {featuresPreviewText(previewDetail?.features_en) ? (
+                            <p className={styles.productPreviewSummary}>
+                              [특징 EN] {featuresPreviewText(previewDetail?.features_en)}
+                            </p>
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className={styles.productPreviewActions}>
+                        <button
+                          type="button"
+                          className={styles.dangerButton}
+                          onClick={() => void handleDelete(selectedPrId)}
+                        >
+                          삭제
+                        </button>
+                      </div>
+                      {previewDetail?.files && previewDetail.files.length > 0 ? (
+                        <div className={styles.productPreviewFiles}>
+                          <p className={styles.productPreviewFilesTitle}>
+                            첨부·PDF ({previewDetail.files.length})
+                          </p>
+                          <ul className={styles.productPreviewFileList}>
+                            {previewDetail.files.map((f, i) => (
+                              <li key={`${f.file_path}-${i}`}>
+                                <a
+                                  className={styles.productPreviewFileLink}
+                                  href={toBackendAssetUrl(f.file_path)}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  {f.origin_name || f.file_path}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
+                    </div>
+                  )}
+                </>
+              ) : selectedCaId == null ? (
+                <>
+                  <h3 className={styles.panelHeading}>분류 · 제품</h3>
                   <p className={styles.panelSub}>
-                    왼쪽 트리에서 분류를 선택하면 이 영역에 그 분류에 속한
-                    제품만 표로 보여 줍니다.
+                    왼쪽에서 분류를 고르면 이 칸에 제품 목록이 나오고, 트리에서
+                    제품 줄을 누르면 여기서 미리보기를 볼 수 있습니다.
                   </p>
                 </>
               ) : (
@@ -627,7 +865,15 @@ export default function AdminProductsPage() {
                       </thead>
                       <tbody>
                         {selectedCategoryProducts.map((p) => (
-                          <tr key={p.pr_id}>
+                          <tr
+                            key={p.pr_id}
+                            className={
+                              selectedPrId === p.pr_id
+                                ? styles.miniTableRowSelected
+                                : undefined
+                            }
+                            onClick={() => setSelectedPrId(p.pr_id)}
+                          >
                             <td>{p.pr_id}</td>
                             <td>{p.name_ko}</td>
                             <td>{p.name_en}</td>
@@ -645,14 +891,20 @@ export default function AdminProductsPage() {
                                 <button
                                   type="button"
                                   className={styles.ghostButton}
-                                  onClick={() => void openEdit(p.pr_id)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    void openEdit(p.pr_id);
+                                  }}
                                 >
                                   수정
                                 </button>
                                 <button
                                   type="button"
                                   className={styles.dangerButton}
-                                  onClick={() => void handleDelete(p.pr_id)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    void handleDelete(p.pr_id);
+                                  }}
                                 >
                                   삭제
                                 </button>
@@ -678,7 +930,10 @@ export default function AdminProductsPage() {
           editPrId={editingId}
           createPresetCaIds={createPresetCaIds}
           categories={categories}
-          onSaved={() => void fetchProducts()}
+          onSaved={() => {
+            void fetchProducts();
+            setPreviewRev((r) => r + 1);
+          }}
         />
       )}
     </div>

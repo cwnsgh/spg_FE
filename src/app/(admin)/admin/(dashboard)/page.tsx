@@ -15,7 +15,7 @@ const sectionCards = [
   },
   {
     title: "고객지원",
-    description: "게시판, 문의 설정, FAQ 운영을 담당하는 영역",
+    description: "FAQ·채용공고·문의 설정 등 고객지원 운영 영역",
   },
   {
     title: "IR정보",

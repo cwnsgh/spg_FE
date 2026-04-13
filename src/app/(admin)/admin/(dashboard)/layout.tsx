@@ -20,6 +20,16 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
     ],
   },
   {
+    title: "통계",
+    items: [
+      {
+        label: "접속 분석",
+        description: "g5_visit · 집계 / 검색",
+        href: "/admin/analytics/visitors",
+      },
+    ],
+  },
+  {
     title: "제품소개",
     items: [
       {
@@ -48,11 +58,6 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
   {
     title: "고객지원",
     items: [
-      {
-        label: "게시판 관리",
-        description: "boards / groups / category",
-        href: "/admin/customersupport/boards",
-      },
       // {
       //   label: "문의 설정",
       //   description: "qa_config",
@@ -133,6 +138,9 @@ function isItemActive(pathname: string, href?: string) {
   }
   if (href === "/admin/customersupport/recruit-posts") {
     return pathname === href || pathname.startsWith(`${href}/`);
+  }
+  if (href === "/admin/analytics/visitors") {
+    return pathname.startsWith("/admin/analytics");
   }
   return pathname.startsWith(href);
 }

@@ -116,8 +116,10 @@ export function CategoryFormModal({
     return 1;
   }, [open, mode, createParentId, editCaId, allRows]);
 
-  /** 1뎁스만 탭·공통 PDF 등 메인 제품 UI에 직접 쓰임 */
-  const isMainDepth = formDepth === 1;
+  /** 1뎁스: 탭·대표이미지·설명·키워드·대분류 공통 PDF */
+  const isRootDepth = formDepth === 1;
+  /** 1·2뎁스: 제품 목록 사이드에 노출되는 PDF·첨부 (`spg_category_files`) */
+  const allowsCategoryFiles = formDepth === 1 || formDepth === 2;
 
   useEffect(() => {
     if (!open) return;
@@ -155,6 +157,8 @@ export function CategoryFormModal({
           setKeywordsEn((d.keywords_en ?? []).join("\n"));
           const img = (d.image_url ?? "").trim();
           setExistingCategoryImageUrl(img || null);
+        }
+        if (editDepth <= 2) {
           setExistingFiles(d.files ?? []);
           const drafts: Record<number, { title_ko: string; title_en: string }> =
             {};
@@ -222,7 +226,7 @@ export function CategoryFormModal({
     }
     setSaving(true);
     setFormError("");
-    const new_category_files = isMainDepth
+    const new_category_files = allowsCategoryFiles
       ? pendingFiles.map((p) => ({
           file: p.file,
           title_ko: p.titleKo.trim() || "첨부파일",
@@ -239,7 +243,7 @@ export function CategoryFormModal({
           name_en: nameEn.trim(),
           sort_order: sortOrder,
           is_active: isActive,
-          ...(isMainDepth
+          ...(isRootDepth
             ? {
                 desc_ko: descKo,
                 desc_en: descEn,
@@ -251,16 +255,18 @@ export function CategoryFormModal({
                     ? new_category_files
                     : undefined,
               }
-            : {
-                desc_ko: "",
-                desc_en: "",
-                keywords_ko: [],
-                keywords_en: [],
-              }),
+            : allowsCategoryFiles
+              ? {
+                  new_category_files:
+                    new_category_files.length > 0
+                      ? new_category_files
+                      : undefined,
+                }
+              : {}),
         });
         onSaved({ savedEditId: null });
       } else if (editCaId != null) {
-        if (isMainDepth) {
+        if (isRootDepth) {
           const kept = existingFiles.filter(
             (f) => !deleteFileIds.includes(f.file_id)
           );
@@ -289,6 +295,35 @@ export function CategoryFormModal({
             is_active: isActive,
             image: imageFile,
             delete_image: deleteImage,
+            delete_file_ids:
+              deleteFileIds.length > 0 ? deleteFileIds : undefined,
+            new_category_files:
+              new_category_files.length > 0 ? new_category_files : undefined,
+            file_title_updates,
+          });
+        } else if (allowsCategoryFiles) {
+          const kept = existingFiles.filter(
+            (f) => !deleteFileIds.includes(f.file_id)
+          );
+          const file_title_updates =
+            kept.length > 0
+              ? kept.map((f) => {
+                  const d = fileTitleDrafts[f.file_id] ?? {
+                    title_ko: f.title_ko ?? "",
+                    title_en: f.title_en ?? "",
+                  };
+                  return {
+                    file_id: f.file_id,
+                    title_ko: d.title_ko.trim(),
+                    title_en: d.title_en.trim(),
+                  };
+                })
+              : undefined;
+          await updateAdminSpgCategory(editCaId, {
+            name_ko: nameKo.trim(),
+            name_en: nameEn.trim(),
+            sort_order: sortOrder,
+            is_active: isActive,
             delete_file_ids:
               deleteFileIds.length > 0 ? deleteFileIds : undefined,
             new_category_files:
@@ -331,14 +366,16 @@ export function CategoryFormModal({
           {mode === "create"
             ? createParentId
               ? formDepth === 2
-                ? "2차(중분류) 등록"
+                ? "2차(중분류) 등록 · 분류별 PDF"
                 : formDepth === 3
                   ? "3차(소분류) 등록"
                   : "카테고리 등록"
               : "1차 대분류 등록 (공통 PDF 가능)"
             : formDepth === 1
               ? "1차 분류 수정 · 메인 노출"
-              : "중·소분류 수정"}
+              : formDepth === 2
+                ? "2차 분류 수정 · 분류별 PDF"
+                : "소분류 수정"}
         </h2>
         {mode === "create" && (
           <p className={styles.modalContext}>
@@ -374,9 +411,11 @@ export function CategoryFormModal({
           (mode === "edit" && !detailLoading && !loadError)) && (
           <form className={styles.formGrid} onSubmit={handleSubmit}>
             <p className={styles.modalFormLead} role="note">
-              {isMainDepth
+              {isRootDepth
                 ? "1차는 메인(제품소개) 탭·공통 PDF 링크를 설정합니다. ①→④ 순서로 보면 됩니다."
-                : "2·3차는 제품 페이지에서 메뉴·분기용 이름·정렬·노출만 씁니다. 아래 ①만 입력하면 됩니다."}
+                : formDepth === 2
+                  ? "2차는 제품 목록 왼쪽 「이 분류 자료」에 붙는 PDF·첨부를 관리합니다. ① 이름·노출, ② PDF 순입니다."
+                  : "3차는 제품 페이지에서 메뉴·분기용 이름·정렬·노출만 씁니다. 아래 ①만 입력하면 됩니다."}
             </p>
 
             <section
@@ -392,7 +431,7 @@ export function CategoryFormModal({
                     이름·노출
                   </h3>
                   <p className={styles.modalSectionHint}>
-                    {isMainDepth ? (
+                    {isRootDepth ? (
                       <>
                         메인(제품소개) 탭에 보이는 이름입니다.{" "}
                         <strong>한글 또는 영문 중 하나 이상</strong> 입력하세요.
@@ -452,27 +491,37 @@ export function CategoryFormModal({
               </div>
             </section>
 
-            {isMainDepth && (
-              <>
-                <section
-                  className={styles.modalSection}
-                  aria-labelledby="cat-step-2"
-                >
-                  <div className={styles.modalSectionHead}>
-                    <span className={styles.stepBadge} aria-hidden>
-                      2
-                    </span>
-                    <div className={styles.modalSectionHeadText}>
-                      <h3 id="cat-step-2" className={styles.modalSectionTitle}>
-                        공통 PDF·자료
-                      </h3>
-                      <p className={styles.modalSectionHint}>
-                        메인에서 내려받기·링크로 쓰입니다. PDF를 여러 개 둘 수
-                        있고, 표시 제목은 링크 문구입니다.
-                      </p>
-                    </div>
+            {allowsCategoryFiles && (
+              <section
+                className={styles.modalSection}
+                aria-labelledby="cat-step-2"
+              >
+                <div className={styles.modalSectionHead}>
+                  <span className={styles.stepBadge} aria-hidden>
+                    2
+                  </span>
+                  <div className={styles.modalSectionHeadText}>
+                    <h3 id="cat-step-2" className={styles.modalSectionTitle}>
+                      {isRootDepth
+                        ? "대분류 공통 PDF·자료"
+                        : "이 분류 PDF·자료"}
+                    </h3>
+                    <p className={styles.modalSectionHint}>
+                      {isRootDepth ? (
+                        <>
+                          제품소개 왼쪽 「대분류 자료」에 붙습니다. PDF를 여러
+                          개 둘 수 있고, 표시 제목은 링크 문구입니다.
+                        </>
+                      ) : (
+                        <>
+                          이 중분류를 선택했을 때만 왼쪽 「이 분류 자료」에
+                          보입니다. PDF 권장, 표시 제목은 링크 문구입니다.
+                        </>
+                      )}
+                    </p>
                   </div>
-                  <div className={styles.modalSectionBody}>
+                </div>
+                <div className={styles.modalSectionBody}>
                 {mode === "edit" && existingFiles.length > 0 && (
                   <div className={styles.existingFiles}>
                     <p className={styles.fileBlockTitle}>
@@ -635,9 +684,12 @@ export function CategoryFormModal({
                     ))}
                   </div>
                 )}
-                  </div>
-                </section>
+                </div>
+              </section>
+            )}
 
+            {isRootDepth && (
+              <>
                 <section
                   className={styles.modalSection}
                   aria-labelledby="cat-step-3"
