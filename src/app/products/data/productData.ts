@@ -11,6 +11,7 @@ export interface Product {
   image: string;
   detailUrl: string;
   description?: string;
+  descriptionEn?: string;
   features?: ProductFeature[];
   catalogPdfUrl?: string;
   technicalPdfUrl?: string;
@@ -53,7 +54,10 @@ const standardAcProducts: ProductSubCategory[] = [
         description:
           "Component Cup Type은 컴팩트한 구조에 고토크, 고강성, 제로 백래쉬를 구현한 고정밀 감속기입니다. 정밀 위치 제어와 부드러운 회전이 요구되는 로봇 및 자동화 장비에 최적화 된 솔루션입니다.",
         features: [
-          { korean: "컴팩트 심플한 디자인", english: "Compact and simple design" },
+          {
+            korean: "컴팩트 심플한 디자인",
+            english: "Compact and simple design",
+          },
           { korean: "제로백래쉬", english: "Non-backlash" },
           { korean: "고토크용량", english: "High torque capacity" },
           {
@@ -75,7 +79,10 @@ const standardAcProducts: ProductSubCategory[] = [
         detailUrl: "/products/product-2",
         description: "Unit Cup Type 제품 설명입니다.",
         features: [
-          { korean: "컴팩트 심플한 디자인", english: "Compact and simple design" },
+          {
+            korean: "컴팩트 심플한 디자인",
+            english: "Compact and simple design",
+          },
           { korean: "고토크용량", english: "High torque capacity" },
         ],
         catalogPdfUrl: "#",
@@ -223,7 +230,10 @@ export const productCategories: ProductCategory[] = [
     id: "standard-ac-geared-motor",
     tabValue: 0,
     label: "표준 AC 기어드모터",
-    title: { korean: "표준 AC 기어드모터", english: "STANDARD AC GEARED MOTOR" },
+    title: {
+      korean: "표준 AC 기어드모터",
+      english: "STANDARD AC GEARED MOTOR",
+    },
     subCategories: standardAcProducts,
   },
   {
@@ -244,7 +254,10 @@ export const productCategories: ProductCategory[] = [
     id: "planetary-gearheads",
     tabValue: 3,
     label: "서보모터용 정밀 유성감속기",
-    title: { korean: "서보모터용 정밀 유성감속기", english: "PLANETARY GEARHEADS" },
+    title: {
+      korean: "서보모터용 정밀 유성감속기",
+      english: "PLANETARY GEARHEADS",
+    },
     subCategories: [],
   },
   {
@@ -335,7 +348,9 @@ export const productData: Record<string, Product[]> = Object.fromEntries(
   )
 );
 
-export function getMainCategoryByTab(tabValue: number): ProductCategory | undefined {
+export function getMainCategoryByTab(
+  tabValue: number
+): ProductCategory | undefined {
   return productCategories.find((category) => category.tabValue === tabValue);
 }
 
@@ -361,4 +376,3 @@ export function getAllProducts(): Product[] {
     category.subCategories.flatMap((subCategory) => subCategory.products)
   );
 }
-

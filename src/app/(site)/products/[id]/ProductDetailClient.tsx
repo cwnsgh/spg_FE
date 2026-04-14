@@ -6,7 +6,10 @@ import Link from "next/link";
 import { notFound, useRouter } from "next/navigation";
 import HeroBanner from "../../../components/HeroBanner";
 import Breadcrumb, { BreadcrumbItem } from "../../../components/Breadcrumb";
-import { getProductById, type Product } from "../../../products/data/productData";
+import {
+  getProductById,
+  type Product,
+} from "../../../products/data/productData";
 import {
   fetchProductCategoryTree,
   fetchProductDetail,
@@ -17,6 +20,8 @@ import { toBackendAssetUrl } from "@/api/config";
 import productBanner from "../../../../assets/product_banner.png";
 import {
   buildProductsUrl,
+  buildProductsUrlForTreePath,
+  findCategoryPathInTree,
   resolveActiveRootTabForProduct,
 } from "../../../products/utils/productSelectionUrl";
 import { devBackendAssetIframePath } from "@/app/products/utils/pdfPreviewUrl";
@@ -35,11 +40,7 @@ function normalizeFeaturePairs(
 ): { korean: string; english: string }[] {
   if (!Array.isArray(koRaw) || koRaw.length === 0) return [];
   const first = koRaw[0];
-  if (
-    typeof first === "object" &&
-    first !== null &&
-    "korean" in first
-  ) {
+  if (typeof first === "object" && first !== null && "korean" in first) {
     return koRaw as { korean: string; english: string }[];
   }
   const en = Array.isArray(enRaw) ? enRaw : [];
@@ -54,6 +55,7 @@ function mapApiProductToView(p: ProductDetailPayload): {
   nameEn: string;
   image: string;
   description?: string;
+  descriptionEn?: string;
   features: { korean: string; english: string }[];
   /** file_type 0 — PHP `download_links.pdf` */
   pdfUrl: string | null;
@@ -69,6 +71,7 @@ function mapApiProductToView(p: ProductDetailPayload): {
     nameEn: p.name_en ?? "",
     image: p.image_url ? toBackendAssetUrl(p.image_url) : PLACEHOLDER_IMAGE,
     description: p.summary_ko ?? undefined,
+    descriptionEn: p.summary_en ?? undefined,
     features: normalizeFeaturePairs(p.features_ko, p.features_en),
     pdfUrl: dl?.pdf ? toBackendAssetUrl(dl.pdf) : null,
     dwgUrl: dl?.dwg ? toBackendAssetUrl(dl.dwg) : null,
@@ -95,7 +98,9 @@ function ProductPdfPreview({
   );
 
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(() => !devBackendAssetIframePath(pdfUrl));
+  const [loading, setLoading] = useState(
+    () => !devBackendAssetIframePath(pdfUrl)
+  );
 
   useEffect(() => {
     if (devProxySrc) {
@@ -188,6 +193,7 @@ function mapStaticProductToView(product: Product) {
     nameEn: product.nameEn,
     image: product.image,
     description: product.description,
+    descriptionEn: product.descriptionEn,
     features: product.features ?? [],
     /** 예전 목업: `catalogPdfUrl`=도면(DWG), `technicalPdfUrl`=PDF */
     pdfUrl: product.technicalPdfUrl ?? null,
@@ -308,6 +314,39 @@ export default function ProductDetailClient({ id }: { id: string }) {
     });
   }, [categoryTree, activeRootTab]);
 
+  const breadcrumbItems: BreadcrumbItem[] = useMemo(() => {
+    const items: BreadcrumbItem[] = [{ label: "홈", href: "/" }];
+
+    let pathInTree: ProductCategoryNode[] | null = null;
+    if (useApi && apiProduct?.categories?.length && categoryTree.length) {
+      const deepest = [...apiProduct.categories].sort(
+        (a, b) => b.depth - a.depth || a.ca_id - b.ca_id
+      )[0];
+      pathInTree = findCategoryPathInTree(categoryTree, deepest.ca_id);
+    }
+
+    if (pathInTree?.length) {
+      const rootId = pathInTree[0].ca_id;
+      items.push({
+        label: "제품소개",
+        href: buildProductsUrl({ rootId, subId: null, d3Id: null }),
+      });
+      pathInTree.forEach((node, index) => {
+        items.push({
+          label: node.name_ko,
+          href: buildProductsUrlForTreePath(pathInTree!, index),
+        });
+      });
+    } else {
+      items.push({ label: "제품소개", href: "/products" });
+    }
+
+    if (view?.name) {
+      items.push({ label: view.name });
+    }
+    return items;
+  }, [view?.name, categoryTree, useApi, apiProduct?.categories]);
+
   if (useApi && loading) {
     return (
       <main className={styles.main}>
@@ -335,12 +374,6 @@ export default function ProductDetailClient({ id }: { id: string }) {
       </main>
     );
   }
-
-  const breadcrumbItems: BreadcrumbItem[] = [
-    { label: "홈", href: "/" },
-    { label: "제품소개", href: "/products" },
-    { label: view.name },
-  ];
 
   return (
     <main className={styles.main}>
@@ -376,8 +409,19 @@ export default function ProductDetailClient({ id }: { id: string }) {
               <span className={styles.productTitleKorean}>{view.name}</span>
             </h1>
 
-            {view.description && (
-              <p className={styles.productDescription}>{view.description}</p>
+            {(view.description || view.descriptionEn) && (
+              <>
+                {view.description ? (
+                  <p className={styles.productDescription}>
+                    {view.description}
+                  </p>
+                ) : null}
+                {view.descriptionEn ? (
+                  <p className={styles.productDescriptionEn}>
+                    {view.descriptionEn}
+                  </p>
+                ) : null}
+              </>
             )}
 
             {view.features.length > 0 && (

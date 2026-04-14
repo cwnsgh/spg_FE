@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   ApiError,
@@ -7,7 +7,16 @@ import {
   updateAdminSpgProduct,
   type AdminSpgCategoryRow,
 } from "@/api";
-import { useCallback, useEffect, useId, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+  type Dispatch,
+  type HTMLAttributes,
+  type SetStateAction,
+} from "react";
 import styles from "./page.module.css";
 import {
   buildCategoryTree,
@@ -49,9 +58,7 @@ function CategoryTreeCheckboxes({
               checked={caIds.includes(n.ca_id)}
               onChange={() => toggleCa(n.ca_id)}
             />
-            <span
-              className={`${styles.miniDepth} ${depthBadgeClass(n.depth)}`}
-            >
+            <span className={`${styles.miniDepth} ${depthBadgeClass(n.depth)}`}>
               {depthShortLabel(n.depth)}
             </span>
             <span>{n.name_ko}</span>
@@ -121,6 +128,67 @@ function hasLineageConflict(
   return false;
 }
 
+type MediaDropSlot = "thumb" | "f0" | "f1" | "f2";
+
+function mediaDropZoneProps(
+  slot: MediaDropSlot,
+  dropActive: MediaDropSlot | null,
+  setDropActive: Dispatch<SetStateAction<MediaDropSlot | null>>,
+  setFile: (f: File | null) => void
+): HTMLAttributes<HTMLDivElement> {
+  return {
+    className: `${styles.mediaCard}${
+      dropActive === slot ? ` ${styles.mediaCardDropActive}` : ""
+    }`,
+    onDragEnter: (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDropActive(slot);
+    },
+    onDragOver: (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.dataTransfer.dropEffect = "copy";
+    },
+    onDragLeave: (e) => {
+      const next = e.relatedTarget as Node | null;
+      if (next && e.currentTarget.contains(next)) return;
+      setDropActive((prev) => (prev === slot ? null : prev));
+    },
+    onDrop: (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDropActive(null);
+      const f = e.dataTransfer.files?.[0];
+      setFile(f ?? null);
+    },
+  };
+}
+
+function PickedFileWithClear({
+  file,
+  onClear,
+  clearLabel,
+}: {
+  file: File;
+  onClear: () => void;
+  clearLabel: string;
+}) {
+  return (
+    <div className={styles.pickedFileRow}>
+      <span className={styles.pickedName}>{file.name}</span>
+      <button
+        type="button"
+        className={styles.fileClearButton}
+        onClick={onClear}
+        aria-label={clearLabel}
+      >
+        ×
+      </button>
+    </div>
+  );
+}
+
 export type ProductFormModalProps = {
   open: boolean;
   onClose: () => void;
@@ -131,7 +199,6 @@ export type ProductFormModalProps = {
   categories: AdminSpgCategoryRow[];
   onSaved: () => void;
 };
-
 export function ProductFormModal({
   open,
   onClose,
@@ -162,12 +229,22 @@ export function ProductFormModal({
   const [file2, setFile2] = useState<File | null>(null);
   const [deleteImage, setDeleteImage] = useState(false);
   const [deleteTypes, setDeleteTypes] = useState<number[]>([]);
-  const [existingImageUrl, setExistingImageUrl] = useState<string | null>(
-    null
-  );
+  const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
   const [existingFilesByType, setExistingFilesByType] = useState<
     Record<number, string>
   >({});
+  const [dropActive, setDropActive] = useState<MediaDropSlot | null>(null);
+  const [fileInputRev, setFileInputRev] = useState<
+    Record<MediaDropSlot, number>
+  >({ thumb: 0, f0: 0, f1: 0, f2: 0 });
+
+  const clearPickedFile = useCallback((slot: MediaDropSlot) => {
+    setFileInputRev((r) => ({ ...r, [slot]: r[slot] + 1 }));
+    if (slot === "thumb") setImageFile(null);
+    else if (slot === "f0") setFile0(null);
+    else if (slot === "f1") setFile1(null);
+    else setFile2(null);
+  }, []);
 
   const resetForm = useCallback((opts?: { presetCaIds?: number[] }) => {
     setFormError("");
@@ -188,13 +265,18 @@ export function ProductFormModal({
     setDeleteTypes([]);
     setExistingImageUrl(null);
     setExistingFilesByType({});
+    setDropActive(null);
+    setFileInputRev((r) => ({
+      thumb: r.thumb + 1,
+      f0: r.f0 + 1,
+      f1: r.f1 + 1,
+      f2: r.f2 + 1,
+    }));
   }, []);
 
   const categoryById = useMemo(() => {
     const m = new Map<number, { parent_id: number | null }>();
-    categories.forEach((c) =>
-      m.set(c.ca_id, { parent_id: c.parent_id })
-    );
+    categories.forEach((c) => m.set(c.ca_id, { parent_id: c.parent_id }));
     return m;
   }, [categories]);
 
@@ -289,11 +371,7 @@ export function ProductFormModal({
     setFeaturePairs((prev) => prev.filter((p) => p.id !== id));
   };
 
-  const updateFeaturePair = (
-    id: string,
-    field: "ko" | "en",
-    value: string
-  ) => {
+  const updateFeaturePair = (id: string, field: "ko" | "en", value: string) => {
     setFeaturePairs((prev) =>
       prev.map((p) => (p.id === id ? { ...p, [field]: value } : p))
     );
@@ -320,9 +398,7 @@ export function ProductFormModal({
       return;
     }
 
-    const activePairs = featurePairs.filter(
-      (p) => p.ko.trim() || p.en.trim()
-    );
+    const activePairs = featurePairs.filter((p) => p.ko.trim() || p.en.trim());
     const fk = activePairs.map((p) => p.ko.trim());
     const fe = activePairs.map((p) => p.en.trim());
 
@@ -394,10 +470,18 @@ export function ProductFormModal({
               <h3 className={styles.formSectionTitle}>이미지 · 기술자료</h3>
               <p className={styles.formSectionHint}>
                 목록 썸네일은 첫 번째 칸에서 선택합니다. PDF / 2D(DWG 등) /
-                3D(STP 등)는 타입별로 하나씩 저장됩니다.
+                3D(STP 등)는 타입별로 하나씩 저장됩니다. 각 칸에 파일을 끌어다
+                놓을 수도 있습니다.
               </p>
               <div className={styles.mediaGrid}>
-                <div className={styles.mediaCard}>
+                <div
+                  {...mediaDropZoneProps(
+                    "thumb",
+                    dropActive,
+                    setDropActive,
+                    setImageFile
+                  )}
+                >
                   <span className={styles.mediaCardLabel}>썸네일</span>
                   {existingImageUrl && mode === "edit" && !deleteImage && (
                     <p className={styles.existingFileHint}>
@@ -409,9 +493,7 @@ export function ProductFormModal({
                     type="file"
                     className={styles.srOnly}
                     accept="image/*"
-                    onChange={(e) =>
-                      setImageFile(e.target.files?.[0] ?? null)
-                    }
+                    onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
                   />
                   <label
                     htmlFor={`${formIds}-thumb`}
@@ -419,6 +501,7 @@ export function ProductFormModal({
                   >
                     이미지 선택
                   </label>
+                  <p className={styles.dropHint}>또는 이 칸으로 드래그</p>
                   {imageFile && (
                     <span className={styles.pickedName}>{imageFile.name}</span>
                   )}
@@ -434,10 +517,15 @@ export function ProductFormModal({
                   )}
                 </div>
 
-                <div className={styles.mediaCard}>
-                  <span className={styles.mediaCardLabel}>
-                    PDF (타입 0)
-                  </span>
+                <div
+                  {...mediaDropZoneProps(
+                    "f0",
+                    dropActive,
+                    setDropActive,
+                    setFile0
+                  )}
+                >
+                  <span className={styles.mediaCardLabel}>PDF (타입 0)</span>
                   {existingFilesByType[0] && (
                     <p className={styles.existingFileHint}>
                       등록됨: {existingFilesByType[0]}
@@ -448,9 +536,7 @@ export function ProductFormModal({
                     type="file"
                     className={styles.srOnly}
                     accept=".pdf,application/pdf"
-                    onChange={(e) =>
-                      setFile0(e.target.files?.[0] ?? null)
-                    }
+                    onChange={(e) => setFile0(e.target.files?.[0] ?? null)}
                   />
                   <label
                     htmlFor={`${formIds}-f0`}
@@ -458,12 +544,20 @@ export function ProductFormModal({
                   >
                     PDF 선택
                   </label>
+                  <p className={styles.dropHint}>또는 이 칸으로 드래그</p>
                   {file0 && (
                     <span className={styles.pickedName}>{file0.name}</span>
                   )}
                 </div>
 
-                <div className={styles.mediaCard}>
+                <div
+                  {...mediaDropZoneProps(
+                    "f1",
+                    dropActive,
+                    setDropActive,
+                    setFile1
+                  )}
+                >
                   <span className={styles.mediaCardLabel}>
                     2D 도면 (타입 1)
                   </span>
@@ -477,9 +571,7 @@ export function ProductFormModal({
                     type="file"
                     className={styles.srOnly}
                     accept=".dwg,.dxf,application/acad,image/*"
-                    onChange={(e) =>
-                      setFile1(e.target.files?.[0] ?? null)
-                    }
+                    onChange={(e) => setFile1(e.target.files?.[0] ?? null)}
                   />
                   <label
                     htmlFor={`${formIds}-f1`}
@@ -487,12 +579,20 @@ export function ProductFormModal({
                   >
                     2D 파일 선택
                   </label>
+                  <p className={styles.dropHint}>또는 이 칸으로 드래그</p>
                   {file1 && (
                     <span className={styles.pickedName}>{file1.name}</span>
                   )}
                 </div>
 
-                <div className={styles.mediaCard}>
+                <div
+                  {...mediaDropZoneProps(
+                    "f2",
+                    dropActive,
+                    setDropActive,
+                    setFile2
+                  )}
+                >
                   <span className={styles.mediaCardLabel}>
                     3D 모델 (타입 2)
                   </span>
@@ -506,9 +606,7 @@ export function ProductFormModal({
                     type="file"
                     className={styles.srOnly}
                     accept=".stp,.step,.zip"
-                    onChange={(e) =>
-                      setFile2(e.target.files?.[0] ?? null)
-                    }
+                    onChange={(e) => setFile2(e.target.files?.[0] ?? null)}
                   />
                   <label
                     htmlFor={`${formIds}-f2`}
@@ -516,6 +614,7 @@ export function ProductFormModal({
                   >
                     3D 파일 선택
                   </label>
+                  <p className={styles.dropHint}>또는 이 칸으로 드래그</p>
                   {file2 && (
                     <span className={styles.pickedName}>{file2.name}</span>
                   )}
@@ -642,9 +741,7 @@ export function ProductFormModal({
                     type="number"
                     className={styles.input}
                     value={sortOrder}
-                    onChange={(e) =>
-                      setSortOrder(Number(e.target.value))
-                    }
+                    onChange={(e) => setSortOrder(Number(e.target.value))}
                   />
                 </label>
                 <label className={styles.label}>
@@ -652,9 +749,7 @@ export function ProductFormModal({
                   <select
                     className={styles.select}
                     value={isActive}
-                    onChange={(e) =>
-                      setIsActive(Number(e.target.value))
-                    }
+                    onChange={(e) => setIsActive(Number(e.target.value))}
                   >
                     <option value={1}>사용</option>
                     <option value={0}>숨김</option>
@@ -686,9 +781,7 @@ export function ProductFormModal({
               </div>
             </div>
 
-            {formError && (
-              <p className={styles.inlineError}>{formError}</p>
-            )}
+            {formError && <p className={styles.inlineError}>{formError}</p>}
             <div className={styles.modalActions}>
               <button
                 type="button"

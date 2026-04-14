@@ -102,3 +102,52 @@ export function resolveActiveRootTabForProduct(
   }
   return roots[0].ca_id;
 }
+
+/** Tree path from root to targetCaId (product detail breadcrumb). */
+export function findCategoryPathInTree(
+  roots: ProductCategoryNode[],
+  targetCaId: number
+): ProductCategoryNode[] | null {
+  function walk(
+    node: ProductCategoryNode,
+    prefix: ProductCategoryNode[]
+  ): ProductCategoryNode[] | null {
+    const path = [...prefix, node];
+    if (node.ca_id === targetCaId) return path;
+    for (const ch of node.children ?? []) {
+      const found = walk(ch, path);
+      if (found) return found;
+    }
+    return null;
+  }
+  for (const r of roots) {
+    const found = walk(r, []);
+    if (found) return found;
+  }
+  return null;
+}
+
+/**
+ * List URL with selection up to path[indexInclusive] (0=tab only, 1=sub, 2=d3).
+ */
+export function buildProductsUrlForTreePath(
+  path: ProductCategoryNode[],
+  indexInclusive: number
+): string {
+  const rootId = path[0].ca_id;
+  if (indexInclusive <= 0 || !path[1]) {
+    return buildProductsUrl({ rootId, subId: null, d3Id: null });
+  }
+  if (indexInclusive === 1) {
+    return buildProductsUrl({
+      rootId,
+      subId: path[1].ca_id,
+      d3Id: null,
+    });
+  }
+  return buildProductsUrl({
+    rootId,
+    subId: path[1].ca_id,
+    d3Id: path[2]?.ca_id ?? null,
+  });
+}
