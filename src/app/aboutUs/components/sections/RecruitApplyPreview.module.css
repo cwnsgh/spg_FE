@@ -1,0 +1,113 @@
+/* 입사지원서 미리보기 / 인쇄용 */
+.wrap {
+  font-size: 1.35rem;
+  line-height: 1.55;
+  color: #111827;
+  max-width: 96rem;
+  margin: 0 auto;
+}
+
+.docTitle {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  margin: 0 0 0.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #111827;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  gap: 0.5rem 1.6rem;
+  margin: 1.2rem 0 2rem;
+  font-size: 1.3rem;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.6rem;
+}
+
+.metaDt {
+  font-weight: 700;
+  color: #374151;
+  flex-shrink: 0;
+}
+
+.metaDd {
+  margin: 0;
+  color: #111827;
+  word-break: break-word;
+}
+
+.section {
+  margin-bottom: 2.2rem;
+  break-inside: avoid;
+}
+
+.sectionTitle {
+  font-size: 1.55rem;
+  font-weight: 800;
+  margin: 0 0 0.75rem;
+  padding: 0.35rem 0 0.45rem;
+  border-bottom: 2px solid #0d9488;
+  color: #0f766e;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.28rem;
+}
+
+.table th,
+.table td {
+  border: 1px solid #d1d5db;
+  padding: 0.55rem 0.65rem;
+  vertical-align: top;
+  text-align: left;
+}
+
+.table th {
+  background: #f3f4f6;
+  font-weight: 700;
+  width: 12rem;
+  white-space: nowrap;
+}
+
+.pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+.empty {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.listCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.75rem;
+  background: #fafafa;
+}
+
+.listCard:last-child {
+  margin-bottom: 0;
+}
+
+@media print {
+  .wrap {
+    max-width: none;
+    font-size: 11pt;
+  }
+
+  .section {
+    break-inside: avoid;
+  }
+}
