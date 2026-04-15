@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   ApiError,
@@ -24,6 +24,10 @@ import {
   depthShortLabel,
   type CategoryTreeNode,
 } from "./categoryTreeUtils";
+import {
+  findProductFormDevPreset,
+  isProductFormTextSlotEmpty,
+} from "./productFormDevDefaults";
 
 function depthBadgeClass(depth: number): string {
   if (depth === 1) return styles.d1;
@@ -298,6 +302,21 @@ export function ProductFormModal({
       setDetailLoading(false);
       setLoadError("");
       resetForm({ presetCaIds: [...createPresetCaIds] });
+      const devPreset = findProductFormDevPreset(
+        categories,
+        createPresetCaIds
+      );
+      if (devPreset) {
+        setSummaryKo(devPreset.summaryKo);
+        setSummaryEn(devPreset.summaryEn);
+        setFeaturePairs(
+          devPreset.features.map((f) => ({
+            id: newPairId(),
+            ko: f.ko,
+            en: f.en,
+          }))
+        );
+      }
       return;
     }
 
@@ -340,7 +359,26 @@ export function ProductFormModal({
     return () => {
       cancelled = true;
     };
-  }, [open, mode, editPrId, createPresetCaIds, resetForm]);
+  }, [open, mode, editPrId, createPresetCaIds, resetForm, categories]);
+
+  /** 등록 모드: 분류 선택이 바뀌었을 때, 요약·특징이 비어 있으면 dev 프리셋만 채움 */
+  useEffect(() => {
+    if (!open || mode !== "create") return;
+    const devPreset = findProductFormDevPreset(categories, caIds);
+    if (!devPreset) return;
+    if (!isProductFormTextSlotEmpty(summaryKo, summaryEn, featurePairs)) {
+      return;
+    }
+    setSummaryKo(devPreset.summaryKo);
+    setSummaryEn(devPreset.summaryEn);
+    setFeaturePairs(
+      devPreset.features.map((f) => ({
+        id: newPairId(),
+        ko: f.ko,
+        en: f.en,
+      }))
+    );
+  }, [open, mode, categories, caIds, summaryKo, summaryEn, featurePairs]);
 
   const close = useCallback(() => {
     resetForm();

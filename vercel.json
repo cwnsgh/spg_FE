@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/__backend_asset/:path*",
+      "destination": "https://dustinsub.mycafe24.com/:path*"
+    }
+  ]
+}
