@@ -28,6 +28,20 @@ function pickCardSubtitle(name: string, nameEn: string): string | null {
   return nameEn.trim();
 }
 
+/**
+ * 긴 영문 제목에서 말줄임으로 끝의 와트/규격이 사라지는 문제 방지.
+ * 예: "… MOTOR 200W(□90㎜)" → 앞부분은 2줄 클램프, `200W(□90㎜)` 는 항상 다음 줄에 표시.
+ */
+function splitProductNameHeadTail(name: string): { head: string; tail: string | null } {
+  const trimmed = name.trim();
+  const m = trimmed.match(/^(.+?)(\s+\d+(?:\.\d+)?W[\s\S]*)$/i);
+  if (!m) return { head: trimmed, tail: null };
+  const head = m[1].trimEnd();
+  const tail = m[2].trim();
+  if (!head || !tail) return { head: trimmed, tail: null };
+  return { head, tail };
+}
+
 export default function ProductGrid({ products }: ProductGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -205,6 +219,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
         )}
         {currentProducts.map((product) => {
           const subtitle = pickCardSubtitle(product.name, product.nameEn);
+          const { head: nameHead, tail: nameTail } = splitProductNameHeadTail(product.name);
           const fullLabel = subtitle
             ? `${product.name} — ${subtitle}`
             : product.name;
@@ -226,7 +241,14 @@ export default function ProductGrid({ products }: ProductGridProps) {
               </div>
               <div className={styles.productBottom}>
                 <div className={styles.productInfo}>
-                  <div className={styles.productName}>{product.name}</div>
+                  {nameTail ? (
+                    <>
+                      <div className={styles.productNameHead}>{nameHead}</div>
+                      <div className={styles.productNameTail}>{nameTail}</div>
+                    </>
+                  ) : (
+                    <div className={styles.productName}>{product.name}</div>
+                  )}
                   {subtitle ? (
                     <div className={styles.productNameEn}>{subtitle}</div>
                   ) : null}

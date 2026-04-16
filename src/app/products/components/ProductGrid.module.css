@@ -71,7 +71,8 @@
   min-width: 0;
 }
 
-.productName {
+.productName,
+.productNameHead {
   font-size: 2rem;
   font-weight: 600;
   color: #333;
@@ -84,6 +85,21 @@
   word-break: break-word;
   overflow-wrap: anywhere;
   line-height: 1.35;
+}
+
+/* 와트·괄호 규격 등 구분 구간 — 말줄임 없이 항상 표시 */
+.productNameHead {
+  margin: 0 0 6px;
+}
+
+.productNameTail {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 10px;
+  line-height: 1.35;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .productNameEn {
@@ -192,9 +208,15 @@
     width: 100%;
   }
 
-  .productName {
+  .productName,
+  .productNameHead,
+  .productNameTail {
     margin-bottom: 0.7rem;
     font-size: 1.8rem;
+  }
+
+  .productNameHead {
+    margin-bottom: 0.45rem;
   }
   .productNameEn {
     font-size: 1.45rem;

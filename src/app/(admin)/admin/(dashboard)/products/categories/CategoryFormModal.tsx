@@ -118,8 +118,9 @@ export function CategoryFormModal({
 
   /** 1뎁스: 탭·대표이미지·설명·키워드·대분류 공통 PDF */
   const isRootDepth = formDepth === 1;
-  /** 1·2뎁스: 제품 목록 사이드에 노출되는 PDF·첨부 (`spg_category_files`) */
-  const allowsCategoryFiles = formDepth === 1 || formDepth === 2;
+  /** 1·2·3뎁스: `spg_category_files` PDF·첨부 (사이트 노출 방식은 뎁스별로 다를 수 있음) */
+  const allowsCategoryFiles =
+    formDepth === 1 || formDepth === 2 || formDepth === 3;
 
   useEffect(() => {
     if (!open) return;
@@ -158,7 +159,7 @@ export function CategoryFormModal({
           const img = (d.image_url ?? "").trim();
           setExistingCategoryImageUrl(img || null);
         }
-        if (editDepth <= 2) {
+        if (editDepth <= 3) {
           setExistingFiles(d.files ?? []);
           const drafts: Record<number, { title_ko: string; title_en: string }> =
             {};
@@ -368,14 +369,14 @@ export function CategoryFormModal({
               ? formDepth === 2
                 ? "2차(중분류) 등록 · 분류별 PDF"
                 : formDepth === 3
-                  ? "3차(소분류) 등록"
+                  ? "3차(소분류) 등록 · 분류별 PDF"
                   : "카테고리 등록"
               : "1차 대분류 등록 (공통 PDF 가능)"
             : formDepth === 1
               ? "1차 분류 수정 · 메인 노출"
               : formDepth === 2
                 ? "2차 분류 수정 · 분류별 PDF"
-                : "소분류 수정"}
+                : "3차 분류 수정 · 분류별 PDF"}
         </h2>
         {mode === "create" && (
           <p className={styles.modalContext}>
@@ -415,7 +416,7 @@ export function CategoryFormModal({
                 ? "1차는 메인(제품소개) 탭·공통 PDF 링크를 설정합니다. ①→④ 순서로 보면 됩니다."
                 : formDepth === 2
                   ? "2차는 제품 목록 왼쪽 「이 분류 자료」에 붙는 PDF·첨부를 관리합니다. ① 이름·노출, ② PDF 순입니다."
-                  : "3차는 제품 페이지에서 메뉴·분기용 이름·정렬·노출만 씁니다. 아래 ①만 입력하면 됩니다."}
+                  : "3차에도 이 소분류 전용 PDF·첨부를 둘 수 있습니다. ① 이름·노출, ② PDF 순입니다."}
             </p>
 
             <section
@@ -511,6 +512,12 @@ export function CategoryFormModal({
                         <>
                           제품소개 왼쪽 「대분류 자료」에 붙습니다. PDF를 여러
                           개 둘 수 있고, 표시 제목은 링크 문구입니다.
+                        </>
+                      ) : formDepth === 3 ? (
+                        <>
+                          이 소분류를 선택했을 때 쓸 수 있는 PDF·첨부입니다(사이트
+                          UI에 반영되는 경우 왼쪽 「이 분류 자료」 등과 연결될
+                          수 있습니다). 표시 제목은 링크 문구입니다.
                         </>
                       ) : (
                         <>

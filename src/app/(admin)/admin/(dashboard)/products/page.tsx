@@ -344,9 +344,8 @@ export default function AdminProductsPage() {
     prevCategoryCountRef.current = categories.length;
 
     if (filterChanged || catsFirstPaint) {
-      setExpandedIds(
-        new Set(flattenCategoryTreeDFS(roots).map((c) => c.ca_id))
-      );
+      // 초기에는 전부 펼치지 않고 루트만 열어 렌더링 부하를 줄인다.
+      setExpandedIds(new Set(roots.map((c) => c.ca_id)));
     }
   }, [filterCaId, categories.length, categoryTreeRoots]);
 

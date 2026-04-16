@@ -22,6 +22,13 @@ const sharedImages: NonNullable<NextConfig["images"]> = {
     },
   ],
 };
+const sharedExperimental: NextConfig["experimental"] = {
+  /**
+   * 개발 프록시(`/api/proxy`)로 전달되는 multipart body 허용치를 상향.
+   * 기본 10MB로는 제품 자료 업로드 시 `Request body exceeded 10MB`가 발생.
+   */
+  middlewareClientMaxBodySize: "200mb",
+};
 
 /**
  * - 프로덕션 빌드: `output: "export"` → `out/` (정적 호스팅). rewrites 없음.
@@ -29,6 +36,7 @@ const sharedImages: NonNullable<NextConfig["images"]> = {
  */
 const nextConfig: NextConfig = isDev
   ? {
+      experimental: sharedExperimental,
       images: {
         ...sharedImages,
         /**
@@ -57,6 +65,7 @@ const nextConfig: NextConfig = isDev
     }
   : {
       output: "export",
+      experimental: sharedExperimental,
       images: {
         unoptimized: true,
         ...sharedImages,
