@@ -2,6 +2,7 @@
  * 채용 지원서 목록 (관리자 세션 필요)
  * 백엔드: `front/recurit/applications.php`
  */
+import { ApiError } from "../client";
 import { adminRawRequest } from "./raw";
 
 export interface RecruitApplicationFilePreview {
@@ -108,4 +109,20 @@ export async function getAdminRecruitApplications(query: RecruitApplicationsQuer
       apply_end: query.apply_end,
     },
   });
+}
+
+/**
+ * 지원서 본문 JSON (관리자 세션) — 공개 지원 마지막 단계 `RecruitApplyPreview`와 동일 구조.
+ * 백엔드: `GET front/recurit/apply.php?re_id=`
+ */
+export async function getAdminRecruitApplyPreview(reId: number) {
+  const json = await adminRawRequest<Record<string, unknown>>("/front/recurit/apply.php", {
+    method: "GET",
+    query: { re_id: reId },
+  });
+  const data = json.data;
+  if (typeof data === "object" && data !== null && !Array.isArray(data)) {
+    return data as Record<string, unknown>;
+  }
+  throw new ApiError("지원서 데이터를 불러오지 못했습니다.", 500);
 }

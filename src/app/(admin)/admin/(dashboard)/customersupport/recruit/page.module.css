@@ -109,6 +109,10 @@
   white-space: nowrap;
 }
 
+.colStatus {
+  width: 8.8rem;
+}
+
 .colPost {
   width: 30rem;
 }
@@ -145,11 +149,12 @@
 
 .statusSelect {
   height: 3.4rem;
-  min-width: 7.6rem;
+  width: 100%;
+  min-width: 0;
   padding: 0 0.6rem;
   border: 1px solid #d1d5db;
   border-radius: 0.55rem;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   background: #fff;
 }
 
@@ -268,11 +273,63 @@
   text-decoration: underline;
 }
 
-.previewFrame {
-  border: 0;
-  width: 100%;
+.previewBody {
   flex: 1;
-  background: #fff;
+  min-height: 0;
+  overflow: auto;
+  padding: 1.2rem 1.6rem 1.6rem;
+  background: #f3f4f6;
+}
+
+.previewLoading {
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.4rem;
+  color: #6b7280;
+}
+
+.previewError {
+  padding: 1.6rem;
+  border-radius: 0.8rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: 1.4rem;
+}
+
+.previewError a {
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+@media print {
+  .noPrint {
+    display: none !important;
+  }
+
+  .modalOverlay {
+    position: static;
+    inset: auto;
+    background: #fff;
+    padding: 0;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .printRoot {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .previewBody {
+    overflow: visible;
+    padding: 0;
+    background: #fff;
+  }
 }
 
 .pagination {

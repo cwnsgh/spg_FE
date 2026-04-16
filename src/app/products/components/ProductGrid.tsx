@@ -237,6 +237,8 @@ export default function ProductGrid({ products }: ProductGridProps) {
                   className={styles.productImage}
                   width={400}
                   height={300}
+                  sizes="(max-width: 1050px) 50vw, 33vw"
+                  loading="lazy"
                 />
               </div>
               <div className={styles.productBottom}>

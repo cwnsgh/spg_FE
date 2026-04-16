@@ -5,11 +5,13 @@ import {
   API_BASE_URL,
   BACKEND_ORIGIN,
   getAdminRecruitApplications,
+  getAdminRecruitApplyPreview,
   type RecruitApplicationFilePreview,
   type RecruitApplicationRow,
   type RecruitApplicationsResponse,
 } from "@/api";
-import { useCallback, useEffect, useRef, useState } from "react";
+import RecruitApplyPreview from "@/app/aboutUs/components/sections/RecruitApplyPreview";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./page.module.css";
 
 /** pt_file에 동일 pf_file(또는 url)이 여러 번 쌓이면 배지가 중복 — 화면에서는 한 번만 */
@@ -46,9 +48,16 @@ export default function AdminRecruitApplicationsPage() {
   const [error, setError] = useState("");
   const [payload, setPayload] = useState<RecruitApplicationsResponse | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [previewUrl, setPreviewUrl] = useState("");
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("");
-  const previewFrameRef = useRef<HTMLIFrameElement | null>(null);
+  const [previewPostSubject, setPreviewPostSubject] = useState("");
+  const [previewBundle, setPreviewBundle] = useState<Record<string, unknown> | null>(
+    null
+  );
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState("");
+  /** PHP 인쇄/레거시 URL — 양식 미리보기와 별도 */
+  const [previewServerUrl, setPreviewServerUrl] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -150,24 +159,44 @@ export default function AdminRecruitApplicationsPage() {
     if (usesDevProxy) return toProxyPath(u);
     return link(u.startsWith("/") ? u : `/${u}`);
   };
-  const openPrintPreview = (row: RecruitApplicationRow) => {
-    setPreviewTitle(`지원서 미리보기 · #${row.re_id} ${row.applicant.name ? `(${row.applicant.name})` : ""}`);
-    setPreviewUrl(printOpenHref(row.links.print_url));
+  const openPrintPreview = async (row: RecruitApplicationRow) => {
+    setPreviewOpen(true);
+    setPreviewLoading(true);
+    setPreviewError("");
+    setPreviewBundle(null);
+    setPreviewTitle(
+      `지원서 미리보기 · #${row.re_id} ${row.applicant.name ? `(${row.applicant.name})` : ""}`
+    );
+    setPreviewPostSubject(row.post.subject?.trim() ?? "");
+    const serverHref = printOpenHref(
+      row.links.print_url || row.links.detail_url || row.links.edit_url
+    );
+    setPreviewServerUrl(serverHref !== "#" ? serverHref : "");
+
+    try {
+      const data = await getAdminRecruitApplyPreview(row.re_id);
+      setPreviewBundle(data);
+    } catch (e) {
+      setPreviewError(
+        e instanceof ApiError ? e.message : "지원서를 불러오지 못했습니다."
+      );
+    } finally {
+      setPreviewLoading(false);
+    }
   };
+
   const closePreview = () => {
-    setPreviewUrl("");
+    setPreviewOpen(false);
     setPreviewTitle("");
+    setPreviewPostSubject("");
+    setPreviewBundle(null);
+    setPreviewError("");
+    setPreviewServerUrl("");
+    setPreviewLoading(false);
   };
+
   const printPreview = () => {
-    const frame = previewFrameRef.current;
-    if (frame?.contentWindow) {
-      frame.contentWindow.focus();
-      frame.contentWindow.print();
-      return;
-    }
-    if (previewUrl) {
-      window.open(previewUrl, "_blank", "noopener,noreferrer");
-    }
+    window.print();
   };
 
   return (
@@ -269,7 +298,7 @@ export default function AdminRecruitApplicationsPage() {
           <thead>
             <tr>
               <th style={{ width: "3.2rem" }} />
-              <th>상태</th>
+              <th className={styles.colStatus}>상태</th>
               <th className={styles.colPost}>공고명</th>
               <th className={styles.colType}>모집분야</th>
               <th className={styles.colWork}>응시분야</th>
@@ -352,7 +381,7 @@ export default function AdminRecruitApplicationsPage() {
                     <button
                       type="button"
                       className={styles.previewButton}
-                      onClick={() => openPrintPreview(row)}
+                      onClick={() => void openPrintPreview(row)}
                     >
                       이력내역
                     </button>
@@ -365,16 +394,23 @@ export default function AdminRecruitApplicationsPage() {
         </table>
       </div>
 
-      {previewUrl ? (
+      {previewOpen ? (
         <div className={styles.modalOverlay} role="dialog" aria-modal="true" aria-label="지원서 미리보기">
-          <div className={styles.modalCard}>
-            <div className={styles.modalHeader}>
+          <div className={`${styles.modalCard} ${styles.printRoot}`}>
+            <div className={`${styles.modalHeader} ${styles.noPrint}`}>
               <strong>{previewTitle || "지원서 미리보기"}</strong>
               <div className={styles.modalActions}>
-                <a href={previewUrl} target="_blank" rel="noreferrer">
-                  새창으로 열기
-                </a>
-                <button type="button" className={styles.secondaryButton} onClick={printPreview}>
+                {previewServerUrl ? (
+                  <a href={previewServerUrl} target="_blank" rel="noreferrer">
+                    서버 인쇄/원본(새 창)
+                  </a>
+                ) : null}
+                <button
+                  type="button"
+                  className={styles.secondaryButton}
+                  onClick={printPreview}
+                  disabled={!previewBundle || Boolean(previewLoading)}
+                >
                   인쇄
                 </button>
                 <button type="button" className={styles.secondaryButton} onClick={closePreview}>
@@ -382,12 +418,24 @@ export default function AdminRecruitApplicationsPage() {
                 </button>
               </div>
             </div>
-            <iframe
-              ref={previewFrameRef}
-              title="지원서 인쇄 미리보기"
-              src={previewUrl}
-              className={styles.previewFrame}
-            />
+            <div className={styles.previewBody}>
+              {previewLoading ? (
+                <p className={styles.previewLoading}>지원서를 불러오는 중…</p>
+              ) : previewError ? (
+                <div className={styles.previewError} role="alert">
+                  <p>{previewError}</p>
+                  {previewServerUrl ? (
+                    <p>
+                      <a href={previewServerUrl} target="_blank" rel="noreferrer">
+                        서버 페이지로 열기
+                      </a>
+                    </p>
+                  ) : null}
+                </div>
+              ) : previewBundle ? (
+                <RecruitApplyPreview data={previewBundle} postSubject={previewPostSubject} />
+              ) : null}
+            </div>
           </div>
         </div>
       ) : null}

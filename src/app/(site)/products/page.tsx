@@ -31,7 +31,11 @@ import {
   replaceProductsUrl,
 } from "../../products/utils/productSelectionUrl";
 
-const PRODUCT_LIST_LIMIT = 120;
+/**
+ * 목록 1회 요청량을 줄여 첫 렌더/스크롤 시 메모리·디코딩 부하를 완화.
+ * (서버 페이지네이션 연동 전까지의 안전한 상한)
+ */
+const PRODUCT_LIST_LIMIT = 48;
 const PLACEHOLDER_IMAGE = "/images/products/prd_01.png";
 
 function ProductsContentInner() {
