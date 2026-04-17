@@ -1342,6 +1342,7 @@ main section.brand-info .ir .btm-contents {
 main section.brand-info .ir .btm-contents .stock-info {
   width: 50%;
   flex-shrink: 0;
+  position: relative;
 }
 main section.brand-info .ir .btm-contents a:hover .title .more-view {
   background: rgba(0, 0, 0, 0.2);
@@ -1473,6 +1474,15 @@ main section.brand-info .ir .btm-contents .stock-info .detail ul li p {
   font-weight: 600;
   margin-top: 15px;
   letter-spacing: -0.02em;
+  line-height: 1;
+}
+main section.brand-info .ir .btm-contents .stock-info .stock-base-date {
+  position: absolute;
+  right: 7rem;
+  bottom: 4.2rem;
+  margin: 0;
+  font-size: 1.2rem;
+  color: #9aa3b2;
   line-height: 1;
 }
 main section.brand-info .ir .btm-contents .financial-info {
@@ -1700,6 +1710,12 @@ main section.brand-info .ir .btm-contents .ir-info .detail .board-item .date {
     .eg {
     margin-left: 0;
     display: block;
+  }
+  main section.brand-info .ir .btm-contents .stock-info .stock-base-date {
+    position: static;
+    margin-top: 2.2rem;
+    text-align: right;
+    font-size: 1.1rem;
   }
   main section.brand-info .ir .top-txt h2 {
     font-size: 2.75rem;

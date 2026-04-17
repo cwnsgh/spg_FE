@@ -1,5 +1,7 @@
 /**
  * IR 정보 데이터
+ * - 재무·IR공고 카드는 API 연동 후에도 로드 실패 시 폴백으로 사용됩니다.
+ * - 주가: 현재 백엔드 시세 API 없음 → 메인 IR 카드에만 표시용으로 유지합니다.
  */
 import { StockInfo, FinancialInfo, IRInfo } from '../types';
 

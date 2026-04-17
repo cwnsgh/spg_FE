@@ -42,11 +42,13 @@ export const gnbMenuData: MenuItem[] = [
     href: "/customersupport",
     subMenu: [
       { label: "제품문의", href: "/customersupport?tab=inquiry" },
-      { label: "메뉴얼 다운로드", href: "/customersupport?tab=download" },
+      { label: "메뉴얼 다운로드", href: "http://spgm.co.kr/" },
       { label: "FAQ", href: "/customersupport?tab=faq" },
-      { label: "모터/기어검색", href: "/customersupport" },
-      { label: "감속기선정", href: "/customersupport" },
-      { label: "기술자료", href: "/customersupport" },
+      {
+        label: "서보용 유성감속기 선정",
+        href: "https://webcatalog.spg.co.kr/",
+      },
+      { label: "기술자료", href: "/customersupport?tab=technical" },
     ],
   },
   {
@@ -120,16 +122,12 @@ export const hamburgerMenuData: HamburgerMenuColumn[] = [
         {
           label: "SH 정밀감속기",
           href: "/products?tab=1",
-          smallCategories: [
-            { label: "KSH 시리즈", href: "/products?tab=1" },
-          ],
+          smallCategories: [{ label: "KSH 시리즈", href: "/products?tab=1" }],
         },
         {
           label: "SR 정밀감속기",
           href: "/products?tab=2",
-          smallCategories: [
-            { label: "KSR 시리즈", href: "/products?tab=2" },
-          ],
+          smallCategories: [{ label: "KSR 시리즈", href: "/products?tab=2" }],
         },
         {
           label: "서보모터용 정밀 유성감속기",
@@ -149,18 +147,14 @@ export const hamburgerMenuData: HamburgerMenuColumn[] = [
         {
           label: "동력용 기어드 모터",
           href: "/products?tab=5",
-          smallCategories: [
-            { label: "메가시리즈", href: "/products?tab=5" },
-          ],
+          smallCategories: [{ label: "메가시리즈", href: "/products?tab=5" }],
         },
       ],
       [
         {
           label: "BLDC 기어드 모터 X-TOR",
           href: "/products?tab=6",
-          smallCategories: [
-            { label: "X-TOR 시리즈", href: "/products?tab=6" },
-          ],
+          smallCategories: [{ label: "X-TOR 시리즈", href: "/products?tab=6" }],
         },
         { label: "DC 기어드 모터", href: "/products?tab=7" },
         { label: "SG 표준 AC 기어드모터", href: "/products?tab=8" },
@@ -227,11 +221,14 @@ export const hamburgerMenuData: HamburgerMenuColumn[] = [
         bigCateGroups: [
           [
             { label: "제품문의", href: "/customersupport?tab=inquiry" },
-            { label: "메뉴얼 다운로드", href: "/customersupport?tab=download" },
+            { label: "메뉴얼 다운로드", href: "http://spgm.co.kr/" },
             { label: "FAQ", href: "/customersupport?tab=faq" },
-            { label: "모터/기어검색", href: "/customersupport" },
+            {
+              label: "서보용 유성감속기 선정",
+              href: "https://webcatalog.spg.co.kr/",
+            },
             { label: "감속기선정", href: "/customersupport" },
-            { label: "기술자료", href: "/customersupport" },
+            { label: "기술자료", href: "/customersupport?tab=technical" },
           ],
         ],
       },

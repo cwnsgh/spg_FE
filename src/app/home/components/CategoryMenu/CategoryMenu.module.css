@@ -12,9 +12,10 @@
   padding: 0 var(--layout-side-pc);
 }
 
+/* PC: 4개 한 줄 (gap 24px × 3) */
 .cateItem {
-  width: calc((100% - 48px) / 3);
-  aspect-ratio: 544 / 200;
+  width: calc((100% - 72px) / 4);
+  aspect-ratio: 360 / 200;
   border-radius: 20px;
 }
 
@@ -34,11 +35,6 @@
 
 .cateItem:nth-child(4) {
   background: url("/images/section03_bg_04.png") no-repeat;
-  background-size: cover;
-}
-
-.cateItem:nth-child(5) {
-  background: url("/images/section03_bg_05.png") no-repeat;
   background-size: cover;
 }
 
@@ -76,10 +72,6 @@
   color: #0044c1;
 }
 
-.cateItem:nth-child(5) .nameEg {
-  opacity: 0.2;
-}
-
 .nameKr {
   font-size: 3rem;
   font-weight: 700;
@@ -107,8 +99,7 @@
 }
 
 .cateItem:nth-child(1) > a .nameKr .moreView img,
-.cateItem:nth-child(4) > a .nameKr .moreView img,
-.cateItem:nth-child(5) > a .nameKr .moreView img {
+.cateItem:nth-child(4) > a .nameKr .moreView img {
   filter: invert(1);
 }
 
@@ -179,10 +170,6 @@
     color: #0044c1 !important;
   }
 
-  .cateItem:nth-child(1) {
-    width: 100%;
-  }
-
   .btmTxt {
     padding-right: 0;
     display: flex;
@@ -207,19 +194,6 @@
     margin-bottom: 3.6rem;
   }
 
-  .cateItem:nth-child(1) {
-    background: linear-gradient(70deg, #092f78 0%, #2d76ad 100%) !important;
-    border-radius: 1.5rem;
-  }
-
-  .cateItem:nth-child(1) a .nameKr {
-    margin-bottom: 1.5rem;
-  }
-
-  .cateItem:nth-child(1) * {
-    color: #fff !important;
-  }
-
   .cateItem > a .cateName .nameKr .moreView {
     display: none;
   }
@@ -229,8 +203,5 @@
     opacity: 1;
   }
 
-  .cateItem:nth-child(1) a .nameEg {
-    font-weight: 300;
-  }
 }
 

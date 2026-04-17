@@ -14,6 +14,7 @@ function CustomerSupportContent() {
     { label: "제품문의", value: "inquiry" },
     { label: "FAQ", value: "faq" },
     { label: "다운로드", value: "download" },
+    { label: "기술자료", value: "technical" },
   ];
 
   const breadcrumb = useMemo<BreadcrumbItem[]>(() => {
@@ -31,6 +32,8 @@ function CustomerSupportContent() {
         return [...baseItems, { label: "FAQ" }];
       case "download":
         return [...baseItems, { label: "다운로드" }];
+      case "technical":
+        return [...baseItems, { label: "기술자료" }];
       default:
         return [...baseItems, { label: "제품문의" }];
     }

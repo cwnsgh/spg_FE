@@ -17,6 +17,8 @@ interface GNBProps {
   isMenuOpen?: boolean;
 }
 
+const isExternalHref = (href: string) => /^https?:\/\//i.test(href);
+
 const GNB: React.FC<GNBProps> = ({
   menuData,
   onMouseEnter,
@@ -50,16 +52,26 @@ const GNB: React.FC<GNBProps> = ({
             <ul className={styles.subMenu}>
               {menu.subMenu.map((subItem, subIndex) => (
                 <li key={subIndex}>
-                  <Link
-                    href={subItem.href}
-                    prefetch={false}
-                    onClick={(e) => {
-                      // 링크 클릭 시 정상적으로 이동하도록 이벤트 전파 허용
-                      // stopPropagation 제거하여 링크가 정상 작동하도록 함
-                    }}
-                  >
-                    {subItem.label}
-                  </Link>
+                  {isExternalHref(subItem.href) ? (
+                    <a
+                      href={subItem.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {subItem.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={subItem.href}
+                      prefetch={false}
+                      onClick={(e) => {
+                        // 링크 클릭 시 정상적으로 이동하도록 이벤트 전파 허용
+                        // stopPropagation 제거하여 링크가 정상 작동하도록 함
+                      }}
+                    >
+                      {subItem.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

@@ -1,0 +1,36 @@
+.section {
+  padding: 0 var(--layout-side-pc-sub);
+  padding-bottom: 8rem;
+}
+
+.title {
+  font-size: 4rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0 0 2.4rem;
+  color: #111;
+}
+
+.description {
+  font-size: 1.8rem;
+  line-height: 1.65;
+  color: #555;
+  margin: 0;
+  max-width: 56rem;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 0 var(--layout-side-mo);
+    padding-bottom: 6rem;
+  }
+
+  .title {
+    font-size: 2.8rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .description {
+    font-size: 1.6rem;
+  }
+}

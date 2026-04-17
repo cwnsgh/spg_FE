@@ -10,6 +10,7 @@
  * - "inquiry": 제품문의 섹션 (문의 유형 탭, 테이블, 필터)
  * - "faq": FAQ 섹션
  * - "download": 다운로드 섹션
+ * - "technical": 기술자료 섹션
  *
  * 상태 관리:
  * - URL 쿼리 파라미터를 읽어서 초기 탭 설정
@@ -22,22 +23,36 @@ import { useSearchParams } from "next/navigation";
 import InquirySection from "./InquirySection/InquirySection";
 import FAQSection from "./FAQSection/FAQSection";
 import DownloadSection from "./DownloadSection/DownloadSection";
+import TechnicalSection from "./TechnicalSection/TechnicalSection";
 import styles from "./SupportTabs.module.css";
+
+const SUPPORT_TAB_VALUES = [
+  "inquiry",
+  "faq",
+  "download",
+  "technical",
+] as const;
+
+type SupportTabValue = (typeof SUPPORT_TAB_VALUES)[number];
+
+function isSupportTabValue(tab: string | null): tab is SupportTabValue {
+  return tab !== null && SUPPORT_TAB_VALUES.includes(tab as SupportTabValue);
+}
 
 export default function SupportTabs() {
   const searchParams = useSearchParams();
 
   // URL 쿼리 파라미터에서 탭 정보 읽기 (없으면 기본값 "inquiry")
   const initialTab = searchParams.get("tab") || "inquiry";
-  const [activeTab, setActiveTab] = useState<"inquiry" | "faq" | "download">(
-    initialTab as "inquiry" | "faq" | "download"
+  const [activeTab, setActiveTab] = useState<SupportTabValue>(
+    isSupportTabValue(initialTab) ? initialTab : "inquiry"
   );
 
   // URL 쿼리 파라미터 변경 시 탭 상태 업데이트
   useEffect(() => {
     const tab = searchParams.get("tab");
-    if (tab && ["inquiry", "faq", "download"].includes(tab)) {
-      setActiveTab(tab as "inquiry" | "faq" | "download");
+    if (isSupportTabValue(tab)) {
+      setActiveTab(tab);
     }
   }, [searchParams]);
 
@@ -48,6 +63,7 @@ export default function SupportTabs() {
         {activeTab === "inquiry" && <InquirySection />}
         {activeTab === "faq" && <FAQSection />}
         {activeTab === "download" && <DownloadSection />}
+        {activeTab === "technical" && <TechnicalSection />}
       </div>
     </div>
   );

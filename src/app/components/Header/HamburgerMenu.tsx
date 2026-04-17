@@ -21,6 +21,8 @@ interface HamburgerMenuProps {
 
 const DEFAULT_OPEN_SECTION = "product";
 
+const isExternalHref = (href: string) => /^https?:\/\//i.test(href);
+
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   isOpen,
   onClose,
@@ -146,9 +148,23 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                       <ul key={groupIndex} className={styles.bigCate}>
                         {bigCateGroup.map((bigCate, bigCateIndex) => (
                           <li key={bigCateIndex}>
-                            <Link href={bigCate.href} onClick={handleLinkClick}>
-                              {bigCate.label}
-                            </Link>
+                            {isExternalHref(bigCate.href) ? (
+                              <a
+                                href={bigCate.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={handleLinkClick}
+                              >
+                                {bigCate.label}
+                              </a>
+                            ) : (
+                              <Link
+                                href={bigCate.href}
+                                onClick={handleLinkClick}
+                              >
+                                {bigCate.label}
+                              </Link>
+                            )}
                             {bigCate.smallCategories && (
                               <ul className={styles.smallCate}>
                                 {bigCate.smallCategories.map(
