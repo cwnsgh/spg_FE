@@ -3,7 +3,8 @@
   font-size: 1.35rem;
   line-height: 1.55;
   color: #111827;
-  max-width: 96rem;
+  width: 100%;
+  max-width: min(96rem, 100%);
   margin: 0 auto;
   padding: 2rem 2.4rem 2.6rem;
   background: #fff;
@@ -13,8 +14,9 @@
 
 /* SPG 입사지원서 본문 (예시 PDF 형태 — 촘촘한 표·A4 한 장 목표) */
 .applicationSheet {
-  max-width: 210mm;
-  margin: 0 auto 2rem;
+  width: 100%;
+  /* 가로 auto는 스크롤 영역 너비가 변할 때마다 가운데 정렬이 다시 잡히며 테두리가 '떨리는' 것처럼 보일 수 있음 */
+  margin: 0 0 2rem;
   padding: 3mm 4mm 4mm;
   border: 2px solid #111;
   background: #fff;
@@ -545,8 +547,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: max(1.2rem, env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px))
-    max(1.2rem, env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px));
+  padding: max(1.2rem, env(safe-area-inset-top, 0px))
+    max(1rem, env(safe-area-inset-right, 0px))
+    max(1.2rem, env(safe-area-inset-bottom, 0px))
+    max(1rem, env(safe-area-inset-left, 0px));
   background: rgba(15, 23, 42, 0.55);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -812,21 +816,27 @@
 
 @media print {
   .wrap {
-    max-width: none;
+    width: 100% !important;
+    max-width: none !important;
     font-size: 11pt;
     padding: 0;
-    background: transparent;
+    background: #fff !important;
     border: none;
     border-radius: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .applicationSheet {
-    max-width: none;
+    width: 100% !important;
+    max-width: none !important;
     margin: 0;
-    padding: 1mm 2mm 2mm;
+    padding: 2mm 3mm 3mm;
     border: 1px solid #000;
-    font-size: 7.6pt;
-    line-height: 1.22;
+    font-size: 8.5pt;
+    line-height: 1.28;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .spgAppTitle {
@@ -855,8 +865,9 @@
     break-inside: avoid;
   }
 
+  /* 인쇄 시 모든 블록을 avoid 하면 페이지 나눔·미리보기가 불안정해질 수 있음 */
   .spgSection {
-    break-inside: avoid;
+    break-inside: auto;
   }
 
   .filePreviewBackdrop {

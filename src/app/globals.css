@@ -86,9 +86,13 @@ main .main_bnr {
   body.recruit-apply-preview-printing #recruit-apply-print-root,
   body.recruit-apply-preview-printing #recruit-apply-print-root * {
     visibility: visible !important;
+    /* 인쇄/PDF에서 표·제목 연한 파란 배경 등이 나오도록 (브라우저 기본: 배경 생략) */
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   body.recruit-apply-preview-printing #recruit-apply-print-root {
+    /* 흐름에서 빼 두어 숨긴 레이아웃이 인쇄 페이지를 밀지 않게 함 */
     position: absolute !important;
     left: 0 !important;
     top: 0 !important;
@@ -99,5 +103,6 @@ main .main_bnr {
     background: #fff !important;
     box-shadow: none !important;
     border: none !important;
+    box-sizing: border-box !important;
   }
 }

@@ -385,6 +385,7 @@
   max-height: none;
   overflow-x: hidden;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   padding: 1.8rem 2rem 2.4rem;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;

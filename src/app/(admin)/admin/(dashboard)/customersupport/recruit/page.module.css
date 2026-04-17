@@ -264,11 +264,13 @@
   align-items: center;
   justify-content: center;
   z-index: 100040;
-  padding: 2rem;
+  padding: 1.2rem 1.4rem;
 }
 
 .modalCard {
-  width: min(118rem, 100%);
+  /* 미리보기 본문(지원서) 가로를 거의 꽉 채움 */
+  width: min(140rem, calc(100vw - 2.8rem));
+  max-width: calc(100vw - 2.8rem);
   height: min(88vh, 92rem);
   background: #fff;
   border-radius: 1.2rem;
@@ -309,6 +311,8 @@
   flex: 1;
   min-height: 0;
   overflow: auto;
+  /* 세로 스크롤바 유무에 따라 가용 너비가 바뀌지 않게 → 안쪽 지원서 테두리가 좌우로 흔들리는 현상 완화 */
+  scrollbar-gutter: stable;
   padding: 1.2rem 1.6rem 1.6rem;
   background: #f3f4f6;
 }
