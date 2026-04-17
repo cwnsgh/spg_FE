@@ -1,7 +1,114 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.8rem;
+}
+
+.dashboardIntro {
+  padding: 2.4rem 2.8rem;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, #172033 0%, #243550 100%);
+  color: #fff;
+  box-shadow: 0 16px 40px rgba(23, 32, 51, 0.18);
+}
+
+.dashboardIntroEyebrow {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.dashboardIntroTitle {
+  color: #fff;
+  margin: 0.8rem 0 0;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.dashboardIntroText {
+  margin: 1.2rem 0 0;
+  max-width: 64rem;
+  font-size: 1.5rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.dashboardIntroText strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.dashboardSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.dashboardSectionTitle {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #172033;
+  letter-spacing: -0.02em;
+}
+
+.linkCardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  gap: 1.2rem;
+}
+
+.linkCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.6rem 3.2rem 1.6rem 1.8rem;
+  border-radius: 1.4rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(17, 42, 95, 0.05);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.12s ease;
+}
+
+.linkCard:hover {
+  border-color: #c7d2fe;
+  box-shadow: 0 12px 28px rgba(29, 94, 232, 0.1);
+  transform: translateY(-1px);
+}
+
+.linkCardLabel {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #172033;
+}
+
+.linkCardMeta {
+  font-size: 1.3rem;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.linkCardArrow {
+  position: absolute;
+  right: 1.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.linkCard:hover .linkCardArrow {
+  color: #1d5ee8;
 }
 
 .heroCard {
@@ -296,7 +403,20 @@
   }
 
   .summaryGrid,
-  .quickGrid {
+  .quickGrid,
+  .linkCardGrid {
     grid-template-columns: 1fr;
+  }
+
+  .dashboardIntro {
+    padding: 2rem 1.8rem;
+  }
+
+  .dashboardIntroTitle {
+    font-size: 2.1rem;
+  }
+
+  .dashboardIntroText {
+    font-size: 1.4rem;
   }
 }

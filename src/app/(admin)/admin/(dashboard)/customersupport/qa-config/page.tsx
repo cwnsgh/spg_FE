@@ -133,8 +133,8 @@ export default function AdminQaConfigPage() {
           <p className={styles.eyebrow}>CUSTOMER SUPPORT</p>
           <h3 className={styles.title}>문의 설정</h3>
           <p className={styles.description}>
-            `g5_qa_config` 단일 설정을 관리합니다. 제목, 카테고리, 필수 입력값,
-            에디터 사용 여부, 공통 안내 문구를 한 곳에서 수정할 수 있습니다.
+            문의 게시판의 제목, 카테고리, 필수 입력값, 에디터 사용 여부, 공통 안내 문구를 한
+            곳에서 수정할 수 있습니다.
           </p>
         </div>
 

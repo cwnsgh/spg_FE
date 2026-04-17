@@ -5,6 +5,326 @@
   color: #111827;
   max-width: 96rem;
   margin: 0 auto;
+  padding: 2rem 2.4rem 2.6rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.4rem;
+}
+
+/* SPG 입사지원서 본문 (예시 PDF 형태 — 촘촘한 표·A4 한 장 목표) */
+.applicationSheet {
+  max-width: 210mm;
+  margin: 0 auto 2rem;
+  padding: 3mm 4mm 4mm;
+  border: 2px solid #111;
+  background: #fff;
+  color: #111;
+  font-size: 1.12rem;
+  line-height: 1.32;
+  box-sizing: border-box;
+}
+
+.spgAppHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.spgHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.spgAppBrandEn {
+  font-size: 1.55rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.spgTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+}
+
+.spgAppBrandKr {
+  font-size: 1.12rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.spgAppTitleMerged {
+  margin: 0;
+  font-size: 1.38rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+}
+
+.spgAppCornerTable {
+  margin-left: auto;
+  border-collapse: collapse;
+  font-size: 0.95em;
+  white-space: nowrap;
+}
+
+.spgAppCornerTable th,
+.spgAppCornerTable td {
+  border: 1px solid #222;
+  padding: 0.15rem 0.45rem;
+  text-align: center;
+}
+
+.spgAppCornerTable th {
+  background: #c5dff3;
+  font-weight: 700;
+}
+
+.spgPersonGrid {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0.35rem;
+  table-layout: fixed;
+}
+
+.spgPersonGrid th,
+.spgPersonGrid td {
+  border: 1px solid #222;
+  padding: 0.18rem 0.35rem;
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.spgPersonGrid th {
+  width: 12%;
+  background: #c5dff3;
+  font-weight: 700;
+  text-align: center;
+  font-size: 0.98em;
+}
+
+.spgAddrCell {
+  text-align: left !important;
+}
+
+.spgPhotoCell {
+  width: 26mm;
+  min-width: 26mm;
+  max-width: 26mm;
+  text-align: center;
+  vertical-align: middle;
+  background: #fafafa;
+  padding: 0.25rem !important;
+}
+
+.spgPhotoBtn {
+  display: inline-flex;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #333;
+  background: #fff;
+  cursor: zoom-in;
+  line-height: 0;
+}
+
+.spgPhotoImg {
+  display: block;
+  width: 24mm;
+  height: 32mm;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.spgPhotoPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24mm;
+  height: 32mm;
+  margin: 0 auto;
+  border: 1px dashed #888;
+  font-size: 1rem;
+  color: #777;
+}
+
+.spgSection {
+  margin-bottom: 0.4rem;
+  break-inside: avoid;
+}
+
+.spgSectionTitle {
+  margin: 0 0 0.12rem;
+  padding: 0.22rem 0.45rem;
+  background: #b8d4f0;
+  border: 1px solid #1a3d5c;
+  font-size: 1.05em;
+  font-weight: 800;
+  color: #0a1628;
+  text-align: center;
+}
+
+.spgTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.96em;
+  table-layout: auto;
+}
+
+.spgTable th,
+.spgTable td {
+  border: 1px solid #333;
+  padding: 0.12rem 0.28rem;
+  vertical-align: top;
+  text-align: left;
+}
+
+.spgTable thead th {
+  background: #c5dff3;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  color: #0a1628;
+}
+
+.spgTable tbody th {
+  background: #c5dff3;
+  font-weight: 700;
+  text-align: center;
+  width: 9rem;
+  max-width: 28%;
+  white-space: nowrap;
+  color: #0a1628;
+}
+
+.spgTableCentered tbody td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.spgTdName {
+  text-align: center !important;
+}
+
+.spgTdChoices {
+  text-align: center !important;
+  white-space: normal;
+  min-width: 12rem;
+}
+
+.spgCareerCont {
+  text-align: left !important;
+  max-width: 14rem;
+  word-break: break-word;
+}
+
+.spgChoiceRow {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.spgCircleChoiceOn,
+.spgCircleChoiceOff {
+  display: inline-block;
+  padding: 0.05rem 0.38rem;
+  font-size: 0.92em;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1.5px solid #333;
+  line-height: 1.25;
+}
+
+.spgCircleChoiceOn {
+  border-color: #111;
+  border-width: 2px;
+  font-weight: 800;
+  box-shadow: 0 0 0 1px #111;
+}
+
+.spgCircleChoiceOff {
+  border-color: #999;
+  color: #555;
+  font-weight: 500;
+}
+
+.spgEndRaw {
+  font-size: 0.88em;
+  color: #444;
+}
+
+.spgUnionPair {
+  display: inline-flex;
+  gap: 0.55rem;
+  justify-content: center;
+}
+
+.spgRecentBadge {
+  display: inline-block;
+  margin-right: 0.35rem;
+  padding: 0.08rem 0.32rem;
+  border-radius: 0.2rem;
+  background: #dc2626;
+  color: #fff;
+  font-size: 0.82em;
+  font-weight: 800;
+  vertical-align: middle;
+  letter-spacing: 0.02em;
+}
+
+.spgAwardSplit {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 0.5rem;
+  align-items: start;
+}
+
+.spgAwardHalf {
+  width: 100%;
+}
+
+.spgTableCareer {
+  font-size: 0.88em;
+}
+
+.spgTableCareer th,
+.spgTableCareer td {
+  padding: 0.1rem 0.2rem;
+}
+
+.spgHorizScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.spgBlankLine {
+  min-height: 1.6rem;
+}
+
+.spgTallBlank {
+  min-height: 6rem;
+  vertical-align: top;
+}
+
+.spgAttachBlock {
+  margin-bottom: 0.35rem;
+}
+
+.applicationSheet .attachPreviewBtn {
+  padding: 0.28rem 0.45rem;
+  font-size: 0.95em;
+  border-radius: 0.3rem;
+}
+
+.applicationSheet .attachTitle {
+  font-size: 1.02em;
+  margin-bottom: 0.2rem;
 }
 
 .docTitle {
@@ -20,9 +340,13 @@
 .meta {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
-  gap: 0.5rem 1.6rem;
-  margin: 1.2rem 0 2rem;
+  gap: 0.65rem 1.8rem;
+  margin: 1.4rem 0 2.2rem;
+  padding: 1.2rem 1.4rem;
   font-size: 1.3rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.35rem;
 }
 
 .metaRow {
@@ -41,6 +365,16 @@
   margin: 0;
   color: #111827;
   word-break: break-word;
+}
+
+.metaRowPhoto {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.metaDdPhoto {
+  width: 100%;
 }
 
 .section {
@@ -78,6 +412,242 @@
   white-space: nowrap;
 }
 
+.previewPhotoBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 22rem;
+  margin: 0 auto;
+}
+
+.previewPhotoFrame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0.5rem;
+  border: 1px solid #c8ced6;
+  border-radius: 0.25rem;
+  background: #fff;
+  cursor: zoom-in;
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.previewPhotoFrame:hover {
+  border-color: #94a3b8;
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.35);
+}
+
+.previewPhotoFrame:focus-visible {
+  outline: 2px solid #0d9488;
+  outline-offset: 3px;
+}
+
+.previewPhoto {
+  display: block;
+  width: 13.5rem;
+  max-width: 100%;
+  height: 18rem;
+  max-height: min(18rem, 42vh);
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.previewPhotoCaption {
+  margin: 0.55rem 0 0;
+  width: 100%;
+  max-width: 18rem;
+  font-size: 1.1rem;
+  line-height: 1.35;
+  color: #64748b;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachBlock {
+  margin-bottom: 1.2rem;
+}
+
+.attachTitle {
+  margin: 0 0 0.35rem;
+  font-size: 1.32rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.attachList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1.28rem;
+}
+
+.attachList li {
+  margin-bottom: 0.45rem;
+}
+
+.attachPreviewBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.55rem;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.attachPreviewBtn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.attachPreviewBtn:focus-visible {
+  outline: 2px solid #0d9488;
+  outline-offset: 2px;
+}
+
+.attachPreviewName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachPreviewAction {
+  flex-shrink: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+.filePreviewBackdrop {
+  position: fixed;
+  inset: 0;
+  /* 지원서 미리보기 모달(100050) 위에 두어 첨부 미리보기가 가려지지 않게 함 */
+  z-index: 100060;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(1.2rem, env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px))
+    max(1.2rem, env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px));
+  background: rgba(15, 23, 42, 0.55);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filePreviewCard {
+  width: min(96rem, 100%);
+  max-height: min(88vh, 90rem);
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  background: #fff;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+}
+
+.filePreviewHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 1.4rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+.filePreviewEyebrow {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.filePreviewTitle {
+  margin: 0.25rem 0 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #111827;
+  word-break: break-word;
+}
+
+.filePreviewClose {
+  flex-shrink: 0;
+  padding: 0.5rem 1rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #334155;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.45rem;
+  cursor: pointer;
+}
+
+.filePreviewClose:hover {
+  background: #f1f5f9;
+}
+
+.filePreviewBody {
+  flex: 1;
+  min-height: 0;
+  padding: 1rem 1.2rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.filePreviewImage {
+  max-width: 100%;
+  max-height: min(72vh, 80rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.35rem;
+}
+
+.filePreviewIframe {
+  width: 100%;
+  min-height: min(65vh, 56rem);
+  max-height: 72vh;
+  border: 0;
+  border-radius: 0.35rem;
+  background: #f1f5f9;
+}
+
+.filePreviewOther {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.6;
+  color: #475569;
+  text-align: center;
+}
+
+.filePreviewOther a {
+  color: #0f766e;
+  font-weight: 700;
+}
+
 .pre {
   white-space: pre-wrap;
   word-break: break-word;
@@ -101,13 +671,195 @@
   margin-bottom: 0;
 }
 
+/* 자기소개서·경력소개서 (문서형) */
+.docSectionProfile,
+.docSectionCareer {
+  margin-top: 2.8rem;
+  padding-top: 2rem;
+  border-top: 1px dashed #cbd5e1;
+}
+
+.docSheetHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.2rem;
+  margin-bottom: 0.65rem;
+}
+
+.docSheetHeaderLeft {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.45;
+}
+
+.docSheetHeaderRight {
+  text-align: right;
+}
+
+.docSheetCo {
+  display: block;
+  font-size: 1.28rem;
+  font-weight: 700;
+  color: #1a56a8;
+  margin-bottom: 0.25rem;
+}
+
+.docSheetTitle {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: 0.06em;
+}
+
+.docSheetRule {
+  border: none;
+  border-top: 1px solid #374151;
+  margin: 0 0 1.5rem;
+}
+
+.docSheetRuleAccent {
+  border: none;
+  border-top: 4px solid #1a56a8;
+  margin: 0 0 1.5rem;
+}
+
+.profileQBlock {
+  margin-bottom: 1.35rem;
+  break-inside: avoid;
+}
+
+.profileQHead {
+  background: #d6ebfa;
+  border: 1px solid #8ebadb;
+  border-bottom: none;
+  padding: 0.55rem 0.9rem;
+  font-size: 1.32rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.profileQBody {
+  border: 1px solid #8ebadb;
+  border-top: 1px solid #b8d4e8;
+  padding: 0.9rem 1rem;
+  min-height: 4rem;
+  font-size: 1.28rem;
+  line-height: 1.6;
+  background: #fff;
+}
+
+.profileQBody .pre {
+  margin: 0;
+}
+
+.historyCard {
+  margin-bottom: 1.5rem;
+  break-inside: avoid;
+  border: 1px solid #7aa8cc;
+  background: #fff;
+}
+
+.historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.26rem;
+  line-height: 1.5;
+  color: #111827;
+}
+
+.historyTable th,
+.historyTable td {
+  border: 1px solid #8ebadb;
+  padding: 0.55rem 0.75rem;
+  vertical-align: top;
+  text-align: left;
+}
+
+.historyTable th {
+  width: 9rem;
+  background: #e8f2fa;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.historyTable th:nth-child(3) {
+  width: 9rem;
+}
+
+.historyDetailTh {
+  vertical-align: middle;
+}
+
+.historyDetailTd {
+  min-height: 6rem;
+}
+
+.historyRecentBadge {
+  margin-left: 0.45rem;
+  display: inline-block;
+  padding: 0.12rem 0.42rem;
+  border-radius: 0.25rem;
+  background: #dc2626;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 800;
+  vertical-align: middle;
+  letter-spacing: 0.02em;
+}
+
 @media print {
   .wrap {
     max-width: none;
     font-size: 11pt;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+  }
+
+  .applicationSheet {
+    max-width: none;
+    margin: 0;
+    padding: 1mm 2mm 2mm;
+    border: 1px solid #000;
+    font-size: 7.6pt;
+    line-height: 1.22;
+  }
+
+  .spgAppTitle {
+    font-size: 12pt;
+    letter-spacing: 0.12em;
+  }
+
+  .spgPhotoImg {
+    width: 21mm;
+    height: 28mm;
+  }
+
+  .spgPhotoPlaceholder {
+    width: 21mm;
+    height: 28mm;
+  }
+
+  .meta {
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
   }
 
   .section {
     break-inside: avoid;
+  }
+
+  .spgSection {
+    break-inside: avoid;
+  }
+
+  .filePreviewBackdrop {
+    display: none !important;
   }
 }

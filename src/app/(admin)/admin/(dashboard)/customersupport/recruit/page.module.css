@@ -114,7 +114,8 @@
 }
 
 .colPost {
-  width: 30rem;
+  width: min(38rem, 36%);
+  min-width: 22rem;
 }
 
 .colType,
@@ -161,48 +162,55 @@
 .fileBadges {
   margin-top: 0.55rem;
   display: flex;
-  flex-wrap: nowrap;
-  gap: 0.4rem;
-  max-width: 25rem;
-  align-items: center;
-  overflow: hidden;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.55rem;
+  align-items: stretch;
 }
 
-.fileBadge {
-  max-width: 11rem;
-  display: inline-block;
-  padding: 0.25rem 0.6rem;
+.fileBadgeWrap {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: 100%;
+}
+
+.fileBadgeBtn {
+  max-width: min(22rem, 100%);
+  padding: 0.3rem 0.65rem;
   border-radius: 0.45rem;
   background: #f3f4f6;
   color: #1d4ed8;
   font-size: 1.2rem;
-  line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-decoration: none;
+  line-height: 1.35;
+  font-weight: 600;
+  font-family: inherit;
+  text-align: left;
   border: 1px solid #e5e7eb;
   cursor: pointer;
+  word-break: break-word;
+  white-space: normal;
 }
 
-.fileBadge:hover {
+.fileBadgeBtn:hover {
   background: #e5e7eb;
   color: #1e40af;
 }
 
-.fileMore {
+.fileBadgeOpen {
   flex-shrink: 0;
-  padding: 0.25rem 0.55rem;
-  border-radius: 999px;
-  border: 1px solid #dbeafe;
-  background: #eff6ff;
-  color: #1d4ed8;
   font-size: 1.15rem;
   font-weight: 700;
+  color: #0f766e;
+  text-decoration: underline;
+}
+
+.fileBadgeOpen:hover {
+  color: #0d9488;
 }
 
 .postCell {
-  max-width: 26rem;
+  max-width: none;
 }
 
 .postTitle {
@@ -231,7 +239,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 60;
+  z-index: 100040;
   padding: 2rem;
 }
 
@@ -303,7 +311,121 @@
   font-weight: 600;
 }
 
+.fileQuickBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100060;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(1.2rem, env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px))
+    max(1.2rem, env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px));
+  background: rgba(15, 23, 42, 0.55);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.fileQuickCard {
+  width: min(96rem, 100%);
+  max-height: min(88vh, 90rem);
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  background: #fff;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+}
+
+.fileQuickHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 1.4rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+.fileQuickEyebrow {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.fileQuickTitle {
+  margin: 0.25rem 0 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #111827;
+  word-break: break-word;
+}
+
+.fileQuickClose {
+  flex-shrink: 0;
+  padding: 0.5rem 1rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #334155;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.45rem;
+  cursor: pointer;
+}
+
+.fileQuickClose:hover {
+  background: #f1f5f9;
+}
+
+.fileQuickBody {
+  flex: 1;
+  min-height: 0;
+  padding: 1rem 1.2rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.fileQuickImage {
+  max-width: 100%;
+  max-height: min(72vh, 80rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.35rem;
+}
+
+.fileQuickIframe {
+  width: 100%;
+  min-height: min(65vh, 56rem);
+  max-height: 72vh;
+  border: 0;
+  border-radius: 0.35rem;
+  background: #f1f5f9;
+}
+
+.fileQuickOther {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.6;
+  color: #475569;
+  text-align: center;
+}
+
+.fileQuickOther a {
+  color: #0f766e;
+  font-weight: 700;
+}
+
 @media print {
+  .fileQuickBackdrop {
+    display: none !important;
+  }
+
   .noPrint {
     display: none !important;
   }

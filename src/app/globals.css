@@ -64,3 +64,40 @@ main .main_bnr {
     text-wrap: balance;
   }
 }
+
+/* 입사지원서 미리보기 — 인쇄·PDF 저장 시 지원서 본문(#recruit-apply-print-root)만 출력 */
+@media print {
+  html:has(body.recruit-apply-preview-printing) {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  body.recruit-apply-preview-printing {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  body.recruit-apply-preview-printing * {
+    visibility: hidden !important;
+  }
+
+  body.recruit-apply-preview-printing #recruit-apply-print-root,
+  body.recruit-apply-preview-printing #recruit-apply-print-root * {
+    visibility: visible !important;
+  }
+
+  body.recruit-apply-preview-printing #recruit-apply-print-root {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}

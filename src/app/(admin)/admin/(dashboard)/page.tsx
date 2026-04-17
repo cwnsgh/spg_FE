@@ -4,76 +4,142 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import styles from "./page.module.css";
 
-const sectionCards = [
+type QuickItem = { href: string; label: string; description: string };
+
+const quickSections: { title: string; items: QuickItem[] }[] = [
+  {
+    title: "통계",
+    items: [
+      {
+        href: "/admin/analytics/visitors",
+        label: "접속 분석",
+        description: "기간별 접속 집계·로그 검색",
+      },
+    ],
+  },
   {
     title: "제품소개",
-    description: "제품 카테고리와 상세 소개 콘텐츠를 정리하는 영역",
+    items: [
+      {
+        href: "/admin/products/categories",
+        label: "제품 카테고리",
+        description: "카테고리 구조·노출",
+      },
+      {
+        href: "/admin/products",
+        label: "제품 콘텐츠",
+        description: "상품 등록·첨부",
+      },
+    ],
   },
   {
     title: "마케팅",
-    description: "대리점/지사/프랜차이즈 등록과 노출 관리 중심 영역",
+    items: [
+      {
+        href: "/admin/marketing/franchise",
+        label: "프랜차이즈 관리",
+        description: "지사·대리점 정보 등록·수정",
+      },
+    ],
   },
   {
     title: "고객지원",
-    description: "FAQ·채용공고·문의 설정 등 고객지원 운영 영역",
+    items: [
+      {
+        href: "/admin/customersupport/faq",
+        label: "FAQ 관리",
+        description: "자주 묻는 질문",
+      },
+      {
+        href: "/admin/customersupport/recruit-posts",
+        label: "채용공고",
+        description: "공고 등록·노출 기간",
+      },
+      {
+        href: "/admin/customersupport/recruit",
+        label: "채용 지원자",
+        description: "지원서 목록·열람",
+      },
+      {
+        href: "/admin/customersupport/qa-config",
+        label: "문의 설정",
+        description: "문의 폼·안내 문구",
+      },
+    ],
   },
   {
     title: "IR정보",
-    description: "재무상태표, 손익계산서, 현금흐름표 관리 영역",
+    items: [
+      {
+        href: "/admin/ir/announcement",
+        label: "IR공고",
+        description: "IR 공시 글",
+      },
+      {
+        href: "/admin/ir/content",
+        label: "IR콘텐츠",
+        description: "IR 본문 콘텐츠",
+      },
+      {
+        href: "/admin/ir/event",
+        label: "IR행사",
+        description: "행사·일정",
+      },
+      {
+        href: "/admin/ir/financial-statement",
+        label: "재무상태표",
+        description: "공시 자료",
+      },
+      {
+        href: "/admin/ir/income-statement",
+        label: "손익계산서",
+        description: "공시 자료",
+      },
+      {
+        href: "/admin/ir/cash-flow",
+        label: "현금흐름표",
+        description: "공시 자료",
+      },
+    ],
   },
-  {
-    title: "회사소개",
-    description: "회사 정보, 콘텐츠, 팝업을 운영하는 영역",
-  },
-];
-
-const marketingTasks = [
-  "프랜차이즈 업체 등록 폼 구성",
-  "목록 조회 및 검색/필터 구조 준비",
-  "수정/삭제 액션 버튼 레이아웃 정리",
 ];
 
 export default function AdminDashboardPage() {
   const { user } = useAuth();
+  const name = user?.mb_name?.trim() || "관리자";
 
   return (
     <main className={styles.page}>
-      <section className={styles.mainGrid}>
-        <article className={`${styles.panel} ${styles.widePanel}`}>
-          <div className={styles.panelHeader}>
-            <div>
-              <p className={styles.panelEyebrow}>Priority</p>
-              <h4 className={styles.panelTitle}>
-                마케팅 {" > "} 프랜차이즈 관리
-              </h4>
-            </div>
-            <Link
-              href="/admin/marketing/franchise"
-              className={styles.panelLink}
-            >
-              페이지 바로가기
-            </Link>
-          </div>
+      <div className={styles.dashboardIntro}>
+        <p className={styles.dashboardIntroEyebrow}>관리자 홈</p>
+        <h1 className={styles.dashboardIntroTitle}>{name}님, 안녕하세요</h1>
+        <p className={styles.dashboardIntroText}>
+          이 페이지는 <strong>관리 메뉴로 들어가기 전 안내 화면</strong>입니다.
+          왼쪽 사이드바에서도 동일한 메뉴를 열 수 있고, 아래는 자주 찾는
+          작업으로 바로 이동합니다.
+        </p>
+      </div>
 
-          <div className={styles.focusCard}>
-            <div className={styles.focusBadge}>CRUD</div>
-            <h5 className={styles.focusTitle}>
-              프랜차이즈 업체 등록, 수정, 삭제
-            </h5>
-            <p className={styles.focusDescription}>
-              `www/api/admin/franchise.php`를 기준으로 관리자에서 가장 먼저 붙일
-              실무 화면입니다. 목록, 상태, 액션 영역을 분리해서 확장하기 쉽게
-              시작합니다.
-            </p>
-
-            <ul className={styles.quickList}>
-              {marketingTasks.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
+      {quickSections.map((section) => (
+        <section key={section.title} className={styles.dashboardSection}>
+          <h2 className={styles.dashboardSectionTitle}>{section.title}</h2>
+          <div className={styles.linkCardGrid}>
+            {section.items.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={styles.linkCard}
+              >
+                <span className={styles.linkCardLabel}>{item.label}</span>
+                <span className={styles.linkCardMeta}>{item.description}</span>
+                <span className={styles.linkCardArrow} aria-hidden>
+                  →
+                </span>
+              </Link>
+            ))}
           </div>
-        </article>
-      </section>
+        </section>
+      ))}
     </main>
   );
 }

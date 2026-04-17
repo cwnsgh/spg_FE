@@ -1,0 +1,140 @@
+/* 미리보기·인쇄용 개인정보 수집·이용·제공 동의서 (첫 장) */
+.consentDoc {
+  margin: 0 0 2.4rem;
+  border: 1px solid #1a1a1a;
+  background: #fff;
+}
+
+@media print {
+  .consentDoc {
+    break-after: page;
+    page-break-after: always;
+  }
+}
+
+.consentHeroTitle {
+  margin: 0;
+  padding: 1.1rem 1.2rem;
+  background: #b8d4f0;
+  border-bottom: 1px solid #1a1a1a;
+  text-align: center;
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #111;
+}
+
+.consentIntro {
+  margin: 0;
+  padding: 1.1rem 1.4rem 1.2rem;
+  text-align: center;
+  font-size: 1.28rem;
+  line-height: 1.65;
+  color: #111;
+  border-bottom: 1px solid #666;
+}
+
+.consentGrid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.26rem;
+  line-height: 1.55;
+  color: #111;
+}
+
+.consentGrid th,
+.consentGrid td {
+  border: 1px solid #555;
+  padding: 0.75rem 0.9rem;
+  vertical-align: top;
+}
+
+.consentGrid th {
+  width: 22%;
+  min-width: 10rem;
+  background: #e3eef8;
+  font-weight: 700;
+  text-align: center;
+}
+
+.consentGrid td {
+  text-align: left;
+}
+
+.consentEm {
+  color: #c00;
+  font-weight: 700;
+}
+
+.consentCheckRow td {
+  padding: 0.85rem 1rem;
+}
+
+.consentCheckLabel {
+  margin-bottom: 0.45rem;
+  font-weight: 600;
+}
+
+.consentCheckOpts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.8rem 2.4rem;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.consentOpt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 1.22rem;
+}
+
+.consentBox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  border: 1.5px solid #111;
+  background: #fff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.consentFooter {
+  display: grid;
+  grid-template-columns: 9rem 1fr 9rem 1fr;
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #555;
+  border-top: none;
+  font-size: 1.26rem;
+}
+
+.consentFooterLabel {
+  padding: 0.85rem 0.6rem;
+  background: #e3eef8;
+  font-weight: 700;
+  text-align: center;
+  border-right: 1px solid #555;
+  border-bottom: 1px solid #555;
+}
+
+.consentFooterValue {
+  padding: 0.85rem 1rem;
+  border-right: 1px solid #555;
+  border-bottom: 1px solid #555;
+  text-align: center;
+}
+
+.consentFooter > div:nth-child(4n) {
+  border-right: none;
+}
+
+@media print {
+  .consentDoc {
+    border: 1px solid #000;
+  }
+}

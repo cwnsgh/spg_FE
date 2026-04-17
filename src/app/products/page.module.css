@@ -135,6 +135,16 @@
     flex-direction: column;
     gap: 2rem;
     padding: 0 var(--layout-side-mo);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* 가로 스크롤(중분류 탭)이 뷰포트 밖으로 밀려 스크롤이 죽지 않도록 */
+  .productContent > * {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .titleArea {

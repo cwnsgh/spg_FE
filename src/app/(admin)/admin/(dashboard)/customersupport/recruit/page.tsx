@@ -11,6 +11,11 @@ import {
   type RecruitApplicationsResponse,
 } from "@/api";
 import RecruitApplyPreview from "@/app/aboutUs/components/sections/RecruitApplyPreview";
+import {
+  recruitUploadFilePublicUrl,
+  recruitUploadPreviewKind,
+} from "@/app/aboutUs/components/sections/recruitApplyAssets";
+import { requestRecruitApplyPreviewPrint } from "@/app/aboutUs/components/sections/requestRecruitApplyPreviewPrint";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./page.module.css";
 
@@ -58,6 +63,11 @@ export default function AdminRecruitApplicationsPage() {
   const [previewError, setPreviewError] = useState("");
   /** PHP 인쇄/레거시 URL — 양식 미리보기와 별도 */
   const [previewServerUrl, setPreviewServerUrl] = useState("");
+  const [listFilePreview, setListFilePreview] = useState<{
+    title: string;
+    url: string;
+    kind: "image" | "pdf" | "other";
+  } | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -196,8 +206,27 @@ export default function AdminRecruitApplicationsPage() {
   };
 
   const printPreview = () => {
-    window.print();
+    requestRecruitApplyPreviewPrint();
   };
+
+  const openListFilePreview = (f: RecruitApplicationFilePreview) => {
+    const built = recruitUploadFilePublicUrl({ url: f.url, pf_file: f.pf_file }).trim();
+    const url = built || fileOpenHref(f.url || "");
+    if (!url || url === "#") return;
+    const name = (f.pf_file || f.url || "").trim();
+    const kind = recruitUploadPreviewKind(name);
+    const title = f.pf_source?.trim() || f.pf_file || "첨부";
+    setListFilePreview({ title, url, kind });
+  };
+
+  useEffect(() => {
+    if (!listFilePreview) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setListFilePreview(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [listFilePreview]);
 
   return (
     <div className={styles.page}>
@@ -297,7 +326,6 @@ export default function AdminRecruitApplicationsPage() {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th style={{ width: "3.2rem" }} />
               <th className={styles.colStatus}>상태</th>
               <th className={styles.colPost}>공고명</th>
               <th className={styles.colType}>모집분야</th>
@@ -311,20 +339,15 @@ export default function AdminRecruitApplicationsPage() {
           <tbody>
             {list.length === 0 && !loading ? (
               <tr>
-                <td colSpan={9} className={styles.muted}>
+                <td colSpan={8} className={styles.muted}>
                   데이터가 없습니다.
                 </td>
               </tr>
             ) : (
               list.map((row: RecruitApplicationRow) => {
                 const previewFiles = dedupeRecruitFilesPreview(row.files_preview);
-                const previewFilesTop = previewFiles.slice(0, 2);
-                const previewFilesRemain = Math.max(0, previewFiles.length - previewFilesTop.length);
                 return (
                 <tr key={row.re_id}>
-                  <td>
-                    <input type="checkbox" aria-label={`지원자 선택 ${row.applicant.name || row.re_id}`} />
-                  </td>
                   <td>
                     <select
                       className={styles.statusSelect}
@@ -345,25 +368,37 @@ export default function AdminRecruitApplicationsPage() {
                     </div>
                     {previewFiles.length ? (
                       <div className={styles.fileBadges}>
-                        {previewFilesTop.map((f) => {
+                        {previewFiles.map((f) => {
                           const label = f.pf_source?.trim() || f.pf_file || "첨부";
-                          const href = fileOpenHref(f.url);
+                          const tabHref =
+                            recruitUploadFilePublicUrl({
+                              url: f.url,
+                              pf_file: f.pf_file,
+                            }).trim() || fileOpenHref(f.url || "");
                           return (
-                            <a
-                              key={`${f.pf_id}-${f.pf_file}`}
-                              href={href}
-                              target="_blank"
-                              rel="noreferrer"
-                              className={styles.fileBadge}
-                              title={label}
-                            >
-                              {label}
-                            </a>
+                            <span key={`${f.pf_id}-${f.pf_file}-${f.url}`} className={styles.fileBadgeWrap}>
+                              <button
+                                type="button"
+                                className={styles.fileBadgeBtn}
+                                title={`${label} — 미리보기`}
+                                onClick={() => openListFilePreview(f)}
+                              >
+                                {label}
+                              </button>
+                              {tabHref && tabHref !== "#" ? (
+                                <a
+                                  href={tabHref}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className={styles.fileBadgeOpen}
+                                  title="새 창에서 열기"
+                                >
+                                  열기
+                                </a>
+                              ) : null}
+                            </span>
                           );
                         })}
-                        {previewFilesRemain > 0 ? (
-                          <span className={styles.fileMore}>+{previewFilesRemain}개</span>
-                        ) : null}
                       </div>
                     ) : null}
                   </td>
@@ -433,8 +468,64 @@ export default function AdminRecruitApplicationsPage() {
                   ) : null}
                 </div>
               ) : previewBundle ? (
-                <RecruitApplyPreview data={previewBundle} postSubject={previewPostSubject} />
+                <div id="recruit-apply-print-root">
+                  <RecruitApplyPreview data={previewBundle} postSubject={previewPostSubject} />
+                </div>
               ) : null}
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {listFilePreview ? (
+        <div
+          className={styles.fileQuickBackdrop}
+          role="presentation"
+          onClick={() => setListFilePreview(null)}
+        >
+          <div
+            className={styles.fileQuickCard}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="admin-file-preview-title"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.fileQuickHeader}>
+              <div>
+                <p className={styles.fileQuickEyebrow}>첨부 미리보기</p>
+                <p id="admin-file-preview-title" className={styles.fileQuickTitle}>
+                  {listFilePreview.title}
+                </p>
+              </div>
+              <button
+                type="button"
+                className={styles.fileQuickClose}
+                onClick={() => setListFilePreview(null)}
+              >
+                닫기
+              </button>
+            </div>
+            <div className={styles.fileQuickBody}>
+              {listFilePreview.kind === "image" ? (
+                <img
+                  className={styles.fileQuickImage}
+                  src={listFilePreview.url}
+                  alt={listFilePreview.title}
+                />
+              ) : listFilePreview.kind === "pdf" ? (
+                <iframe
+                  className={styles.fileQuickIframe}
+                  title={listFilePreview.title}
+                  src={listFilePreview.url}
+                />
+              ) : (
+                <p className={styles.fileQuickOther}>
+                  이 형식은 여기서 바로 미리보기할 수 없습니다.{" "}
+                  <a href={listFilePreview.url} target="_blank" rel="noreferrer">
+                    새 창에서 열기
+                  </a>
+                </p>
+              )}
             </div>
           </div>
         </div>

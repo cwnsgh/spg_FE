@@ -1,5 +1,12 @@
 "use client";
 
+import { Fragment, useEffect, useState } from "react";
+import {
+  recruitProfileImageUrl,
+  recruitUploadFilePublicUrl,
+  recruitUploadPreviewKind,
+} from "./recruitApplyAssets";
+import RecruitPrivacyConsentPreview from "./RecruitPrivacyConsentPreview";
 import styles from "./RecruitApplyPreview.module.css";
 
 function norm(v: unknown): string {
@@ -38,14 +45,98 @@ const PROFILE_LABELS = [
   "5. 본인의 장점 및 보완점",
 ] as const;
 
+const STEP1_ATTACHMENT_LABELS: {
+  key: "fgrade" | "fscore" | "fcerti" | "fcareer";
+  label: string;
+}[] = [
+  { key: "fgrade", label: "최종학력 졸업증명서" },
+  { key: "fscore", label: "최종학력 성적증명서" },
+  { key: "fcerti", label: "자격증" },
+  { key: "fcareer", label: "경력증명서" },
+];
+
+function schoolFinalLabel(lastRaw: unknown): string {
+  const t = norm(lastRaw).trim();
+  if (t === "1" || t.toLowerCase() === "y" || t === "예") return "최종학력";
+  return "—";
+}
+
+/** 예시 양식(졸업·예정·중퇴·휴학) 원 안 표시용 — 저장값 매핑 */
+const SCHOOL_END_DISPLAY = ["졸업", "예정", "중퇴", "휴학"] as const;
+
+function schoolEndCircleKey(stored: string): (typeof SCHOOL_END_DISPLAY)[number] | "" {
+  const t = stored.trim();
+  if (!t) return "";
+  if (t === "졸업") return "졸업";
+  if (t === "중퇴") return "중퇴";
+  if (t === "휴학") return "휴학";
+  if (t === "재학중" || t === "수료") return "예정";
+  return "";
+}
+
+function unionCircleKey(raw: string): "유" | "무" | "" {
+  const t = raw.trim();
+  if (!t) return "";
+  if (t === "유" || t === "가입") return "유";
+  if (t === "무" || t === "미가입" || t === "아니오") return "무";
+  const tl = t.toLowerCase();
+  if (tl === "y" || tl === "yes" || tl === "true") return "유";
+  if (tl === "n" || tl === "no" || tl === "false") return "무";
+  return "";
+}
+
+function SchoolEndCircles({ end }: { end: string }) {
+  const key = schoolEndCircleKey(norm(end));
+  const raw = norm(end).trim();
+  return (
+    <span className={styles.spgChoiceRow}>
+      {SCHOOL_END_DISPLAY.map((label) => (
+        <span
+          key={label}
+          className={label === key ? styles.spgCircleChoiceOn : styles.spgCircleChoiceOff}
+        >
+          {label}
+        </span>
+      ))}
+      {raw && !key ? <span className={styles.spgEndRaw}> ({raw})</span> : null}
+    </span>
+  );
+}
+
+function UnionCircles({ value }: { value: string }) {
+  const k = unionCircleKey(norm(value));
+  return (
+    <span className={styles.spgUnionPair}>
+      <span className={k === "유" ? styles.spgCircleChoiceOn : styles.spgCircleChoiceOff}>유</span>
+      <span className={k === "무" ? styles.spgCircleChoiceOn : styles.spgCircleChoiceOff}>무</span>
+    </span>
+  );
+}
+
+export type RecruitStep1AttachmentRow = {
+  pf_id?: number;
+  pf_source?: string;
+  pf_file?: string;
+  /** 업로드 API가 내려주는 경우 그대로 사용 */
+  url?: string;
+};
+
 export interface RecruitApplyPreviewProps {
   /** `recruitGetApply` / 작성 폼과 동일한 키를 가진 한 덩어의 지원서 객체 */
   data: Record<string, unknown>;
   /** 채용공고 제목 (선택) */
   postSubject?: string;
+  /** 1단계 첨부 목록(미리보기 전용). 관리자 화면 등에서는 생략 가능 */
+  step1Attachments?: Partial<
+    Record<"fgrade" | "fscore" | "fcerti" | "fcareer", RecruitStep1AttachmentRow[]>
+  >;
 }
 
-export default function RecruitApplyPreview({ data, postSubject }: RecruitApplyPreviewProps) {
+export default function RecruitApplyPreview({
+  data,
+  postSubject,
+  step1Attachments,
+}: RecruitApplyPreviewProps) {
   const armyRaw = data.re_army;
   let armyType = "";
   let armyCont = "";
@@ -72,109 +163,225 @@ export default function RecruitApplyPreview({ data, postSubject }: RecruitApplyP
       : {};
   const historyRows = asArray(data.re_history);
 
+  const [attachmentPreview, setAttachmentPreview] = useState<{
+    title: string;
+    fileLabel: string;
+    url: string;
+    kind: "image" | "pdf" | "other";
+  } | null>(null);
+
+  useEffect(() => {
+    if (!attachmentPreview) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setAttachmentPreview(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [attachmentPreview]);
+
+  const openAttachmentPreview = (sectionTitle: string, file: RecruitStep1AttachmentRow) => {
+    const url = recruitUploadFilePublicUrl(file);
+    if (!url) return;
+    const fileLabel = norm(file.pf_source) || norm(file.pf_file) || "첨부";
+    const kind = recruitUploadPreviewKind(fileLabel);
+    setAttachmentPreview({ title: sectionTitle, fileLabel, url, kind });
+  };
+
+  const openProfilePhotoPreview = () => {
+    const fileLabel = norm(data.re_img);
+    if (!fileLabel) return;
+    const url = recruitProfileImageUrl(fileLabel);
+    if (!url) return;
+    setAttachmentPreview({
+      title: "증명사진",
+      fileLabel,
+      url,
+      kind: "image",
+    });
+  };
+
   const textOrEmpty = (s: string) =>
     s.trim() ? <span className={styles.pre}>{s}</span> : <span className={styles.empty}>(미입력)</span>;
 
   return (
+    <Fragment>
     <div className={styles.wrap}>
-      <h1 className={styles.docTitle}>입 사 지 원 서</h1>
+      <RecruitPrivacyConsentPreview data={data} />
 
-      <dl className={styles.meta}>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>채용공고</dt>
-          <dd className={styles.metaDd}>{postSubject?.trim() || "(공고 제목 없음)"}</dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>지원번호</dt>
-          <dd className={styles.metaDd}>{norm(data.re_id) || "-"}</dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>응시구분</dt>
-          <dd className={styles.metaDd}>{textOrEmpty(norm(data.re_work_type))}</dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>응시부서</dt>
-          <dd className={styles.metaDd}>{textOrEmpty(norm(data.re_work))}</dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>성명</dt>
-          <dd className={styles.metaDd}>{textOrEmpty(norm(data.re_name))}</dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>성명(한자)</dt>
-          <dd className={styles.metaDd}>{textOrEmpty(norm(data.re_name_cn))}</dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>성명(영문)</dt>
-          <dd className={styles.metaDd}>{textOrEmpty(norm(data.re_name_en))}</dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>생년월일</dt>
-          <dd className={styles.metaDd}>{textOrEmpty(norm(data.re_birth))}</dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>성별</dt>
-          <dd className={styles.metaDd}>{textOrEmpty(norm(data.re_sex))}</dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>휴대폰</dt>
-          <dd className={styles.metaDd}>{textOrEmpty(norm(data.re_hp))}</dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>집전화</dt>
-          <dd className={styles.metaDd}>{textOrEmpty(norm(data.re_tel))}</dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>이메일</dt>
-          <dd className={styles.metaDd}>{textOrEmpty(norm(data.re_email))}</dd>
-        </div>
-        <div className={styles.metaRow} style={{ gridColumn: "1 / -1" }}>
-          <dt className={styles.metaDt}>주소</dt>
-          <dd className={styles.metaDd}>
-            {textOrEmpty(
-              joinAddr(
-                norm(data.re_zip),
-                norm(data.re_addr1),
-                norm(data.re_addr2),
-                norm(data.re_addr3),
-                norm(data.re_addr_jibeon)
-              )
-            )}
-          </dd>
-        </div>
-        <div className={styles.metaRow}>
-          <dt className={styles.metaDt}>증명사진 파일</dt>
-          <dd className={styles.metaDd}>{textOrEmpty(norm(data.re_img))}</dd>
-        </div>
-      </dl>
+      <div className={styles.applicationSheet}>
+        <header className={styles.spgAppHeader}>
+          <div className={styles.spgHeaderLeft}>
+            <span className={styles.spgAppBrandEn}>SPG</span>
+            <div className={styles.spgTitleBlock}>
+              <span className={styles.spgAppBrandKr}>주식회사에스피지</span>
+              <h1 className={styles.spgAppTitleMerged}>입사지원서</h1>
+            </div>
+          </div>
+          <table className={styles.spgAppCornerTable} aria-label="응시 요약">
+            <tbody>
+              <tr>
+                <th>응시구분</th>
+                <td>{norm(data.re_work_type).trim() || "…"}</td>
+              </tr>
+              <tr>
+                <th>응시부서</th>
+                <td>{norm(data.re_work).trim() || "…"}</td>
+              </tr>
+            </tbody>
+          </table>
+        </header>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>학력사항</h2>
+        <table className={styles.spgPersonGrid}>
+          <tbody>
+            <tr>
+              <th scope="row">채용공고</th>
+              <td colSpan={3}>{postSubject?.trim() || "(공고 제목 없음)"}</td>
+              <td rowSpan={7} className={styles.spgPhotoCell}>
+                {norm(data.re_img).trim() ? (
+                  <button
+                    type="button"
+                    className={styles.spgPhotoBtn}
+                    onClick={openProfilePhotoPreview}
+                    aria-label="증명사진 크게 보기"
+                  >
+                    <img
+                      src={recruitProfileImageUrl(norm(data.re_img))}
+                      alt=""
+                      className={styles.spgPhotoImg}
+                      width={105}
+                      height={133}
+                    />
+                  </button>
+                ) : (
+                  <div className={styles.spgPhotoPlaceholder}>(사진)</div>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">성명(한글)</th>
+              <td>{textOrEmpty(norm(data.re_name))}</td>
+              <th scope="row">성명(한자)</th>
+              <td>{textOrEmpty(norm(data.re_name_cn))}</td>
+            </tr>
+            <tr>
+              <th scope="row">성명(영문)</th>
+              <td colSpan={3}>{textOrEmpty(norm(data.re_name_en))}</td>
+            </tr>
+            <tr>
+              <th scope="row">생년월일</th>
+              <td>{textOrEmpty(norm(data.re_birth))}</td>
+              <th scope="row">성별</th>
+              <td>{textOrEmpty(norm(data.re_sex))}</td>
+            </tr>
+            <tr>
+              <th scope="row">휴대폰</th>
+              <td>{textOrEmpty(norm(data.re_hp))}</td>
+              <th scope="row">집전화</th>
+              <td>{textOrEmpty(norm(data.re_tel))}</td>
+            </tr>
+            <tr>
+              <th scope="row">이메일</th>
+              <td colSpan={3}>{textOrEmpty(norm(data.re_email))}</td>
+            </tr>
+            <tr>
+              <th scope="row">주소</th>
+              <td colSpan={3} className={styles.spgAddrCell}>
+                {textOrEmpty(
+                  joinAddr(
+                    norm(data.re_zip),
+                    norm(data.re_addr1),
+                    norm(data.re_addr2),
+                    norm(data.re_addr3),
+                    norm(data.re_addr_jibeon)
+                  )
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      {step1Attachments ? (
+        <section className={styles.spgSection}>
+          <h2 className={styles.spgSectionTitle}>첨부자료</h2>
+          {STEP1_ATTACHMENT_LABELS.map(({ key, label: blockTitle }) => {
+            const list = step1Attachments[key] ?? [];
+            return (
+              <div key={key} className={`${styles.attachBlock} ${styles.spgAttachBlock}`}>
+                <h3 className={styles.attachTitle}>{blockTitle}</h3>
+                {list.length === 0 ? (
+                  <p className={styles.empty}>(없음)</p>
+                ) : (
+                  <ul className={styles.attachList}>
+                    {list.map((f, i) => {
+                      const fileName = norm(f.pf_source) || norm(f.pf_file) || "(파일)";
+                      const href = recruitUploadFilePublicUrl(f);
+                      return (
+                        <li key={f.pf_id ?? `${key}-${i}`}>
+                          {href ? (
+                            <button
+                              type="button"
+                              className={styles.attachPreviewBtn}
+                              onClick={() => openAttachmentPreview(blockTitle, f)}
+                            >
+                              <span className={styles.attachPreviewName}>{fileName}</span>
+                              <span className={styles.attachPreviewAction}>미리보기</span>
+                            </button>
+                          ) : (
+                            <span className={styles.attachPreviewName}>{fileName}</span>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
+        </section>
+      ) : null}
+
+      <section className={styles.spgSection}>
+        <h2 className={styles.spgSectionTitle}>학력사항</h2>
         {schoolRows.length === 0 ? (
           <p className={styles.empty}>(없음)</p>
         ) : (
-          <table className={styles.table}>
+          <table className={`${styles.spgTable} ${styles.spgTableCentered}`}>
             <thead>
               <tr>
                 <th>기간</th>
                 <th>학교명</th>
                 <th>전공</th>
-                <th>구분</th>
-                <th>졸업여부</th>
+                <th>최종학력</th>
+                <th>이수구분</th>
               </tr>
             </thead>
             <tbody>
               {schoolRows.map((r, i) => {
                 const o = rowObj(r);
+                const finalIdx = schoolRows.findIndex(
+                  (x) => schoolFinalLabel(rowObj(x).last) === "최종학력"
+                );
+                const nameIdx = schoolRows.findIndex((x) => norm(rowObj(x).name).trim());
+                const badgeIdx = finalIdx >= 0 ? finalIdx : nameIdx;
+                const showRecent = norm(o.name).trim() && badgeIdx === i;
                 return (
                   <tr key={i}>
                     <td>
                       {norm(o.sdate)} ~ {norm(o.edate)}
                     </td>
-                    <td>{norm(o.name)}</td>
+                    <td className={styles.spgTdName}>
+                      {showRecent ? (
+                        <span className={styles.spgRecentBadge} title="최종학력">
+                          최근
+                        </span>
+                      ) : null}
+                      {norm(o.name)}
+                    </td>
                     <td>{norm(o.major)}</td>
-                    <td>{norm(o.last)}</td>
-                    <td>{norm(o.end)}</td>
+                    <td>{schoolFinalLabel(o.last)}</td>
+                    <td className={styles.spgTdChoices}>
+                      <SchoolEndCircles end={norm(o.end)} />
+                    </td>
                   </tr>
                 );
               })}
@@ -183,9 +390,9 @@ export default function RecruitApplyPreview({ data, postSubject }: RecruitApplyP
         )}
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>병역사항</h2>
-        <table className={styles.table}>
+      <section className={styles.spgSection}>
+        <h2 className={styles.spgSectionTitle}>병역사항</h2>
+        <table className={styles.spgTable}>
           <tbody>
             <tr>
               <th>구분</th>
@@ -207,135 +414,133 @@ export default function RecruitApplyPreview({ data, postSubject }: RecruitApplyP
         </table>
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>자격면허</h2>
+      <section className={styles.spgSection}>
+        <h2 className={styles.spgSectionTitle}>자격·면허</h2>
         {licenceRows.length === 0 ? (
           <p className={styles.empty}>(없음)</p>
         ) : (
-          licenceRows.map((r, i) => {
-            const o = rowObj(r);
-            return (
-              <div key={i} className={styles.listCard}>
-                <table className={styles.table}>
-                  <tbody>
-                    <tr>
-                      <th>취득일</th>
-                      <td>{norm(o.date)}</td>
-                    </tr>
-                    <tr>
-                      <th>자격증/면허명</th>
-                      <td>{norm(o.name)}</td>
-                    </tr>
-                    <tr>
-                      <th>등급</th>
-                      <td>{norm(o.grade)}</td>
-                    </tr>
-                    <tr>
-                      <th>발급구분</th>
-                      <td>{norm(o.output) || norm(o.publisher)}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            );
-          })
+          <table className={`${styles.spgTable} ${styles.spgTableCentered}`}>
+            <thead>
+              <tr>
+                <th>취득일</th>
+                <th>자격증·면허명</th>
+                <th>등급</th>
+                <th>발급기관</th>
+              </tr>
+            </thead>
+            <tbody>
+              {licenceRows.map((r, i) => {
+                const o = rowObj(r);
+                return (
+                  <tr key={i}>
+                    <td>{norm(o.date)}</td>
+                    <td>{norm(o.name)}</td>
+                    <td>{norm(o.grade)}</td>
+                    <td>{norm(o.output) || norm(o.publisher)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         )}
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>경력사항</h2>
+      <section className={styles.spgSection}>
+        <h2 className={styles.spgSectionTitle}>경력사항</h2>
         {careerRows.length === 0 ? (
           <p className={styles.empty}>(없음)</p>
         ) : (
-          careerRows.map((r, i) => {
-            const o = rowObj(r);
-            return (
-              <div key={i} className={styles.listCard}>
-                <table className={styles.table}>
-                  <tbody>
-                    <tr>
-                      <th>업체명</th>
-                      <td>{norm(o.name)}</td>
-                    </tr>
-                    <tr>
-                      <th>근무기간</th>
+          <div className={styles.spgHorizScroll}>
+            <table className={`${styles.spgTable} ${styles.spgTableCareer} ${styles.spgTableCentered}`}>
+              <thead>
+                <tr>
+                  <th>업체명</th>
+                  <th>근무기간</th>
+                  <th>직위</th>
+                  <th>근무부서</th>
+                  <th>담당업무</th>
+                  <th>급여</th>
+                  <th>소재지</th>
+                  <th>퇴사사유</th>
+                  <th>노조유무</th>
+                </tr>
+              </thead>
+              <tbody>
+                {careerRows.map((r, i) => {
+                  const o = rowObj(r);
+                  const firstCareerIdx = careerRows.findIndex((x) => norm(rowObj(x).name).trim());
+                  const showRecent =
+                    norm(o.name).trim() && firstCareerIdx === i && careerRows.some((x) =>
+                      norm(rowObj(x).name).trim()
+                    );
+                  return (
+                    <tr key={i}>
+                      <td className={styles.spgTdName}>
+                        {showRecent ? (
+                          <span className={styles.spgRecentBadge} title="가장 최근 경력">
+                            최근
+                          </span>
+                        ) : null}
+                        {norm(o.name)}
+                      </td>
                       <td>
                         {norm(o.sdate)} ~ {norm(o.edate)}
                       </td>
-                    </tr>
-                    <tr>
-                      <th>직위</th>
                       <td>{norm(o.position)}</td>
-                    </tr>
-                    <tr>
-                      <th>근무부서</th>
                       <td>{norm(o.part)}</td>
-                    </tr>
-                    <tr>
-                      <th>담당업무</th>
-                      <td>{norm(o.cont)}</td>
-                    </tr>
-                    <tr>
-                      <th>연봉(만원)</th>
+                      <td className={styles.spgCareerCont}>{norm(o.cont)}</td>
                       <td>{norm(o.salary)}</td>
-                    </tr>
-                    <tr>
-                      <th>소재지</th>
                       <td>{norm(o.location)}</td>
-                    </tr>
-                    <tr>
-                      <th>퇴사사유</th>
                       <td>{norm(o.reason)}</td>
+                      <td>
+                        <UnionCircles value={norm(o.union)} />
+                      </td>
                     </tr>
-                    <tr>
-                      <th>노조유무</th>
-                      <td>{norm(o.union)}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            );
-          })
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         )}
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>상벌사항</h2>
-        {awardRows.length === 0 ? (
-          <p className={styles.empty}>(없음)</p>
-        ) : (
-          awardRows.map((r, i) => {
-            const o = rowObj(r);
-            return (
-              <div key={i} className={styles.listCard}>
-                <table className={styles.table}>
-                  <tbody>
-                    <tr>
-                      <th>상벌내용</th>
-                      <td>{norm(o.cont)}</td>
+      <section className={styles.spgSection}>
+        <h2 className={styles.spgSectionTitle}>상벌사항</h2>
+        <div className={styles.spgAwardSplit}>
+          {[0, 1].map((half) => (
+            <table key={half} className={`${styles.spgTable} ${styles.spgTableCentered} ${styles.spgAwardHalf}`}>
+              <thead>
+                <tr>
+                  <th>상벌내용</th>
+                  <th>일자</th>
+                  <th>상벌기관</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 4 }, (_, row) => {
+                  const idx = half * 4 + row;
+                  const r = awardRows[idx];
+                  const o = r ? rowObj(r) : null;
+                  return (
+                    <tr key={row}>
+                      <td>{o ? norm(o.cont) : "\u00a0"}</td>
+                      <td>{o ? norm(o.date) : "\u00a0"}</td>
+                      <td>{o ? norm(o.publisher) : "\u00a0"}</td>
                     </tr>
-                    <tr>
-                      <th>일자</th>
-                      <td>{norm(o.date)}</td>
-                    </tr>
-                    <tr>
-                      <th>상벌기관</th>
-                      <td>{norm(o.publisher)}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            );
-          })
-        )}
+                  );
+                })}
+              </tbody>
+            </table>
+          ))}
+        </div>
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>외국어</h2>
+      <section className={styles.spgSection}>
+        <h2 className={styles.spgSectionTitle}>외국어</h2>
         {langRows.length === 0 ? (
           <p className={styles.empty}>(없음)</p>
         ) : (
-          <table className={styles.table}>
+          <table className={`${styles.spgTable} ${styles.spgTableCentered}`}>
             <thead>
               <tr>
                 <th>언어</th>
@@ -361,9 +566,9 @@ export default function RecruitApplyPreview({ data, postSubject }: RecruitApplyP
         )}
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>OA 활용</h2>
-        <table className={styles.table}>
+      <section className={styles.spgSection}>
+        <h2 className={styles.spgSectionTitle}>OA 활용</h2>
+        <table className={`${styles.spgTable} ${styles.spgTableCentered}`}>
           <tbody>
             {OA_LABELS.map((label, i) => (
               <tr key={label}>
@@ -375,9 +580,9 @@ export default function RecruitApplyPreview({ data, postSubject }: RecruitApplyP
         </table>
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>기타사항</h2>
-        <table className={styles.table}>
+      <section className={styles.spgSection}>
+        <h2 className={styles.spgSectionTitle}>기타사항</h2>
+        <table className={styles.spgTable}>
           <tbody>
             <tr>
               <th>통근방법</th>
@@ -411,48 +616,107 @@ export default function RecruitApplyPreview({ data, postSubject }: RecruitApplyP
         </table>
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>자기소개서</h2>
+      <section className={styles.spgSection}>
+        <h2 className={styles.spgSectionTitle}>면접소견 (인사팀 작성란)</h2>
+        <table className={styles.spgTable}>
+          <tbody>
+            <tr>
+              <th>면접일</th>
+              <td colSpan={3} className={styles.spgBlankLine}>
+                &nbsp;
+              </td>
+            </tr>
+            <tr>
+              <th>면접소견</th>
+              <td colSpan={3} className={styles.spgTallBlank}>
+                &nbsp;
+              </td>
+            </tr>
+            <tr>
+              <th>최종결정연봉</th>
+              <td className={styles.spgBlankLine}>&nbsp;</td>
+              <th>비고</th>
+              <td className={styles.spgBlankLine}>&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      </div>
+
+      <section className={`${styles.section} ${styles.docSectionProfile}`}>
+        <div className={styles.docSheetHeader}>
+          <div className={styles.docSheetHeaderLeft}>
+            {norm(data.re_name)}
+            {norm(data.re_sex) ? `(${norm(data.re_sex)})` : ""} {norm(data.re_hp)}
+          </div>
+          <div className={styles.docSheetHeaderRight}>
+            <span className={styles.docSheetCo}>주식회사에스피지</span>
+            <h2 className={styles.docSheetTitle}>자기소개서</h2>
+          </div>
+        </div>
+        <hr className={styles.docSheetRule} />
         {PROFILE_LABELS.map((title, i) => {
           const k = `re_profile${i + 1}`;
           const val = norm(data[k]);
           return (
-            <div key={k} className={styles.listCard}>
-              <h3 style={{ margin: "0 0 0.5rem", fontSize: "1.35rem", fontWeight: 700 }}>{title}</h3>
-              {val ? <p className={styles.pre}>{val}</p> : <p className={styles.empty}>(미입력)</p>}
+            <div key={k} className={styles.profileQBlock}>
+              <div className={styles.profileQHead}>{title}</div>
+              <div className={styles.profileQBody}>
+                {val ? <p className={styles.pre}>{val}</p> : <p className={styles.empty}>(미입력)</p>}
+              </div>
             </div>
           );
         })}
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>경력소개서</h2>
+      <section className={`${styles.section} ${styles.docSectionCareer}`}>
+        <div className={styles.docSheetHeader}>
+          <div className={styles.docSheetHeaderLeft}>
+            {norm(data.re_name)}
+            {norm(data.re_sex) ? `(${norm(data.re_sex)})` : ""} {norm(data.re_hp)}
+          </div>
+          <div className={styles.docSheetHeaderRight}>
+            <span className={styles.docSheetCo}>주식회사에스피지</span>
+            <h2 className={styles.docSheetTitle}>경력소개서</h2>
+          </div>
+        </div>
+        <hr className={styles.docSheetRuleAccent} />
         {historyRows.length === 0 ? (
           <p className={styles.empty}>(없음)</p>
         ) : (
           historyRows.map((r, i) => {
             const o = rowObj(r);
+            const hasName = Boolean(norm(o.name).trim());
+            const firstNamedIdx = historyRows.findIndex((x) => norm(rowObj(x).name).trim());
+            const showRecent = hasName && firstNamedIdx === i;
             return (
-              <div key={i} className={styles.listCard}>
-                <table className={styles.table}>
+              <div key={i} className={styles.historyCard}>
+                <table className={styles.historyTable}>
                   <tbody>
                     <tr>
-                      <th>회사명</th>
+                      <th>
+                        회사명
+                        {showRecent ? (
+                          <span className={styles.historyRecentBadge} title="가장 최근 경력">
+                            최근
+                          </span>
+                        ) : null}
+                      </th>
                       <td>{norm(o.name)}</td>
-                    </tr>
-                    <tr>
                       <th>담당업무</th>
                       <td>{norm(o.job)}</td>
                     </tr>
                     <tr>
                       <th>근무기간</th>
-                      <td>
+                      <td colSpan={3}>
                         {norm(o.sdate)} ~ {norm(o.edate)} ( {norm(o.year)}년 {norm(o.month)}개월 )
                       </td>
                     </tr>
                     <tr>
-                      <th>세부경력</th>
-                      <td>{norm(o.cont) ? <span className={styles.pre}>{norm(o.cont)}</span> : ""}</td>
+                      <th className={styles.historyDetailTh}>세부경력 소개</th>
+                      <td colSpan={3} className={styles.historyDetailTd}>
+                        {norm(o.cont) ? <span className={styles.pre}>{norm(o.cont)}</span> : ""}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -462,5 +726,60 @@ export default function RecruitApplyPreview({ data, postSubject }: RecruitApplyP
         )}
       </section>
     </div>
+
+    {attachmentPreview ? (
+      <div
+        className={styles.filePreviewBackdrop}
+        role="presentation"
+        onClick={() => setAttachmentPreview(null)}
+      >
+        <div
+          className={styles.filePreviewCard}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="file-preview-title"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className={styles.filePreviewHeader}>
+            <div>
+              <p className={styles.filePreviewEyebrow}>{attachmentPreview.title}</p>
+              <h3 id="file-preview-title" className={styles.filePreviewTitle}>
+                {attachmentPreview.fileLabel}
+              </h3>
+            </div>
+            <button
+              type="button"
+              className={styles.filePreviewClose}
+              onClick={() => setAttachmentPreview(null)}
+            >
+              닫기
+            </button>
+          </div>
+          <div className={styles.filePreviewBody}>
+            {attachmentPreview.kind === "image" ? (
+              <img
+                src={attachmentPreview.url}
+                alt={attachmentPreview.fileLabel}
+                className={styles.filePreviewImage}
+              />
+            ) : attachmentPreview.kind === "pdf" ? (
+              <iframe
+                title={attachmentPreview.fileLabel}
+                src={attachmentPreview.url}
+                className={styles.filePreviewIframe}
+              />
+            ) : (
+              <p className={styles.filePreviewOther}>
+                이 형식은 여기서 바로 미리보기할 수 없습니다.{" "}
+                <a href={attachmentPreview.url} target="_blank" rel="noreferrer">
+                  새 창에서 열기
+                </a>
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    ) : null}
+    </Fragment>
   );
 }

@@ -24,7 +24,7 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
     items: [
       {
         label: "접속 분석",
-        description: "g5_visit · 집계 / 검색",
+        description: "접속 집계·로그 검색",
         href: "/admin/analytics/visitors",
       },
     ],
@@ -34,12 +34,12 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
     items: [
       {
         label: "제품 카테고리",
-        description: "spg_product_category",
+        description: "카테고리 구조·노출",
         href: "/admin/products/categories",
       },
       {
         label: "제품 콘텐츠",
-        description: "spg_products · 매핑·첨부",
+        description: "상품 등록·첨부",
         href: "/admin/products",
       },
     ],
@@ -49,37 +49,34 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
     items: [
       {
         label: "프랜차이즈 관리",
-        description: "등록 / 수정 / 삭제",
+        description: "등록·수정·삭제",
         href: "/admin/marketing/franchise",
       },
-      { label: "인기검색어", description: "populars / ranks" },
     ],
   },
   {
     title: "고객지원",
     items: [
-      // {
-      //   label: "문의 설정",
-      //   description: "qa_config",
-      //   href: "/admin/customersupport/qa-config",
-      // },
       {
         label: "FAQ 관리",
-        description: "faqs / faq_master",
+        description: "질문·답변",
         href: "/admin/customersupport/faq",
       },
       {
         label: "채용공고",
-        description: "manage_posts · 등록/수정",
+        description: "공고 등록·수정",
         href: "/admin/customersupport/recruit-posts",
       },
       {
         label: "채용 지원자",
-        description: "g5_recurit · applications",
+        description: "지원서 목록·열람",
         href: "/admin/customersupport/recruit",
       },
-      { label: "문의 설정", description: "qa_config" },
-      // { label: "FAQ 관리", description: "faqs / faq_master" },
+      {
+        label: "문의 설정",
+        description: "문의 폼·안내 문구",
+        href: "/admin/customersupport/qa-config",
+      },
     ],
   },
   {
@@ -87,42 +84,34 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
     items: [
       {
         label: "IR공고",
-        description: "ir_notice posts",
+        description: "공고 관리",
         href: "/admin/ir/announcement",
       },
       {
         label: "IR콘텐츠",
-        description: "ir_content posts",
+        description: "콘텐츠 관리",
         href: "/admin/ir/content",
       },
       {
         label: "IR행사",
-        description: "ir_event posts",
+        description: "행사 일정",
         href: "/admin/ir/event",
       },
       {
         label: "재무상태표",
-        description: "financial_statement",
+        description: "공시 자료",
         href: "/admin/ir/financial-statement",
       },
       {
         label: "손익계산서",
-        description: "income_statement",
+        description: "공시 자료",
         href: "/admin/ir/income-statement",
       },
       {
         label: "현금흐름표",
-        description: "cash_flow",
+        description: "공시 자료",
         href: "/admin/ir/cash-flow",
       },
-    ],
-  },
-  {
-    title: "회사소개",
-    items: [
-      { label: "회사 정보", description: "company" },
-      { label: "콘텐츠 관리", description: "contents" },
-      { label: "팝업 관리", description: "popup" },
     ],
   },
 ];
@@ -141,6 +130,9 @@ function isItemActive(pathname: string, href?: string) {
   }
   if (href === "/admin/analytics/visitors") {
     return pathname.startsWith("/admin/analytics");
+  }
+  if (href === "/admin/customersupport/qa-config") {
+    return pathname === href;
   }
   return pathname.startsWith(href);
 }

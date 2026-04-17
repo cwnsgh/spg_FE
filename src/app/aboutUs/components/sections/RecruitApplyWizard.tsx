@@ -21,8 +21,10 @@ import {
   RECRUIT_EXAM_CATEGORY_OPTIONS,
   RECRUIT_SCHOOL_END_OPTIONS,
 } from "./recruitApplyStep1Options";
+import { recruitProfileImageUrl } from "./recruitApplyAssets";
 import { toDateInputValue } from "./recruitFormRules";
 import RecruitApplyPreview from "./RecruitApplyPreview";
+import { requestRecruitApplyPreviewPrint } from "./requestRecruitApplyPreviewPrint";
 
 const MAX_LICENCE_ROWS = 7;
 const MAX_CAREER_ROWS = 5;
@@ -523,43 +525,82 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
     void reload();
   }, [reload]);
 
-  const draftFingerprint = JSON.stringify({
-    uiStep,
-    re_work_type,
-    re_work,
-    re_name,
-    re_name_cn,
-    re_name_en,
-    re_hp,
-    re_tel,
-    re_email,
-    re_birth,
-    re_sex,
-    re_zip,
-    re_addr1,
-    re_addr2,
-    re_addr3,
-    re_addr_jibeon,
-    re_img,
-    re_school,
-    re_army,
-    re_licence,
-    re_career,
-    re_award,
-    re_lang,
-    re_oa,
-    re_add,
-    re_profile1,
-    re_profile2,
-    re_profile3,
-    re_profile4,
-    re_profile5,
-    re_history,
-  });
+  const draftFingerprint = useMemo(
+    () =>
+      JSON.stringify({
+        uiStep,
+        re_work_type,
+        re_work,
+        re_name,
+        re_name_cn,
+        re_name_en,
+        re_hp,
+        re_tel,
+        re_email,
+        re_birth,
+        re_sex,
+        re_zip,
+        re_addr1,
+        re_addr2,
+        re_addr3,
+        re_addr_jibeon,
+        re_img,
+        re_school,
+        re_army,
+        re_licence,
+        re_career,
+        re_award,
+        re_lang,
+        re_oa,
+        re_add,
+        re_profile1,
+        re_profile2,
+        re_profile3,
+        re_profile4,
+        re_profile5,
+        re_history,
+      }),
+    [
+      uiStep,
+      re_work_type,
+      re_work,
+      re_name,
+      re_name_cn,
+      re_name_en,
+      re_hp,
+      re_tel,
+      re_email,
+      re_birth,
+      re_sex,
+      re_zip,
+      re_addr1,
+      re_addr2,
+      re_addr3,
+      re_addr_jibeon,
+      re_img,
+      re_school,
+      re_army,
+      re_licence,
+      re_career,
+      re_award,
+      re_lang,
+      re_oa,
+      re_add,
+      re_profile1,
+      re_profile2,
+      re_profile3,
+      re_profile4,
+      re_profile5,
+      re_history,
+    ]
+  );
 
   useEffect(() => {
     if (!didInitialHydrate) return;
-    setIsDirty(draftFingerprint !== lastSavedFingerprintRef.current);
+    const t = window.setTimeout(() => {
+      setIsDirty(draftFingerprint !== lastSavedFingerprintRef.current);
+    }, 120);
+    return () => window.clearTimeout(t);
   }, [didInitialHydrate, draftFingerprint]);
 
   useEffect(() => {
@@ -587,6 +628,12 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
 
     const schoolOk = re_school.some((r) => r.name.trim() && r.major.trim());
     if (!schoolOk) missing.push("학력(학교명+전공)");
+    else {
+      const finalOk = re_school.some(
+        (r) => r.name.trim() && r.major.trim() && r.last === "1"
+      );
+      if (!finalOk) missing.push("최종학력(해당 학력에 체크 1곳)");
+    }
 
     return missing;
   };
@@ -813,8 +860,12 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
     };
   };
 
+  /** 미리보기 카드가 닫혀 있을 때는 폼 입력마다 무거운 payload를 만들지 않습니다. */
+  const previewDraftKey = showApplyPreview ? draftFingerprint : "__preview_closed__";
+
   /** 미리보기·인쇄용 — 현재 폼 상태를 서버 저장 형태와 동일하게 합칩니다. */
   const previewApplyBundle = useMemo((): Record<string, unknown> => {
+    if (!showApplyPreview) return {};
     return {
       re_id: reId,
       re_status: reStatus,
@@ -823,8 +874,7 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
       ...buildStepPayload(3),
       ...buildStepPayload(4),
     };
-    /* buildStepPayload 본문은 draftFingerprint에 포함된 상태에 의존 */
-  }, [draftFingerprint, reId, reStatus]);
+  }, [showApplyPreview, previewDraftKey, reId, reStatus]);
 
   const autosaveCurrentStep = useCallback(async () => {
     if (!reId) return;
@@ -955,6 +1005,7 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
                 "주소",
                 "증명사진",
                 "학력",
+                "최종학력",
                 "응시구분",
                 "응시부서",
                 "성명",
@@ -1013,7 +1064,13 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
       await recruitUploadFile("recurit", file);
       setMsg("증명사진이 등록되었습니다.");
       if (photoInputRef.current) photoInputRef.current.value = "";
-      await reload();
+      // 전체 reload + hydrate 하면 서버에 아직 저장되지 않은 필드(응시구분·응시부서 등)가 비워짐.
+      // 증명사진만 서버에서 다시 읽어 반영한다.
+      const row = await recruitGetApply();
+      setRe_img(norm(row.re_img));
+      const nextId = Number(row.re_id ?? 0);
+      if (nextId > 0) setReId(nextId);
+      setReStatus(Number(row.re_status ?? 0));
     } catch (e) {
       if (e instanceof ApiError) setErr(e.message);
       else setErr("업로드에 실패했습니다.");
@@ -1243,7 +1300,17 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
               <div className={styles.step1PersonLayout}>
                 <div className={styles.photoColumn}>
                   <div className={styles.photoFrame}>
-                    {re_img.trim() ? "등록됨" : "사진"}
+                    {re_img.trim() ? (
+                      <img
+                        src={recruitProfileImageUrl(re_img)}
+                        alt="증명사진 미리보기"
+                        width={150}
+                        height={200}
+                        decoding="async"
+                      />
+                    ) : (
+                      <span>사진</span>
+                    )}
                   </div>
                   <input
                     ref={photoInputRef}
@@ -1404,7 +1471,8 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
 
             <h3 className={styles.wizardSubSectionTitle}>학력사항</h3>
             <p className={styles.hint}>
-              최대 {MAX_SCHOOL_ROWS}개까지 가능합니다.
+              최대 {MAX_SCHOOL_ROWS}개까지 가능합니다. 최종학력은{" "}
+              <strong>한 행만</strong> 체크할 수 있습니다.
             </p>
             {re_school.map((row, i) => (
               <div key={i} className={styles.arrayBlock}>
@@ -1435,12 +1503,17 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
                         type="checkbox"
                         checked={row.last === "1"}
                         onChange={(e) => {
-                          const next = [...re_school];
-                          next[i] = {
-                            ...row,
-                            last: e.target.checked ? "1" : "",
-                          };
-                          setRe_school(next);
+                          const checked = e.target.checked;
+                          setRe_school(
+                            re_school.map((r, j) => {
+                              if (!checked) {
+                                return j === i ? { ...r, last: "" } : r;
+                              }
+                              return j === i
+                                ? { ...r, last: "1" }
+                                : { ...r, last: "" };
+                            })
+                          );
                         }}
                       />
                       최종학력
@@ -1738,9 +1811,9 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
                 <div className={styles.careerLabel}>취득일</div>
                 <div className={styles.careerCell}>
                   <input
-                    className={styles.careerUnderlineInput}
+                    type="date"
+                    className={styles.careerDateInput}
                     value={row.date}
-                    placeholder="취득일을 적어주세요"
                     onChange={(e) => {
                       const n = [...re_licence];
                       n[i] = { ...row, date: e.target.value };
@@ -2123,9 +2196,9 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
                 <div className={styles.careerLabel}>일자</div>
                 <div className={styles.careerCell}>
                   <input
-                    className={styles.careerUnderlineInput}
+                    type="date"
+                    className={styles.careerDateInput}
                     value={row.date}
-                    placeholder="발급일자"
                     onChange={(e) => {
                       const n = [...re_award];
                       n[i] = { ...row, date: e.target.value };
@@ -2871,24 +2944,42 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
             aria-modal="true"
             aria-labelledby="apply-preview-title"
             onClick={(e) => e.stopPropagation()}
-            style={{ width: "min(110rem, 98vw)", maxHeight: "min(90vh, 96rem)", overflowY: "auto" }}
           >
-            <h4 id="apply-preview-title" className={styles.modalTitle}>
-              입사지원서 미리보기
-            </h4>
-            <p className={styles.modalText}>
-              아래 내용은 현재 작성 중인 화면 기준입니다. 인쇄 시 브라우저 메뉴에서
-              &quot;PDF로 저장&quot;을 선택할 수 있습니다.
-            </p>
-            <div className={`${styles.modalActions} ${styles.applyPreviewActions}`}>
-              <button type="button" className={styles.btnPrimary} onClick={() => window.print()}>
-                인쇄 / PDF 저장
-              </button>
-              <button type="button" className={styles.btn} onClick={() => setShowApplyPreview(false)}>
-                닫기
-              </button>
+            <div className={styles.applyPreviewHeader}>
+              <h4 id="apply-preview-title" className={styles.modalTitle}>
+                입사지원서 미리보기
+              </h4>
+              <p className={styles.modalText}>
+                아래 내용은 현재 작성 중인 화면 기준입니다. 인쇄 시 브라우저 메뉴에서
+                &quot;PDF로 저장&quot;을 선택할 수 있습니다.
+              </p>
+              <div className={`${styles.modalActions} ${styles.applyPreviewActions}`}>
+                <button
+                  type="button"
+                  className={styles.btnPrimary}
+                  onClick={() => requestRecruitApplyPreviewPrint()}
+                >
+                  인쇄 / PDF 저장
+                </button>
+                <button type="button" className={styles.btn} onClick={() => setShowApplyPreview(false)}>
+                  닫기
+                </button>
+              </div>
             </div>
-            <RecruitApplyPreview data={previewApplyBundle} postSubject={detail?.subject} />
+            <div className={styles.applyPreviewScroll}>
+              <div id="recruit-apply-print-root">
+                <RecruitApplyPreview
+                  data={previewApplyBundle}
+                  postSubject={detail?.subject}
+                  step1Attachments={{
+                    fgrade: extraFiles.fgrade as { pf_source?: string; pf_file?: string }[],
+                    fscore: extraFiles.fscore as { pf_source?: string; pf_file?: string }[],
+                    fcerti: extraFiles.fcerti as { pf_source?: string; pf_file?: string }[],
+                    fcareer: extraFiles.fcareer as { pf_source?: string; pf_file?: string }[],
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       ) : null}

@@ -137,8 +137,8 @@ export default function AdminVisitAnalyticsPage() {
       <header className={styles.intro}>
         <h1>접속 통계</h1>
         <p>
-          그누보드 g5_visit · g5_visit_sum 기준입니다. 접속 로그는 사이트에서 기록이 쌓이도록
-          연동되어 있어야 합니다.
+          접속 로그와 일·월별 집계를 조회합니다. 사이트에서 방문 기록이 쌓이도록 연동되어 있어야
+          합니다.
         </p>
       </header>
 

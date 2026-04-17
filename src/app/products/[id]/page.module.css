@@ -1,6 +1,10 @@
 .main {
   padding: 100px 0 0;
   background-color: #fff;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: clip;
 }
 
 .loadingMsg {
@@ -12,7 +16,11 @@
 .breadcrumbArea {
   margin-bottom: 80px;
   display: flex;
-  justify-content: first baseline;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* 제품 상세 영역 */
@@ -325,8 +333,21 @@
 }
 
 @media (max-width: 1050px) {
+  .main {
+    padding-top: 8rem;
+  }
+
+  .loadingMsg {
+    padding: 3rem var(--layout-side-mo);
+  }
+
+  .breadcrumbArea {
+    margin-bottom: 2.4rem;
+  }
+
   .productDetail {
     padding: 0 var(--layout-side-mo);
+    min-width: 0;
   }
 
   .productTitleKorean {
@@ -363,11 +384,8 @@
   .productImage {
     flex: 0 0 auto;
     width: min(700px, 100%);
+    max-width: 100%;
     margin-inline: auto;
-  }
-
-  .featuresGrid {
-    grid-template-columns: 1fr;
   }
 
   .downloadButtons {
@@ -395,6 +413,7 @@
     transform: translateY(0);
   }
   .featuresList {
+    grid-template-columns: 1fr;
     gap: 2.5rem 2rem;
   }
   .featureItem {
@@ -416,10 +435,13 @@
     line-height: 1.5;
   }
   .contentArea {
-    min-height: 70rem;
+    min-height: auto;
+    padding: 2rem 1.6rem;
+    margin-bottom: 3rem;
   }
   .content {
     font-size: 2rem;
+    text-align: left;
   }
 
   .listButtonArea {
