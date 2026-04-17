@@ -5,7 +5,8 @@
 export function requestRecruitApplyPreviewPrint(): void {
   document.body.classList.add("recruit-apply-preview-printing");
 
-  let failSafe: ReturnType<typeof window.setTimeout> | undefined;
+  /** 브라우저는 `number`, Node 타입 병합 시 `Timeout` — 빌드 호환을 위해 브라우저 타이머 id만 사용 */
+  let failSafe: number | undefined;
 
   const cleanup = () => {
     if (failSafe != null) {

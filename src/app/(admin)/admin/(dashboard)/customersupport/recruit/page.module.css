@@ -89,9 +89,11 @@
 
 .table {
   width: 100%;
+  min-width: 72rem;
   border-collapse: collapse;
   font-size: 1.4rem;
-  table-layout: fixed;
+  /* auto: 공고·첨부가 길어도 지원자·연락처 열이 0으로 압축되지 않음 — 좁으면 가로 스크롤 */
+  table-layout: auto;
 }
 
 .table th,
@@ -109,34 +111,50 @@
   white-space: nowrap;
 }
 
+/* 열 너비 힌트(%) — 합이 100% 근처, 나머지는 브라우저가 배분 */
 .colStatus {
-  width: 8.8rem;
+  width: 5%;
+  min-width: 7.5rem;
 }
 
 .colPost {
-  width: min(38rem, 36%);
-  min-width: 22rem;
+  width: 37%;
+  min-width: 12rem;
 }
 
 .colType,
 .colWork {
-  width: 11rem;
+  width: 4%;
+  min-width: 8.5rem;
 }
 
 .colApplicant {
-  width: 11rem;
+  width: 4%;
+  min-width: 10rem;
 }
 
 .colPhone {
-  width: 12rem;
+  width: 8%;
+  min-width: 11rem;
 }
 
 .colDate {
-  width: 10rem;
+  width: 5%;
+  min-width: 9rem;
 }
 
 .colHistory {
-  width: 9rem;
+  width: 8%;
+  min-width: 8.5rem;
+}
+
+/* 본문 행: 지원자(5)·연락처(6) 열이 첨부 많을 때도 최소 폭 유지 */
+.table tbody td:nth-child(5) {
+  min-width: 10rem;
+}
+
+.table tbody td:nth-child(6) {
+  min-width: 11rem;
 }
 
 .table tr:last-child td {
@@ -165,6 +183,10 @@
   flex-wrap: wrap;
   gap: 0.45rem 0.55rem;
   align-items: stretch;
+  max-height: 9.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.2rem;
 }
 
 .fileBadgeWrap {
@@ -176,7 +198,7 @@
 }
 
 .fileBadgeBtn {
-  max-width: min(22rem, 100%);
+  max-width: min(16rem, 100%);
   padding: 0.3rem 0.65rem;
   border-radius: 0.45rem;
   background: #f3f4f6;
@@ -210,7 +232,9 @@
 }
 
 .postCell {
-  max-width: none;
+  max-width: 28rem;
+  min-width: 0;
+  vertical-align: top;
 }
 
 .postTitle {
@@ -318,8 +342,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: max(1.2rem, env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px))
-    max(1.2rem, env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px));
+  padding: max(1.2rem, env(safe-area-inset-top, 0px))
+    max(1rem, env(safe-area-inset-right, 0px))
+    max(1.2rem, env(safe-area-inset-bottom, 0px))
+    max(1rem, env(safe-area-inset-left, 0px));
   background: rgba(15, 23, 42, 0.55);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
