@@ -16,7 +16,190 @@
   line-height: 1.65;
   color: #555;
   margin: 0;
-  max-width: 56rem;
+  max-width: 64rem;
+}
+
+.searchWrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.8rem;
+}
+
+.searchInput {
+  width: 100%;
+  max-width: 36rem;
+  height: 4.4rem;
+  border: 1px solid #d6dbe3;
+  border-radius: 999px;
+  padding: 0 1.6rem;
+  font-size: 1.55rem;
+  color: #1f2937;
+  background: #fff;
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #122e64;
+  box-shadow: 0 0 0 3px rgba(18, 46, 100, 0.12);
+}
+
+.status,
+.statusError {
+  margin: 2.4rem 0 0;
+  font-size: 1.7rem;
+  line-height: 1.6;
+}
+
+.status {
+  color: #555;
+}
+
+.statusError {
+  color: #b42318;
+}
+
+.fileList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 2px solid #1f2937;
+  border-bottom: 1px solid #d9dee7;
+  background: #fff;
+}
+
+.listHead {
+  margin-top: 2.4rem;
+  display: grid;
+  grid-template-columns: minmax(22rem, 0.42fr) 1fr 10rem;
+  gap: 1rem;
+  align-items: center;
+  padding: 0 0.8rem 0.9rem 1.2rem;
+  font-size: 1.32rem;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+.groupRow {
+  border-bottom: 1px solid #e5e7eb;
+  display: grid;
+  grid-template-columns: minmax(22rem, 0.42fr) 1fr;
+  gap: 1rem;
+}
+
+.groupRow:last-child {
+  border-bottom: 0;
+}
+
+.groupCategory {
+  margin: 0;
+  padding: 1.4rem 0.4rem 1.4rem 1.2rem;
+  color: #374151;
+  font-size: 1.56rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.groupFiles {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.groupFileRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 5.1rem;
+  padding: 0.8rem 0.8rem 0.8rem 0;
+  border-top: 1px solid #eef2f7;
+}
+
+.groupFileRow:first-child {
+  border-top: 0;
+}
+
+.categoryName {
+  color: #374151;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.categoryNameEn {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.fileTitle {
+  color: #111827;
+  font-weight: 600;
+  font-size: 1.52rem;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pagination {
+  margin-top: 1.6rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.pageBtn {
+  height: 3.2rem;
+  min-width: 5.8rem;
+  border: 1px solid #cfd8e3;
+  border-radius: 0.6rem;
+  background: #fff;
+  color: #334155;
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: 0 1rem;
+}
+
+.pageBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 1.32rem;
+  color: #475569;
+  min-width: 5.8rem;
+  text-align: center;
+}
+
+.downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 8.8rem;
+  border-radius: 0.6rem;
+  border: 1px solid #cbd5e1;
+  color: #122e64;
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: 0.62rem 1rem;
+  background: #f8fafc;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.downloadBtn:hover {
+  background: #122e64;
+  color: #fff;
+  border-color: #122e64;
 }
 
 @media (max-width: 768px) {
@@ -32,5 +215,62 @@
 
   .description {
     font-size: 1.6rem;
+  }
+
+  .status,
+  .statusError {
+    margin-top: 1.8rem;
+    font-size: 1.55rem;
+  }
+
+  .searchWrap {
+    margin-top: 1.4rem;
+    justify-content: stretch;
+  }
+
+  .searchInput {
+    max-width: none;
+    height: 3.9rem;
+    font-size: 1.45rem;
+    padding: 0 1.3rem;
+  }
+
+  .fileList {
+    margin-top: 1.8rem;
+  }
+
+  .listHead {
+    display: none;
+  }
+
+  .groupRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .groupCategory {
+    padding: 0.95rem 0.6rem 0.65rem;
+    font-size: 1.34rem;
+    color: #64748b;
+  }
+
+  .groupFileRow {
+    min-height: 4.7rem;
+    padding: 0.72rem 0.2rem 0.72rem 0.6rem;
+  }
+
+  .fileTitle {
+    font-size: 1.38rem;
+  }
+
+  .downloadBtn {
+    min-width: 7.8rem;
+    font-size: 1.22rem;
+    padding: 0.55rem 0.7rem;
+  }
+
+  .pagination {
+    justify-content: center;
+    margin-top: 1.4rem;
   }
 }
