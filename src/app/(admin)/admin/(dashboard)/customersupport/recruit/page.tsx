@@ -9,6 +9,7 @@ import {
   type RecruitApplicationFilePreview,
   type RecruitApplicationRow,
   type RecruitApplicationsResponse,
+  updateAdminRecruitApplicationStatuses,
 } from "@/api";
 import RecruitApplyPreview from "@/app/aboutUs/components/sections/RecruitApplyPreview";
 import {
@@ -68,6 +69,19 @@ export default function AdminRecruitApplicationsPage() {
     url: string;
     kind: "image" | "pdf" | "other";
   } | null>(null);
+  const [listFileDialog, setListFileDialog] = useState<{
+    rowTitle: string;
+    files: RecruitApplicationFilePreview[];
+  } | null>(null);
+  const [pendingStatusChange, setPendingStatusChange] = useState<{
+    reId: number;
+    applicantName: string;
+    oldStatus: number;
+    oldLabel: string;
+    nextStatus: number;
+    nextLabel: string;
+  } | null>(null);
+  const [statusChanging, setStatusChanging] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -216,7 +230,46 @@ export default function AdminRecruitApplicationsPage() {
     const name = (f.pf_file || f.url || "").trim();
     const kind = recruitUploadPreviewKind(name);
     const title = f.pf_source?.trim() || f.pf_file || "첨부";
+    // 목록 모달 위에 미리보기 모달이 가려지지 않도록 목록은 먼저 닫습니다.
+    setListFileDialog(null);
     setListFilePreview({ title, url, kind });
+  };
+
+  const resolveRecruitFileHref = (f: RecruitApplicationFilePreview) => {
+    const built = recruitUploadFilePublicUrl({ url: f.url, pf_file: f.pf_file }).trim();
+    return built || fileOpenHref(f.url || "");
+  };
+
+  const statusLabel = (value: number) =>
+    statusOptions.find((s) => s.value === value)?.label || `상태 ${value}`;
+
+  const requestStatusChange = (row: RecruitApplicationRow, nextStatus: number) => {
+    const oldStatus = row.re_status;
+    if (nextStatus === oldStatus) return;
+    setPendingStatusChange({
+      reId: row.re_id,
+      applicantName: row.applicant.name || String(row.re_id),
+      oldStatus,
+      oldLabel: statusLabel(oldStatus),
+      nextStatus,
+      nextLabel: statusLabel(nextStatus),
+    });
+  };
+
+  const confirmStatusChange = async () => {
+    if (!pendingStatusChange) return;
+    setStatusChanging(true);
+    try {
+      await updateAdminRecruitApplicationStatuses([
+        { re_id: pendingStatusChange.reId, re_status: pendingStatusChange.nextStatus },
+      ]);
+      setPendingStatusChange(null);
+      setRefreshKey((k) => k + 1);
+    } catch (e) {
+      alert(e instanceof ApiError ? e.message : "상태 변경에 실패했습니다.");
+    } finally {
+      setStatusChanging(false);
+    }
   };
 
   useEffect(() => {
@@ -352,8 +405,8 @@ export default function AdminRecruitApplicationsPage() {
                     <select
                       className={styles.statusSelect}
                       value={row.re_status}
-                      disabled
                       aria-label={`상태 ${row.applicant.name || row.re_id}`}
+                      onChange={(e) => requestStatusChange(row, Number(e.target.value))}
                     >
                       {statusOptions.map((s) => (
                         <option key={s.value} value={s.value}>
@@ -366,41 +419,25 @@ export default function AdminRecruitApplicationsPage() {
                     <div className={styles.postTitle} title={row.post.subject || "—"}>
                       {row.post.subject || "—"}
                     </div>
-                    {previewFiles.length ? (
-                      <div className={styles.fileBadges}>
-                        {previewFiles.map((f) => {
-                          const label = f.pf_source?.trim() || f.pf_file || "첨부";
-                          const tabHref =
-                            recruitUploadFilePublicUrl({
-                              url: f.url,
-                              pf_file: f.pf_file,
-                            }).trim() || fileOpenHref(f.url || "");
-                          return (
-                            <span key={`${f.pf_id}-${f.pf_file}-${f.url}`} className={styles.fileBadgeWrap}>
-                              <button
-                                type="button"
-                                className={styles.fileBadgeBtn}
-                                title={`${label} — 미리보기`}
-                                onClick={() => openListFilePreview(f)}
-                              >
-                                {label}
-                              </button>
-                              {tabHref && tabHref !== "#" ? (
-                                <a
-                                  href={tabHref}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  className={styles.fileBadgeOpen}
-                                  title="새 창에서 열기"
-                                >
-                                  열기
-                                </a>
-                              ) : null}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    ) : null}
+                    <div className={styles.fileSummaryRow}>
+                      <span className={styles.fileSummaryText}>
+                        첨부 {previewFiles.length}개
+                      </span>
+                      {previewFiles.length ? (
+                        <button
+                          type="button"
+                          className={styles.fileSummaryBtn}
+                          onClick={() =>
+                            setListFileDialog({
+                              rowTitle: row.post.subject || `지원서 #${row.re_id}`,
+                              files: previewFiles,
+                            })
+                          }
+                        >
+                          보기
+                        </button>
+                      ) : null}
+                    </div>
                   </td>
                   <td>{row.re_type || "무관"}</td>
                   <td>{row.re_work || "—"}</td>
@@ -526,6 +563,117 @@ export default function AdminRecruitApplicationsPage() {
                   </a>
                 </p>
               )}
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {listFileDialog ? (
+        <div
+          className={styles.fileListBackdrop}
+          role="presentation"
+          onClick={() => setListFileDialog(null)}
+        >
+          <div
+            className={styles.fileQuickCard}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="admin-file-list-title"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.fileQuickHeader}>
+              <div>
+                <p className={styles.fileQuickEyebrow}>첨부파일 목록</p>
+                <p id="admin-file-list-title" className={styles.fileQuickTitle}>
+                  {listFileDialog.rowTitle}
+                </p>
+              </div>
+              <button
+                type="button"
+                className={styles.fileQuickClose}
+                onClick={() => setListFileDialog(null)}
+              >
+                닫기
+              </button>
+            </div>
+            <div className={styles.fileListBody}>
+              {listFileDialog.files.map((f) => {
+                const label = f.pf_source?.trim() || f.pf_file || "첨부";
+                const href = resolveRecruitFileHref(f);
+                return (
+                  <div key={`${f.pf_id}-${f.pf_file}-${f.url}`} className={styles.fileListRow}>
+                    <span className={styles.fileListName}>{label}</span>
+                    <div className={styles.fileListActions}>
+                      <button
+                        type="button"
+                        className={styles.fileListBtn}
+                        onClick={() => openListFilePreview(f)}
+                      >
+                        미리보기
+                      </button>
+                      {href && href !== "#" ? (
+                        <>
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={styles.fileListBtn}
+                          >
+                            새창
+                          </a>
+                          <a href={href} download className={styles.fileListBtn}>
+                            다운로드
+                          </a>
+                        </>
+                      ) : null}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {pendingStatusChange ? (
+        <div
+          className={styles.statusModalBackdrop}
+          role="presentation"
+          onClick={() => (statusChanging ? null : setPendingStatusChange(null))}
+        >
+          <div
+            className={styles.statusModalCard}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="status-change-title"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p id="status-change-title" className={styles.statusModalTitle}>
+              상태를 변경하시겠습니까?
+            </p>
+            <p className={styles.statusModalText}>
+              {pendingStatusChange.applicantName} 지원자 상태를
+            </p>
+            <p className={styles.statusModalFlow}>
+              ({pendingStatusChange.oldLabel}) → ({pendingStatusChange.nextLabel})
+            </p>
+            <div className={styles.statusModalActions}>
+              <button
+                type="button"
+                className={styles.secondaryButton}
+                onClick={() => setPendingStatusChange(null)}
+                disabled={statusChanging}
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                className={styles.primaryButton}
+                onClick={() => void confirmStatusChange()}
+                disabled={statusChanging}
+              >
+                {statusChanging ? "변경 중..." : "변경"}
+              </button>
             </div>
           </div>
         </div>

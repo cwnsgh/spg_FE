@@ -8,6 +8,7 @@ import styles from "./TechnicalSection.module.css";
 type TechnicalFileItem = {
   fileId: number;
   title: string;
+  titleEn: string;
   fileUrl: string;
   categoryName: string;
   categoryNameEn: string;
@@ -27,6 +28,7 @@ function collectDepth1Files(nodes: ProductCategoryNode[]): TechnicalFileItem[] {
       out.push({
         fileId: file.file_id,
         title: file.title_ko?.trim() || fileNameFromPath(file.file_path),
+        titleEn: file.title_en?.trim() || "",
         fileUrl: toBackendAssetUrl(file.file_path),
         categoryName: node.name_ko,
         categoryNameEn: node.name_en ?? "",
@@ -71,7 +73,8 @@ export default function TechnicalSection() {
       (item) =>
         item.categoryName.toLowerCase().includes(q) ||
         item.categoryNameEn.toLowerCase().includes(q) ||
-        item.title.toLowerCase().includes(q)
+        item.title.toLowerCase().includes(q) ||
+        item.titleEn.toLowerCase().includes(q)
     );
   }, [items, keyword]);
 
@@ -156,6 +159,11 @@ export default function TechnicalSection() {
                   {group.files.map((item) => (
                     <li key={item.fileId} className={styles.groupFileRow}>
                       <span className={styles.fileTitle}>{item.title}</span>
+                      {item.titleEn ? (
+                        <span className={styles.fileTitleEn}>
+                          ({item.titleEn})
+                        </span>
+                      ) : null}
                       <a
                         href={item.fileUrl}
                         className={styles.downloadBtn}

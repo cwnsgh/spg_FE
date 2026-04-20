@@ -126,3 +126,36 @@ export async function getAdminRecruitApplyPreview(reId: number) {
   }
   throw new ApiError("지원서 데이터를 불러오지 못했습니다.", 500);
 }
+
+export interface RecruitStatusUpdateItem {
+  re_id: number;
+  re_status: number;
+}
+
+export interface RecruitStatusUpdateResponse {
+  ok: boolean;
+  message?: string;
+  data?: {
+    updated_count: number;
+    updated: Array<{
+      re_id: number;
+      old_status: number;
+      old_status_text: string;
+      new_status: number;
+      new_status_text: string;
+    }>;
+  };
+}
+
+/** 관리자 지원서 상태 변경 (`ajax.application_status.php`) */
+export async function updateAdminRecruitApplicationStatuses(
+  items: RecruitStatusUpdateItem[]
+) {
+  return adminRawRequest<RecruitStatusUpdateResponse>(
+    "/front/recurit/ajax.application_status.php",
+    {
+      method: "POST",
+      body: { items },
+    }
+  );
+}

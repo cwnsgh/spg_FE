@@ -147,6 +147,16 @@
   white-space: nowrap;
 }
 
+.fileTitleEn {
+  color: #6b7280;
+  font-weight: 500;
+  font-size: 1.38rem;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .pagination {
   margin-top: 1.6rem;
   display: flex;
@@ -261,6 +271,10 @@
 
   .fileTitle {
     font-size: 1.38rem;
+  }
+
+  .fileTitleEn {
+    font-size: 1.24rem;
   }
 
   .downloadBtn {

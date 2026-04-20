@@ -189,6 +189,35 @@
   padding-right: 0.2rem;
 }
 
+.fileSummaryRow {
+  margin-top: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.fileSummaryText {
+  font-size: 1.2rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.fileSummaryBtn {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #1e40af;
+  height: 2.5rem;
+  padding: 0 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.fileSummaryBtn:hover {
+  background: #f8fafc;
+}
+
 .fileBadgeWrap {
   display: inline-flex;
   flex-wrap: wrap;
@@ -355,6 +384,23 @@
   -webkit-overflow-scrolling: touch;
 }
 
+/* 첨부 목록은 미리보기보다 한 단계 아래로 */
+.fileListBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(1.2rem, env(safe-area-inset-top, 0px))
+    max(1rem, env(safe-area-inset-right, 0px))
+    max(1.2rem, env(safe-area-inset-bottom, 0px))
+    max(1rem, env(safe-area-inset-left, 0px));
+  background: rgba(15, 23, 42, 0.48);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .fileQuickCard {
   width: min(96rem, 100%);
   max-height: min(88vh, 90rem);
@@ -418,6 +464,106 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.fileListBody {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0.8rem 1.2rem 1.2rem;
+}
+
+.fileListRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 0.2rem;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.fileListRow:last-child {
+  border-bottom: 0;
+}
+
+.fileListName {
+  min-width: 0;
+  flex: 1;
+  font-size: 1.32rem;
+  color: #0f172a;
+  word-break: break-word;
+}
+
+.fileListActions {
+  display: inline-flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.fileListBtn {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f766e;
+  text-decoration: none;
+  height: 2.8rem;
+  border-radius: 0.45rem;
+  padding: 0 0.85rem;
+  font-size: 1.18rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fileListBtn:hover {
+  background: #f0fdfa;
+}
+
+.statusModalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100080;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+}
+
+.statusModalCard {
+  width: min(46rem, 100%);
+  background: #fff;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 20px 36px rgba(0, 0, 0, 0.24);
+  padding: 1.8rem 2rem;
+}
+
+.statusModalTitle {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.statusModalText {
+  margin: 1rem 0 0;
+  font-size: 1.4rem;
+  color: #374151;
+}
+
+.statusModalFlow {
+  margin: 0.55rem 0 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+.statusModalActions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
 }
 
 .fileQuickImage {
