@@ -44,7 +44,7 @@ function parseId(v: unknown): number | null {
  * — 목록 API가 `ca_ids`만 안 주고 `ca_id` 또는 `categories[]`만 줄 때도 분류 미지정으로 안 빠지게 함.
  */
 function normalizeCaIds(p: AdminSpgProductRow): number[] {
-  const rec = p as Record<string, unknown>;
+  const rec = p as unknown as Record<string, unknown>;
   const raw = rec["ca_ids"];
 
   if (Array.isArray(raw) && raw.length > 0) {
