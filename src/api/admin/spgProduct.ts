@@ -48,7 +48,11 @@ export interface AdminSpgProductRow {
   sort_order: number;
   is_active: number;
   /** 목록 API에서 매핑된 카테고리 ID (신규 PHP 응답) */
-  ca_ids?: number[];
+  ca_ids?: number[] | string;
+  /** 일부 목록 응답은 단일 `ca_id`만 줄 수 있음 */
+  ca_id?: number;
+  /** 상세와 동일하게 `categories[{ ca_id }]`만 오는 목록도 있을 수 있음 */
+  categories?: { ca_id: number; name_ko?: string; name_en?: string }[];
 }
 
 export type AdminSpgProductDetail = AdminSpgProductRow & {

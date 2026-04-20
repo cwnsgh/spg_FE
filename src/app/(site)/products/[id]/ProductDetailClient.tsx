@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound, useRouter } from "next/navigation";
@@ -24,10 +30,165 @@ import {
   findCategoryPathInTree,
   resolveActiveRootTabForProduct,
 } from "../../../products/utils/productSelectionUrl";
-import { devBackendAssetIframePath } from "@/app/products/utils/pdfPreviewUrl";
+import {
+  devBackendAssetIframePath,
+  toSameOriginAssetUrlForFetch,
+} from "@/app/products/utils/pdfPreviewUrl";
 import styles from "../../../products/[id]/page.module.css";
 
 const PLACEHOLDER_IMAGE = "/images/products/prd_01.png";
+
+/** `<a download>`용: 경로 제거·위험 문자 최소 제거(백엔드 신뢰 값 전제) */
+function safeDownloadFileName(value: string | null | undefined): string | undefined {
+  const raw = value?.trim();
+  if (!raw) return undefined;
+  const base = raw.replace(/^.*[/\\]/, "").replace(/[/\\]+/g, "");
+  if (!base) return undefined;
+  return base.length > 220 ? base.slice(0, 220) : base;
+}
+
+function pickOriginName(
+  dl: ProductDetailPayload["download_links"],
+  kind: "pdf" | "dwg" | "stp"
+): string | undefined {
+  if (!dl) return undefined;
+  const originKey = `${kind}_origin_name` as const;
+  const nameKey = `${kind}_name` as const;
+  const rec = dl as Record<string, string | null | undefined>;
+  return safeDownloadFileName(rec[originKey] ?? rec[nameKey]);
+}
+
+/** API에 원본 파일명이 없을 때: 제품명 기반 제안명(업로드명과 다를 수 있음) */
+const FALLBACK_KIND_SUFFIX: Record<"pdf" | "dwg" | "stp", string> = {
+  pdf: "_catalog",
+  dwg: "_2d",
+  stp: "_3d",
+};
+
+function fallbackDownloadNameFromProduct(
+  nameKo: string,
+  nameEn: string | null | undefined,
+  ext: "pdf" | "dwg" | "stp"
+): string | undefined {
+  const baseRaw = nameKo.trim() || (nameEn?.trim() ?? "");
+  if (!baseRaw) return undefined;
+  let base = baseRaw
+    .replace(/[/\\:*?"<>|]+/g, " ")
+    .replace(/[\u0000-\u001F\u007F]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/[.\s]+$/g, "")
+    .trim();
+  if (!base) return undefined;
+
+  const suffix = FALLBACK_KIND_SUFFIX[ext];
+  const tail = `${suffix}.${ext}`;
+  const maxBase = 220 - tail.length;
+  if (maxBase < 1) {
+    return safeDownloadFileName(`product${tail}`);
+  }
+  if (base.length > maxBase) {
+    base = base.slice(0, maxBase).replace(/[.\s]+$/g, "").trim();
+    if (!base) base = "product";
+  }
+  return safeDownloadFileName(`${base}${tail}`);
+}
+
+/** URL 경로의 실제 확장자(예: zip)와 제안명 확장자가 다르면 URL 쪽에 맞춤 */
+function extensionFromUrlPath(url: string): string {
+  try {
+    const pathname = new URL(url).pathname;
+    const seg = pathname.split("/").pop() || "";
+    const dot = seg.lastIndexOf(".");
+    if (dot < 0) return "";
+    return seg.slice(dot + 1).toLowerCase().replace(/[^a-z0-9]/gi, "");
+  } catch {
+    return "";
+  }
+}
+
+function finalDownloadName(
+  suggested: string | undefined,
+  url: string
+): string {
+  const extUrl = extensionFromUrlPath(url);
+  const name = suggested?.trim();
+  if (!name) {
+    const fallback = extUrl ? `download.${extUrl}` : "download";
+    return safeDownloadFileName(fallback) ?? fallback;
+  }
+  const safe = safeDownloadFileName(name) ?? name;
+  if (!extUrl) return safe;
+  const lower = safe.toLowerCase();
+  if (lower.endsWith(`.${extUrl}`)) return safe;
+  const withoutExt = safe.replace(/\.[^./\\]+$/, "");
+  const base = withoutExt || "download";
+  return safeDownloadFileName(`${base}.${extUrl}`) ?? `${base}.${extUrl}`;
+}
+
+/**
+ * 원격 URL을 fetch→blob 후 `<a download>`로 저장해 **제안 파일명** 적용.
+ * 백엔드 절대 URL은 CORS에 막히기 쉬우므로, 가능하면 `/__backend_asset` 등 동일 출처 프록시로 fetch.
+ * 실패 시 새 탭으로 원본 URL 오픈(이름은 URL에 따름).
+ */
+async function downloadRemoteFileWithSuggestedName(
+  url: string,
+  suggestedFileName: string | undefined
+): Promise<void> {
+  const fileName = finalDownloadName(suggestedFileName, url);
+  const fetchUrl = toSameOriginAssetUrlForFetch(url);
+  try {
+    const res = await fetch(fetchUrl, { mode: "cors", credentials: "omit" });
+    if (!res.ok) throw new Error(String(res.status));
+    const blob = await res.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = fileName;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(() => URL.revokeObjectURL(objectUrl), 2_000);
+  } catch {
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+}
+
+function ProductAssetDownloadButton({
+  url,
+  downloadName,
+  className,
+  children,
+}: {
+  url: string;
+  downloadName?: string;
+  className: string;
+  children: ReactNode;
+}) {
+  const [busy, setBusy] = useState(false);
+
+  const onClick = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await downloadRemoteFileWithSuggestedName(url, downloadName);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      className={className}
+      onClick={onClick}
+      disabled={busy}
+    >
+      {busy ? "다운로드 중…" : children}
+    </button>
+  );
+}
 
 function isNumericProductId(id: string): boolean {
   return /^\d+$/.test(id);
@@ -63,6 +224,9 @@ function mapApiProductToView(p: ProductDetailPayload): {
   dwgUrl: string | null;
   /** file_type 2 — `download_links.stp` */
   stpUrl: string | null;
+  pdfDownloadName?: string;
+  dwgDownloadName?: string;
+  stpDownloadName?: string;
   content?: string;
 } {
   const dl = p.download_links;
@@ -76,93 +240,117 @@ function mapApiProductToView(p: ProductDetailPayload): {
     pdfUrl: dl?.pdf ? toBackendAssetUrl(dl.pdf) : null,
     dwgUrl: dl?.dwg ? toBackendAssetUrl(dl.dwg) : null,
     stpUrl: dl?.stp ? toBackendAssetUrl(dl.stp) : null,
+    pdfDownloadName:
+      pickOriginName(dl, "pdf") ??
+      (dl?.pdf
+        ? fallbackDownloadNameFromProduct(p.name_ko, p.name_en, "pdf")
+        : undefined),
+    dwgDownloadName:
+      pickOriginName(dl, "dwg") ??
+      (dl?.dwg
+        ? fallbackDownloadNameFromProduct(p.name_ko, p.name_en, "dwg")
+        : undefined),
+    stpDownloadName:
+      pickOriginName(dl, "stp") ??
+      (dl?.stp
+        ? fallbackDownloadNameFromProduct(p.name_ko, p.name_en, "stp")
+        : undefined),
     content: undefined,
   };
 }
 
+/** Chromium 내장 PDF에 툴바 숨김 요청(지원 여부는 브라우저에 따름). */
+function withChromiumPdfObjectFlags(src: string): string {
+  if (!src || src.includes("#")) return src;
+  return `${src}#toolbar=0&navpanes=0`;
+}
+
 /**
- * PDF: 백엔드 X-Frame-Options 회피 후 `<object application/pdf>`로 브라우저 기본 뷰어 표시
- * - 개발: `/__backend_asset` 동일 출처
- * - 그 외: CORS 되면 fetch→blob, 아니면 새 창 링크
+ * PDF: fetch(동일 출처 프록시 우선) → `File`로 제목 후보를 붙인 blob URL → `<object>` 기본 뷰어.
+ * - 브라우저 상단/탭에 보이는 이름은 **완전히 보장되지 않음**(뷰어가 PDF 메타데이터·URL을 쓰기도 함).
+ * - fetch 실패 시에만 `/__backend_asset` 직링크 폴백(이름은 URL에 따름).
  */
 function ProductPdfPreview({
   pdfUrl,
   productName,
+  suggestedFileName,
 }: {
   pdfUrl: string;
   productName: string;
+  /** 다운로드와 동일 규칙(원본명·제품명 fallback) — 뷰어에 쓸 파일명 후보 */
+  suggestedFileName?: string;
 }) {
-  const devProxySrc = useMemo(
-    () => devBackendAssetIframePath(pdfUrl),
-    [pdfUrl]
-  );
-
-  const [blobUrl, setBlobUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(
-    () => !devBackendAssetIframePath(pdfUrl)
-  );
+  const [docSrc, setDocSrc] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (devProxySrc) {
-      setBlobUrl(null);
-      setLoading(false);
-      return undefined;
-    }
-
     let cancelled = false;
     let objectUrl: string | null = null;
 
-    setLoading(true);
-    setBlobUrl(null);
+    const displayFileName = finalDownloadName(suggestedFileName, pdfUrl);
+    const fetchUrl = toSameOriginAssetUrlForFetch(pdfUrl);
 
-    fetch(pdfUrl, { mode: "cors", credentials: "omit" })
+    setLoading(true);
+    setDocSrc(null);
+
+    fetch(fetchUrl, { mode: "cors", credentials: "omit" })
       .then((r) => {
         if (!r.ok) throw new Error(String(r.status));
         return r.blob();
       })
       .then((blob) => {
-        const u = URL.createObjectURL(blob);
+        const file = new File([blob], displayFileName, {
+          type: blob.type || "application/pdf",
+        });
+        const u = URL.createObjectURL(file);
         if (cancelled) {
           URL.revokeObjectURL(u);
           return;
         }
         objectUrl = u;
-        setBlobUrl(u);
+        setDocSrc(u);
         setLoading(false);
       })
       .catch(() => {
-        if (!cancelled) setLoading(false);
+        if (cancelled) return;
+        const iframeSrc = devBackendAssetIframePath(pdfUrl);
+        if (iframeSrc) {
+          setDocSrc(iframeSrc);
+        } else {
+          setDocSrc(null);
+        }
+        setLoading(false);
       });
 
     return () => {
       cancelled = true;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [pdfUrl, devProxySrc]);
-
-  const docSrc = devProxySrc ?? blobUrl;
+  }, [pdfUrl, suggestedFileName]);
 
   return (
     <div className={styles.productPdfViewer}>
       {docSrc ? (
-        <object
-          type="application/pdf"
-          data={docSrc}
-          title={`${productName} PDF`}
-          className={styles.productPdfObject}
-        >
-          <div className={styles.productPdfFallback}>
-            <p>이 브라우저에서 PDF를 바로 표시하지 못했습니다.</p>
-            <a
-              href={pdfUrl}
-              className={styles.productPdfFallbackLink}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              PDF 파일 열기
-            </a>
-          </div>
-        </object>
+        <div className={styles.productPdfEmbed}>
+          <object
+            type="application/pdf"
+            data={withChromiumPdfObjectFlags(docSrc)}
+            title={`${productName} PDF`}
+            className={styles.productPdfObject}
+          >
+            <div className={styles.productPdfFallback}>
+              <p>이 브라우저에서 PDF를 바로 표시하지 못했습니다.</p>
+              <a
+                href={pdfUrl}
+                className={styles.productPdfFallbackLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                PDF 파일 열기
+              </a>
+            </div>
+          </object>
+        </div>
       ) : loading ? (
         <p className={styles.productPdfLoading} role="status">
           PDF 불러오는 중…
@@ -187,7 +375,9 @@ function ProductPdfPreview({
   );
 }
 
-function mapStaticProductToView(product: Product) {
+function mapStaticProductToView(
+  product: Product
+): ReturnType<typeof mapApiProductToView> {
   return {
     name: product.name,
     nameEn: product.nameEn,
@@ -199,6 +389,13 @@ function mapStaticProductToView(product: Product) {
     pdfUrl: product.technicalPdfUrl ?? null,
     dwgUrl: product.catalogPdfUrl ?? null,
     stpUrl: null as string | null,
+    pdfDownloadName: product.technicalPdfUrl
+      ? fallbackDownloadNameFromProduct(product.name, product.nameEn, "pdf")
+      : undefined,
+    dwgDownloadName: product.catalogPdfUrl
+      ? fallbackDownloadNameFromProduct(product.name, product.nameEn, "dwg")
+      : undefined,
+    stpDownloadName: undefined,
     content: product.content,
   };
 }
@@ -444,12 +641,10 @@ export default function ProductDetailClient({ id }: { id: string }) {
 
             <div className={styles.downloadButtons}>
               {view.pdfUrl && (
-                <a
-                  href={view.pdfUrl}
+                <ProductAssetDownloadButton
+                  url={view.pdfUrl}
+                  downloadName={view.pdfDownloadName}
                   className={`${styles.downloadButton} ${styles.technicalButton}`}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
                 >
                   PDF 다운로드
                   <Image
@@ -458,15 +653,13 @@ export default function ProductDetailClient({ id }: { id: string }) {
                     width={20}
                     height={20}
                   />
-                </a>
+                </ProductAssetDownloadButton>
               )}
               {view.dwgUrl && (
-                <a
-                  href={view.dwgUrl}
+                <ProductAssetDownloadButton
+                  url={view.dwgUrl}
+                  downloadName={view.dwgDownloadName}
                   className={`${styles.downloadButton} ${styles.catalogButton}`}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
                 >
                   2D 도면 다운로드
                   <Image
@@ -475,15 +668,13 @@ export default function ProductDetailClient({ id }: { id: string }) {
                     width={20}
                     height={20}
                   />
-                </a>
+                </ProductAssetDownloadButton>
               )}
               {view.stpUrl && (
-                <a
-                  href={view.stpUrl}
+                <ProductAssetDownloadButton
+                  url={view.stpUrl}
+                  downloadName={view.stpDownloadName}
                   className={`${styles.downloadButton} ${styles.technicalButton}`}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
                 >
                   3D 모델 (STP)
                   <Image
@@ -492,14 +683,18 @@ export default function ProductDetailClient({ id }: { id: string }) {
                     width={20}
                     height={20}
                   />
-                </a>
+                </ProductAssetDownloadButton>
               )}
             </div>
           </div>
         </div>
 
         {view.pdfUrl && (
-          <ProductPdfPreview pdfUrl={view.pdfUrl} productName={view.name} />
+          <ProductPdfPreview
+            pdfUrl={view.pdfUrl}
+            productName={view.name}
+            suggestedFileName={view.pdfDownloadName}
+          />
         )}
 
         {view.content && (

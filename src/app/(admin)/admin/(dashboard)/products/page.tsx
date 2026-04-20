@@ -30,51 +30,132 @@ function depthBadgeClass(depth: number): string {
   return styles.dN;
 }
 
-/** 목록 API에 분류가 비어 있을 때 대비 (구 서버·누락 필드) */
-function normalizeCaIds(p: AdminSpgProductRow): number[] {
-  const raw = p.ca_ids as unknown;
-  if (Array.isArray(raw)) {
-    return raw.map((x) => Number(x)).filter((x) => !Number.isNaN(x));
+function parseId(v: unknown): number | null {
+  if (typeof v === "number" && !Number.isNaN(v)) return v;
+  if (typeof v === "string" && v.trim()) {
+    const n = Number(v.trim());
+    return Number.isNaN(n) ? null : n;
   }
+  return null;
+}
+
+/**
+ * 목록/상세에서 오는 분류 필드를 `ca_id` 배열로 맞춤.
+ * — 목록 API가 `ca_ids`만 안 주고 `ca_id` 또는 `categories[]`만 줄 때도 분류 미지정으로 안 빠지게 함.
+ */
+function normalizeCaIds(p: AdminSpgProductRow): number[] {
+  const rec = p as Record<string, unknown>;
+  const raw = rec["ca_ids"];
+
+  if (Array.isArray(raw) && raw.length > 0) {
+    const ids: number[] = [];
+    for (const x of raw) {
+      const direct = parseId(x);
+      if (direct !== null) {
+        ids.push(direct);
+        continue;
+      }
+      if (x && typeof x === "object") {
+        const o = x as { ca_id?: unknown; id?: unknown };
+        const fromCa = parseId(o.ca_id);
+        if (fromCa !== null) ids.push(fromCa);
+        else {
+          const fromId = parseId(o.id);
+          if (fromId !== null) ids.push(fromId);
+        }
+      }
+    }
+    if (ids.length) return ids;
+  }
+
+  /** PHP `json_encode`가 연속 배열을 JS에서 `{ "0": 12, "1": 34 }` 객체로 줄 때 */
+  if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+    const vals = Object.values(raw as Record<string, unknown>);
+    const fromObj = vals
+      .map(parseId)
+      .filter((x): x is number => x !== null);
+    if (fromObj.length) return fromObj;
+  }
+
   if (typeof raw === "string" && raw.trim()) {
-    return raw
+    const t = raw.trim();
+    if (t.startsWith("[")) {
+      try {
+        const parsed = JSON.parse(t) as unknown;
+        if (Array.isArray(parsed)) {
+          const ids = parsed
+            .map(parseId)
+            .filter((x): x is number => x !== null);
+          if (ids.length) return ids;
+        }
+      } catch {
+        /* fall through */
+      }
+    }
+    const fromStr = t
       .split(",")
       .map((s) => Number(s.trim()))
       .filter((x) => !Number.isNaN(x));
+    if (fromStr.length) return fromStr;
   }
+
+  const single = parseId(rec["ca_id"]);
+  if (single !== null) return [single];
+
+  const cats = rec["categories"];
+  if (Array.isArray(cats) && cats.length > 0) {
+    const fromCats: number[] = [];
+    for (const c of cats) {
+      if (!c || typeof c !== "object") continue;
+      const id = parseId((c as { ca_id?: unknown }).ca_id);
+      if (id !== null) fromCats.push(id);
+    }
+    if (fromCats.length) return fromCats;
+  }
+
   return [];
 }
 
-const ENRICH_CA_IDS_CAP = 100;
+/** 목록에 `ca_ids`가 없을 때 상세 API로 보강 — 한 번에 병렬로 부르는 최대 건수 */
 const ENRICH_CHUNK = 12;
 
+/**
+ * 목록 행에 분류가 비어 있으면 `getAdminSpgProduct`로 채움.
+ * 예전에는 최대 100건만 보강해 나머지는 영구히 「분류 미지정」으로 남는 문제가 있었음.
+ */
 async function enrichMissingCaIds(
   rows: AdminSpgProductRow[]
 ): Promise<{ rows: AdminSpgProductRow[]; skipped: number }> {
-  const base = rows.map((p) => ({ ...p, ca_ids: normalizeCaIds(p) }));
-  const missing = base.filter((p) => !p.ca_ids.length);
-  if (missing.length === 0) return { rows: base, skipped: 0 };
-  const slice = missing.slice(0, ENRICH_CA_IDS_CAP);
-  const map = new Map<number, number[]>();
-  for (let i = 0; i < slice.length; i += ENRICH_CHUNK) {
-    const part = slice.slice(i, i + ENRICH_CHUNK);
-    const settled = await Promise.all(
-      part.map(async (p) => {
+  let current = rows.map((p) => ({ ...p, ca_ids: normalizeCaIds(p) }));
+  const attempted = new Set<number>();
+
+  for (;;) {
+    const missing = current.filter((p) => !normalizeCaIds(p).length);
+    const batch = missing
+      .filter((p) => !attempted.has(p.pr_id))
+      .slice(0, ENRICH_CHUNK);
+    if (batch.length === 0) break;
+
+    const map = new Map<number, number[]>();
+    await Promise.all(
+      batch.map(async (p) => {
+        attempted.add(p.pr_id);
         try {
           const d = await getAdminSpgProduct(p.pr_id);
-          return [p.pr_id, d.ca_ids ?? []] as const;
+          map.set(p.pr_id, normalizeCaIds(d));
         } catch {
-          return [p.pr_id, [] as number[]] as const;
+          map.set(p.pr_id, []);
         }
       })
     );
-    for (const [id, ids] of settled) map.set(id, ids);
+
+    current = current.map((p) =>
+      map.has(p.pr_id) ? { ...p, ca_ids: map.get(p.pr_id)! } : p
+    );
   }
-  const merged = base.map((p) =>
-    map.has(p.pr_id) ? { ...p, ca_ids: map.get(p.pr_id)! } : p
-  );
-  const skipped = Math.max(0, missing.length - ENRICH_CA_IDS_CAP);
-  return { rows: merged, skipped };
+
+  const stillMissing = current.filter((p) => !normalizeCaIds(p).length);
+  return { rows: current, skipped: stillMissing.length };
 }
 
 function featuresPreviewText(features: unknown): string {
@@ -371,7 +452,7 @@ export default function AdminProductsPage() {
       const { rows, skipped } = await enrichMissingCaIds(data);
       if (skipped > 0) {
         setEnrichNote(
-          `분류 정보가 비어 있던 제품 ${skipped}건은 한 번에 보강하지 않았습니다. 목록을 나누어 관리하거나 서버 목록 API를 최신으로 맞춰 주세요.`
+          `목록에 분류 ID가 없어 상세로 보강했지만, 여전히 분류를 알 수 없는 제품이 ${skipped}건 있습니다. 서버 목록 API에 ca_ids(또는 categories)를 내려 주거나, 해당 제품 DB 매핑을 확인해 주세요.`
         );
       }
       setProducts(rows);

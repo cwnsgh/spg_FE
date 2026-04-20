@@ -98,6 +98,17 @@ export interface ProductDetailPayload {
     pdf?: string | null;
     dwg?: string | null;
     stp?: string | null;
+    /**
+     * 저장 경로(`pdf` 등)와 별개의 **업로드 당시 파일명**.
+     * `products.php`가 내려줄 때만 — 없으면 브라우저는 URL/서버 Content-Disposition 기준으로 저장합니다.
+     */
+    pdf_origin_name?: string | null;
+    dwg_origin_name?: string | null;
+    stp_origin_name?: string | null;
+    /** 일부 백엔드에서 `*_name`으로 줄 수 있어 동일 의미로 수용 */
+    pdf_name?: string | null;
+    dwg_name?: string | null;
+    stp_name?: string | null;
   };
 }
 

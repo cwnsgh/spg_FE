@@ -117,6 +117,26 @@ export const PRODUCT_FORM_DEV_PRESETS: ProductFormDevPreset[] = [
       { ko: "F종 절연", en: "Class F Insulation" },
     ],
   },
+  {
+    matchDepth2NameEn: "PML Series (FOOT(LEG) MOUNTED TYPE)",
+    summaryKo:
+      "PMK Series는 0.2kW 출력에서 최대 2,200 N·m의 압도적인 허용 토크를 구현한 고강도 기어드 모터로, 최저효율제 만족 및 IP55 등급의 내구성을 통해 중하중 산업 공정에 최적화되어 있습니다.",
+    summaryEn:
+      "The PMK Series is a high-strength geared motor achieving an impressive allowable torque of up to 2,200 N·m at 0.2kW. It is optimized for heavy-duty industrial processes, featuring MEPS compliance and IP55-rated durability.",
+    features: [
+      {
+        ko: "최대 허용 토크 (2,200 N·m)",
+        en: "Maximum Allowable Torque (2,200 N·m)",
+      },
+      { ko: "최저효율제 기준 만족", en: "MEPS Compliance" },
+      { ko: "고신뢰성 및 저소음", en: "High Reliability & Low Noise" },
+      {
+        ko: "방진·방수 등급 (IP55/IP40)",
+        en: "Ingress Protection (IP55/IP40)",
+      },
+      { ko: "F종 절연", en: "Class F Insulation" },
+    ],
+  },
 ];
 
 export function findProductFormDevPreset(
