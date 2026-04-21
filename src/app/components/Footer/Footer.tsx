@@ -17,13 +17,31 @@ const Footer: React.FC = () => {
             <img src="/images/logo.png" alt="spg" />
           </div>
           <div className={styles.info}>
-            <p className={styles.companyName}>(주)케이먼트 코퍼레이션</p>
+            <p className={styles.companyName}>SPG Co., Ltd </p>
             <address>
-              <span><em>TEL</em><span>1800-8413</span></span>
-              <span><em>FAX</em><span>032-421-0880</span></span>
-              <span><em>대표이사</em><span>김선홍</span></span>
-              <span><em>주소</em><span>인천시 계양구 오조산로 57번길 7-1 미래사랑빌딩 601,602호</span></span>
-              <span><em>사업자등록번호</em><span>000-00-00000</span></span>
+              <span>
+                <em>TEL</em>
+                <span>032-820-8200</span>
+              </span>
+              <span>
+                <em>FAX</em>
+                <span>032-821-0383</span>
+              </span>
+              <span>
+                <em>대표이사</em>
+                <span>여영길</span>
+              </span>
+              <span>
+                <em>주소</em>
+                <span>
+                  인천광역시 남동구 청능대로 289번길 45 (고잔동, 남동공단 67B
+                  12L)
+                </span>
+              </span>
+              <span>
+                <em>사업자등록번호</em>
+                <span>139-81-11459</span>
+              </span>
             </address>
           </div>
         </div>

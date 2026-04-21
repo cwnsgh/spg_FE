@@ -9,10 +9,12 @@ export default function Footer() {
           <div className={styles.footerLeft}>
             <div className={styles.logo}>SPG</div>
             <div className={styles.companyInfo}>
-              <p>TEL: 1800-413</p>
-              <p>FAX: 010-421-0000</p>
-              <p>주소: 인천시 계양구 아나지로 711번길 83번지</p>
-              <p>사업자등록번호: 000-00-00000</p>
+              <p>TEL 032-820-8200</p>
+              <p>FAX 032-821-0383</p>
+              <p>
+                인천광역시 남동구 청능대로 289번길 45 (고잔동, 남동공단 67B 12L)
+              </p>
+              <p>사업자등록번호: 139-81-11459</p>
             </div>
             <div className={styles.legalLinks}>
               <Link href="/privacy">개인정보처리방침</Link>
@@ -27,7 +29,7 @@ export default function Footer() {
               <Link href="/aboutUs">회사소개</Link>
             </nav>
             <p className={styles.copyright}>
-              Copyright. KMENT Corp. All rights reserved. Hosting. Cafe24
+              Copyright © SPG Co., Ltd All rights Reserved
             </p>
           </div>
         </div>
