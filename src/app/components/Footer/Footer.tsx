@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
           </li>
         </ul>
         <p className={styles.copyright}>
-          Copyright, KMENT Corp. All rights reserved. Hosting. cafe24
+          Copyright © SPG Co., Ltd. All rights reserved.
         </p>
       </div>
     </footer>

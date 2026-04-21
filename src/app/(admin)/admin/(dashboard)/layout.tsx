@@ -17,6 +17,11 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
     title: "메인",
     items: [
       { label: "대시보드", description: "전체 운영 현황", href: "/admin" },
+      {
+        label: "팝업 관리",
+        description: "메인 노출 레이어 팝업",
+        href: "/admin/popups",
+      },
     ],
   },
   {
@@ -119,6 +124,7 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
 function isItemActive(pathname: string, href?: string) {
   if (!href) return false;
   if (href === "/admin") return pathname === href;
+  if (href === "/admin/popups") return pathname === "/admin/popups";
   // `/admin/products` 는 `/admin/products/categories` 의 접두어이므로 startsWith 만 쓰면 둘 다 켜짐
   if (href === "/admin/products") return pathname === "/admin/products";
   // `recruit-posts` 가 `recruit` 접두어로 잡히지 않도록 구분

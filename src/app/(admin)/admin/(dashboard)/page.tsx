@@ -8,6 +8,16 @@ type QuickItem = { href: string; label: string; description: string };
 
 const quickSections: { title: string; items: QuickItem[] }[] = [
   {
+    title: "메인",
+    items: [
+      {
+        href: "/admin/popups",
+        label: "팝업 관리",
+        description: "메인 페이지 노출 팝업",
+      },
+    ],
+  },
+  {
     title: "통계",
     items: [
       {

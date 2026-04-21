@@ -91,9 +91,23 @@ export async function apiRequest<T>(
     credentials,
   });
 
-  const json = (await response.json()) as
-    | ApiResponse<T>
-    | (T & { ok?: boolean });
+  const rawText = await response.text();
+  let json: unknown;
+  try {
+    json = rawText ? JSON.parse(rawText) : {};
+  } catch {
+    if (!response.ok) {
+      const fallback404 =
+        "요청한 API를 서버에서 찾을 수 없습니다(404). 백엔드에 해당 PHP 파일이 올라가 있는지, NEXT_PUBLIC_API_BASE_URL(개발 시에는 /api/proxy → 리라이트 대상)을 확인하세요. 프록시는 주소만 넘기므로 원격에 파일이 없으면 404가 납니다.";
+      throw new ApiError(
+        response.status === 404 ? fallback404 : "서버가 JSON이 아닌 응답을 돌려주었습니다.",
+        response.status
+      );
+    }
+    throw new ApiError("응답 본문을 JSON으로 읽을 수 없습니다.", response.status);
+  }
+
+  const jsonObj = json as ApiResponse<T> | (T & { ok?: boolean });
 
   // HTTP 자체가 실패한 경우입니다. (예: 400, 401, 500)
   if (!response.ok) {
@@ -101,15 +115,17 @@ export async function apiRequest<T>(
       typeof json === "object" &&
       json !== null &&
       "error" in json &&
-      typeof json.error === "string"
-        ? json.error
-        : "요청 처리 중 오류가 발생했습니다.";
+      typeof (json as { error?: unknown }).error === "string"
+        ? String((json as { error: string }).error)
+        : response.status === 404
+          ? "요청한 API를 서버에서 찾을 수 없습니다(404). 백엔드 파일 배포·API 베이스 URL을 확인하세요."
+          : "요청 처리 중 오류가 발생했습니다.";
 
     const isSecret =
       typeof json === "object" &&
       json !== null &&
       "is_secret" in json &&
-      json.is_secret === true;
+      (json as { is_secret?: boolean }).is_secret === true;
 
     throw new ApiError(message, response.status, { isSecret });
   }
@@ -119,11 +135,11 @@ export async function apiRequest<T>(
     typeof json === "object" &&
     json !== null &&
     "ok" in json &&
-    json.ok === false &&
+    (json as { ok?: boolean }).ok === false &&
     "error" in json
   ) {
-    const isSecret = "is_secret" in json && json.is_secret === true;
-    throw new ApiError(String(json.error), response.status, { isSecret });
+    const isSecret = "is_secret" in json && (json as { is_secret?: boolean }).is_secret === true;
+    throw new ApiError(String((json as { error: string }).error), response.status, { isSecret });
   }
 
   // 백엔드가 { ok: true, data: ... } 형태를 쓰는 경우 data만 꺼내서 반환합니다.
@@ -131,12 +147,12 @@ export async function apiRequest<T>(
     typeof json === "object" &&
     json !== null &&
     "ok" in json &&
-    json.ok === true &&
+    (json as { ok?: boolean }).ok === true &&
     "data" in json
   ) {
-    return json.data as T;
+    return (json as { data: T }).data;
   }
 
   // 혹시 data 없이 바로 배열/객체를 주는 API가 생겨도 그대로 쓸 수 있게 열어둡니다.
-  return json as T;
+  return jsonObj as T;
 }

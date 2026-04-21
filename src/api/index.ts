@@ -15,6 +15,7 @@ export * from "./admin/recruitApplications";
 export * from "./admin/recruitPosts";
 export * from "./admin/spgProduct";
 export * from "./admin/visitAnalytics";
+export * from "./admin/popups";
 // 회원 세션 (쿠키 포함 요청)
 export * from "./auth";
 // 사용자용 게시판·FAQ 등
