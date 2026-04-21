@@ -32,7 +32,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   productColumnOverride,
 }) => {
   const [openSection, setOpenSection] = useState<string | null>(null);
-  /** 모바일: 제품 1뎁스별 소분류(2뎁스) 펼침 — 항목이 많을 때 세로 길이 완화 */
+  /** 제품 1뎁스별 소분류(2뎁스) 펼침 — 태블릿·모바일·웹(데스크톱) 공통 */
   const [openProductSubKeys, setOpenProductSubKeys] = useState<Set<string>>(
     () => new Set()
   );

@@ -23,16 +23,13 @@
 }
 
 .hamInner {
-  width: 80%;
+  width: 78%;
   display: flex;
   margin-top: 0;
 }
 
-.menuColumn {
-}
-
 .menuColumn:nth-child(1) {
-  margin-right: 0%;
+  margin-right: 5%;
 }
 
 .menuColumn:nth-child(2) {
@@ -103,17 +100,64 @@
   word-break: keep-all;
 }
 
-@media (min-width: 1051px) {
-  .smallCateCollapsible.smallCateClosed,
-  .smallCateCollapsible.smallCateOpen {
-    max-height: none !important;
-    opacity: 1 !important;
-    overflow: visible !important;
-    margin-top: 0.4rem !important;
-    margin-bottom: 0 !important;
-    padding-left: 0.4rem !important;
-    transition: none;
-  }
+/* 제품 1뎁스 + 소분류 토글 (모든 뷰포트) */
+.productBigRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.productBigRow > a {
+  flex: 1;
+  min-width: 0;
+}
+
+.productSubToggle {
+  display: block;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: url("/images/icon/arrow_04.png") no-repeat center;
+  background-size: 0.6rem auto;
+  filter: invert(1);
+  transform: rotate(90deg);
+  transition: transform 0.3s ease;
+}
+
+.productSubToggleOpen {
+  transform: rotate(270deg);
+}
+
+.smallCateCollapsible.smallCateClosed {
+  max-height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0.4rem;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease,
+    margin 0.25s ease;
+}
+
+.smallCateCollapsible.smallCateOpen {
+  max-height: min(2400px, 120vh);
+  overflow: visible;
+  opacity: 1;
+  margin-top: 0.35rem;
+  transition:
+    max-height 0.45s ease,
+    opacity 0.3s ease,
+    margin 0.25s ease;
 }
 
 .smallCate {
@@ -138,15 +182,6 @@
 }
 .smallCate li:hover a {
   color: #bbb;
-}
-
-/* 제품 1뎁스 + 모바일 전용 소분류 토글(데스크톱에서는 display:contents로 기존 레이아웃 유지) */
-.productBigRow {
-  display: contents;
-}
-
-.productSubToggle {
-  display: none;
 }
 
 /* 반응형 - 모바일 (헤더 100px에 맞춤) */
@@ -208,63 +243,10 @@
     display: block;
   }
 
-  .productBigRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.6rem;
-    min-width: 0;
-  }
-
-  .productBigRow > a {
-    flex: 1;
-    min-width: 0;
-  }
-
   .productSubToggle {
-    display: block;
-    flex-shrink: 0;
     width: 2.75rem;
     height: 2.75rem;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    cursor: pointer;
-    background: url("/images/icon/arrow_04.png") no-repeat center;
     background-size: 0.65rem auto;
-    filter: invert(1);
-    transform: rotate(90deg);
-    transition: transform 0.3s ease;
-  }
-
-  .productSubToggleOpen {
-    transform: rotate(270deg);
-  }
-
-  .smallCateCollapsible.smallCateClosed {
-    max-height: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-left: 0.4rem;
-    overflow: hidden;
-    opacity: 0;
-    transition:
-      max-height 0.35s ease,
-      opacity 0.25s ease,
-      margin 0.25s ease;
-  }
-
-  .smallCateCollapsible.smallCateOpen {
-    max-height: min(2400px, 120vh);
-    overflow: visible;
-    opacity: 1;
-    margin-top: 0.35rem;
-    transition:
-      max-height 0.45s ease,
-      opacity 0.3s ease,
-      margin 0.25s ease;
   }
 
   .menuColumn .menu .bigCate > li > a,
