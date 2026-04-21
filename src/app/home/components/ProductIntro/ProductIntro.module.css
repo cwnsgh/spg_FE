@@ -1,4 +1,19 @@
-/* 섹션 2 - 제품 소개 */
-/* 전역 CSS에서 처리하므로 CSS Module 스타일 제거 */
-/* CSS Module은 Swiper 관련 스타일만 유지 */
+/* 특징(키워드): 한글 위 · 영문 아래 회색 */
+.kwPair {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: flex-start;
+}
 
+.kwKo {
+  font-weight: 700;
+  color: inherit;
+}
+
+.kwEn {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #a1aebe !important;
+  line-height: 1.35;
+}
