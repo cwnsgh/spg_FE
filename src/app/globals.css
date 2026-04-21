@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 /* Reset CSS */
-@import '../styles/reset.css';
+@import "../styles/reset.css";
 
 /* Common CSS (Fonts) */
-@import '../styles/common.css';
+@import "../styles/common.css";
 
 /* Main CSS (전역 스타일 - 헤더, 푸터, 섹션 공통 스타일) */
-@import '../styles/main.css';
+@import "../styles/main.css";
 
 /* CSS 변수 */
 :root {
@@ -35,6 +35,35 @@ body {
 /* 메인 페이지에서 Footer의 margin-top 제거 */
 body:has(.home-page) footer {
   margin-top: 0 !important;
+}
+
+/* 사이트 공개 영역(헤더~푸터): 텍스트 드래그 선택·이미지 끌기 방지 — (site) 레이아웃 .site-shell */
+.site-shell {
+  -webkit-user-select: none;
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.site-shell img,
+.site-shell picture img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+}
+
+.site-shell input,
+.site-shell textarea,
+.site-shell select,
+.site-shell [contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.site-shell pre,
+.site-shell code {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 /* 메인 섹션 공통 */

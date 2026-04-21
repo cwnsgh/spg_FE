@@ -1,11 +1,11 @@
 .navWrap {
   flex-shrink: 0;
-  width: 20.5%;
+  min-width: 18%;
+  width: 22.5%;
 }
 
 /* 서브 카테고리 네비게이션 */
 .subCategoryNav {
-  height: 44rem;
   max-height: 44rem;
   overflow-y: auto;
   overflow-x: hidden;

@@ -23,12 +23,19 @@ const DEFAULT_OPEN_SECTION = "product";
 
 const isExternalHref = (href: string) => /^https?:\/\//i.test(href);
 
+const productSubKey = (groupIndex: number, bigCateIndex: number) =>
+  `p${groupIndex}-${bigCateIndex}`;
+
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   isOpen,
   onClose,
   productColumnOverride,
 }) => {
   const [openSection, setOpenSection] = useState<string | null>(null);
+  /** 모바일: 제품 1뎁스별 소분류(2뎁스) 펼침 — 항목이 많을 때 세로 길이 완화 */
+  const [openProductSubKeys, setOpenProductSubKeys] = useState<Set<string>>(
+    () => new Set()
+  );
 
   const columns = React.useMemo(() => {
     if (productColumnOverride) {
@@ -40,6 +47,19 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   useEffect(() => {
     setOpenSection(isOpen ? DEFAULT_OPEN_SECTION : null);
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) setOpenProductSubKeys(new Set());
+  }, [isOpen]);
+
+  const toggleProductSub = (key: string) => {
+    setOpenProductSubKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
 
   const handleSectionToggle = (key: string) => {
     setOpenSection((prev) => (prev === key ? null : key));
@@ -87,34 +107,78 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                       key={groupIndex}
                       className={`${styles.bigCate} ${styles.productGroup}`}
                     >
-                      {bigCateGroup.map((bigCate, bigCateIndex) => (
-                        <li key={bigCateIndex}>
-                          <Link
-                            href={bigCate.href}
-                            prefetch={false}
-                            onClick={handleLinkClick}
-                          >
-                            {bigCate.label}
-                          </Link>
-                          {bigCate.smallCategories && (
-                            <ul className={styles.smallCate}>
-                              {bigCate.smallCategories.map(
-                                (smallCate, smallIndex) => (
-                                  <li key={smallIndex}>
-                                    <Link
-                                      href={smallCate.href}
-                                      prefetch={false}
-                                      onClick={handleLinkClick}
-                                    >
-                                      {smallCate.label}
-                                    </Link>
-                                  </li>
-                                )
-                              )}
-                            </ul>
-                          )}
-                        </li>
-                      ))}
+                      {bigCateGroup.map((bigCate, bigCateIndex) => {
+                        const subKey = productSubKey(groupIndex, bigCateIndex);
+                        const hasSmall = Boolean(
+                          bigCate.smallCategories?.length
+                        );
+                        const subPanelOpen = openProductSubKeys.has(subKey);
+                        const subPanelId = `ham-product-sub-${subKey}`;
+                        return (
+                          <li key={bigCateIndex}>
+                            {hasSmall ? (
+                              <div className={styles.productBigRow}>
+                                <Link
+                                  href={bigCate.href}
+                                  prefetch={false}
+                                  onClick={handleLinkClick}
+                                >
+                                  {bigCate.label}
+                                </Link>
+                                <button
+                                  type="button"
+                                  className={`${styles.productSubToggle} ${
+                                    subPanelOpen ? styles.productSubToggleOpen : ""
+                                  }`}
+                                  aria-expanded={subPanelOpen}
+                                  aria-controls={subPanelId}
+                                  aria-label={
+                                    subPanelOpen
+                                      ? `${bigCate.label} 하위 메뉴 접기`
+                                      : `${bigCate.label} 하위 메뉴 펼치기`
+                                  }
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleProductSub(subKey);
+                                  }}
+                                />
+                              </div>
+                            ) : (
+                              <Link
+                                href={bigCate.href}
+                                prefetch={false}
+                                onClick={handleLinkClick}
+                              >
+                                {bigCate.label}
+                              </Link>
+                            )}
+                            {hasSmall && (
+                              <ul
+                                id={subPanelId}
+                                className={`${styles.smallCate} ${styles.smallCateCollapsible} ${
+                                  subPanelOpen
+                                    ? styles.smallCateOpen
+                                    : styles.smallCateClosed
+                                }`}
+                              >
+                                {bigCate.smallCategories!.map(
+                                  (smallCate, smallIndex) => (
+                                    <li key={smallIndex}>
+                                      <Link
+                                        href={smallCate.href}
+                                        prefetch={false}
+                                        onClick={handleLinkClick}
+                                      >
+                                        {smallCate.label}
+                                      </Link>
+                                    </li>
+                                  )
+                                )}
+                              </ul>
+                            )}
+                          </li>
+                        );
+                      })}
                     </ul>
                   ))}
                 </div>
