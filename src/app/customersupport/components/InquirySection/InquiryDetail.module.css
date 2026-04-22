@@ -87,6 +87,14 @@
   font-weight: 600;
 }
 
+/* 답변·관리 권한자에게만 노출되는 문의자 연락처(wr_1) */
+.staffOnlyMeta {
+  padding: 0.2rem 0.8rem;
+  margin: -0.2rem -0.4rem;
+  border-radius: 0.4rem;
+  background: #f7f5f0;
+}
+
 .attachmentBox {
   display: flex;
   flex-direction: column;

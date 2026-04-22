@@ -2,7 +2,12 @@
  * 공통 fetch 래퍼(`apiRequest`)와 API 오류 타입(`ApiError`)입니다.
  * 도메인별 모듈은 이 파일의 `apiRequest`만 호출하는 것을 권장합니다.
  */
-import { toApiUrl } from "./config";
+import { API_BASE_URL, toApiUrl } from "./config";
+
+/** 상대 베이스(`/api/proxy`) = 브라우저→Next 동일 출처; 세션 쿠키를 확실히 실으려 `include` 권장 */
+const defaultApiCredentials: RequestCredentials = API_BASE_URL.startsWith("/")
+  ? "include"
+  : "same-origin";
 import { ApiResponse } from "./types";
 
 // 공통 요청 에러 타입입니다.
@@ -75,7 +80,7 @@ export async function apiRequest<T>(
     query,
     body,
     headers,
-    credentials = "same-origin",
+    credentials = defaultApiCredentials,
     ...init
   }: RequestOptions = {}
 ): Promise<T> {

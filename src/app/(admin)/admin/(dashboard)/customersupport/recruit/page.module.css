@@ -112,6 +112,12 @@
 }
 
 /* 열 너비 힌트(%) — 합이 100% 근처, 나머지는 브라우저가 배분 */
+.colSelect {
+  width: 3%;
+  min-width: 3.6rem;
+  text-align: center;
+}
+
 .colStatus {
   width: 5%;
   min-width: 7.5rem;
@@ -148,12 +154,12 @@
   min-width: 8.5rem;
 }
 
-/* 본문 행: 지원자(5)·연락처(6) 열이 첨부 많을 때도 최소 폭 유지 */
-.table tbody td:nth-child(5) {
+/* 본문 행: 지원자·연락처 열이 첨부 많을 때도 최소 폭 유지 (1열: 선택) */
+.table tbody td:nth-child(6) {
   min-width: 10rem;
 }
 
-.table tbody td:nth-child(6) {
+.table tbody td:nth-child(7) {
   min-width: 11rem;
 }
 
@@ -656,4 +662,76 @@
 .pagination span {
   font-size: 1.4rem;
   color: #6b7280;
+}
+
+.bulkBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.4rem;
+  padding: 1rem 1.4rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+  background: #f9fafb;
+}
+
+.bulkBarLeft {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 1.2rem;
+}
+
+.selectAllLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+}
+
+.rowCheckbox {
+  width: 1.6rem;
+  height: 1.6rem;
+  cursor: pointer;
+  accent-color: #111827;
+}
+
+.bulkHint {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.dangerButton {
+  height: 3.8rem;
+  padding: 0 1.4rem;
+  border: 1px solid #b91c1c;
+  border-radius: 0.55rem;
+  background: #dc2626;
+  color: #fff;
+  font-size: 1.35rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dangerButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

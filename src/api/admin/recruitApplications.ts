@@ -159,3 +159,23 @@ export async function updateAdminRecruitApplicationStatuses(
     }
   );
 }
+
+export interface RecruitApplicationDeleteResponse {
+  ok: boolean;
+  message?: string;
+  error?: string;
+}
+
+/**
+ * 삭제대기(`re_status === 8`) 지원서만 서버에서 영구삭제합니다.
+ * `ajax.application_delete.php`
+ */
+export async function deleteAdminRecruitApplications(reIds: number[]) {
+  return adminRawRequest<RecruitApplicationDeleteResponse>(
+    "/front/recurit/ajax.application_delete.php",
+    {
+      method: "POST",
+      body: { re_ids: reIds },
+    }
+  );
+}

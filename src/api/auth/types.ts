@@ -3,7 +3,8 @@ export interface AuthUser {
   mb_id: string;
   mb_name: string;
   mb_level: number;
-  is_admin?: boolean;
+  /** PHP에서 `true` 또는 `1` 로 올 수 있음 */
+  is_admin?: boolean | number | string;
 }
 
 /** 로그인 요청 body */

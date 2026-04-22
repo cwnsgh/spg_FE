@@ -70,11 +70,6 @@ const quickSections: { title: string; items: QuickItem[] }[] = [
         label: "채용 지원자",
         description: "지원서 목록·열람",
       },
-      {
-        href: "/admin/customersupport/qa-config",
-        label: "문의 설정",
-        description: "문의 폼·안내 문구",
-      },
     ],
   },
   {

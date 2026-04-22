@@ -36,6 +36,18 @@ const SUPPORT_TABS: TabItem[] = [
   { label: "다운로드", value: "download" },
 ];
 
+function parseCreatedPostId(response: unknown): number {
+  if (response == null || typeof response !== "object") return 0;
+  const r = response as Record<string, unknown>;
+  const pick = (o: Record<string, unknown>) => o.wr_id ?? o.id;
+  let raw: unknown = pick(r);
+  if (raw == null && typeof r.data === "object" && r.data !== null) {
+    raw = pick(r.data as Record<string, unknown>);
+  }
+  const n = typeof raw === "number" ? raw : Number(raw);
+  return Number.isFinite(n) && n > 0 ? Math.trunc(n) : 0;
+}
+
 export default function InquiryWrite() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -260,6 +272,7 @@ export default function InquiryWrite() {
     const trimmedCategory = writeForm.category.trim();
     const trimmedSubject = writeForm.subject.trim();
     const trimmedWriter = writeForm.writer.trim();
+    const trimmedContact = writeForm.contact.trim();
     const trimmedPassword = writeForm.password.trim();
     const trimmedContent = writeForm.content.trim();
 
@@ -275,6 +288,11 @@ export default function InquiryWrite() {
 
     if (!trimmedWriter) {
       setWriteFormErrorMessage(err.writerRequired);
+      return;
+    }
+
+    if (!trimmedContact) {
+      setWriteFormErrorMessage(err.contactRequired);
       return;
     }
 
@@ -308,6 +326,7 @@ export default function InquiryWrite() {
       formData.set("wr_subject", trimmedSubject);
       formData.set("wr_content", trimmedContent);
       formData.set("wr_name", trimmedWriter);
+      formData.set("wr_1", trimmedContact);
       formData.set("wr_password", trimmedPassword);
       formData.set("agree", "1");
 
@@ -320,7 +339,7 @@ export default function InquiryWrite() {
       });
 
       const response = await createBoardPost(formData);
-      const nextPostId = Number(response.wr_id ?? response.id ?? 0);
+      const nextPostId = parseCreatedPostId(response);
 
       if (nextPostId > 0) {
         router.push(getInquiryDetailPath(activeLanguage, nextPostId));
@@ -412,22 +431,45 @@ export default function InquiryWrite() {
                 </Link>
               </div>
 
+              <div className={pageStyles.writeFormWrap}>
               <div className={formStyles.writeFormGrid}>
-                <label className={formStyles.writeField}>
-                  <span>{w.category}</span>
-                  <select
-                    value={writeForm.category}
-                    onChange={(event) =>
-                      handleWriteFieldChange("category", event.target.value)
-                    }
+                <div className={formStyles.categorySecretRow}>
+                  <label className={formStyles.writeField}>
+                    <span>{w.category}</span>
+                    <select
+                      value={writeForm.category}
+                      disabled={isWriting}
+                      onChange={(event) =>
+                        handleWriteFieldChange("category", event.target.value)
+                      }
+                    >
+                      {writeCategories.map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <div
+                    className={`${formStyles.writeField} ${formStyles.checkField} ${formStyles.secretBesideCategory}`}
                   >
-                    {writeCategories.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                    <span>{w.secretRow}</span>
+                    <label className={formStyles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={writeForm.isSecret}
+                        disabled={isWriting}
+                        onChange={(event) =>
+                          handleWriteFieldChange(
+                            "isSecret",
+                            event.target.checked
+                          )
+                        }
+                      />
+                      <span>{w.secretCheck}</span>
+                    </label>
+                  </div>
+                </div>
 
                 <label
                   className={`${formStyles.writeField} ${formStyles.fullField}`}
@@ -436,6 +478,7 @@ export default function InquiryWrite() {
                   <input
                     type="text"
                     value={writeForm.subject}
+                    disabled={isWriting}
                     onChange={(event) =>
                       handleWriteFieldChange("subject", event.target.value)
                     }
@@ -448,6 +491,7 @@ export default function InquiryWrite() {
                   <input
                     type="text"
                     value={writeForm.writer}
+                    disabled={isWriting}
                     onChange={(event) =>
                       handleWriteFieldChange("writer", event.target.value)
                     }
@@ -455,48 +499,50 @@ export default function InquiryWrite() {
                   />
                 </label>
 
-                <div
-                  className={`${formStyles.writeField} ${formStyles.checkField}`}
-                >
-                  <span>{w.secretRow}</span>
-                  <label className={formStyles.checkboxLabel}>
+                <label className={formStyles.writeField}>
+                  <span>{w.contact}</span>
+                  <input
+                    type="text"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    value={writeForm.contact}
+                    disabled={isWriting}
+                    onChange={(event) =>
+                      handleWriteFieldChange("contact", event.target.value)
+                    }
+                    placeholder={w.contactPh}
+                  />
+                </label>
+
+                <div className={formStyles.passwordPairRow}>
+                  <label className={formStyles.writeField}>
+                    <span>{w.password}</span>
                     <input
-                      type="checkbox"
-                      checked={writeForm.isSecret}
+                      type="password"
+                      value={writeForm.password}
+                      disabled={isWriting}
                       onChange={(event) =>
-                        handleWriteFieldChange("isSecret", event.target.checked)
+                        handleWriteFieldChange("password", event.target.value)
                       }
+                      placeholder={w.passwordPh}
                     />
-                    <span>{w.secretCheck}</span>
+                  </label>
+                  <label className={formStyles.writeField}>
+                    <span>{w.passwordConfirm}</span>
+                    <input
+                      type="password"
+                      value={writeForm.passwordConfirm}
+                      disabled={isWriting}
+                      onChange={(event) =>
+                        handleWriteFieldChange(
+                          "passwordConfirm",
+                          event.target.value
+                        )
+                      }
+                      placeholder={w.passwordConfirmPh}
+                    />
                   </label>
                 </div>
-
-                <label className={formStyles.writeField}>
-                  <span>{w.password}</span>
-                  <input
-                    type="password"
-                    value={writeForm.password}
-                    onChange={(event) =>
-                      handleWriteFieldChange("password", event.target.value)
-                    }
-                    placeholder={w.passwordPh}
-                  />
-                </label>
-
-                <label className={formStyles.writeField}>
-                  <span>{w.passwordConfirm}</span>
-                  <input
-                    type="password"
-                    value={writeForm.passwordConfirm}
-                    onChange={(event) =>
-                      handleWriteFieldChange(
-                        "passwordConfirm",
-                        event.target.value
-                      )
-                    }
-                    placeholder={w.passwordConfirmPh}
-                  />
-                </label>
 
                 <label
                   className={`${formStyles.writeField} ${formStyles.fullField}`}
@@ -504,6 +550,7 @@ export default function InquiryWrite() {
                   <span>{w.content}</span>
                   <textarea
                     value={writeForm.content}
+                    disabled={isWriting}
                     onChange={(event) =>
                       handleWriteFieldChange("content", event.target.value)
                     }
@@ -521,6 +568,7 @@ export default function InquiryWrite() {
                       <input
                         type="file"
                         multiple
+                        disabled={isWriting}
                         className={formStyles.hiddenFileInput}
                         onChange={handleWriteAttachmentChange}
                       />
@@ -537,6 +585,7 @@ export default function InquiryWrite() {
                           <button
                             type="button"
                             className={formStyles.fileRemoveButton}
+                            disabled={isWriting}
                             onClick={() =>
                               handleRemoveWriteAttachment(attachment.id)
                             }
@@ -557,6 +606,7 @@ export default function InquiryWrite() {
                     <input
                       type="checkbox"
                       checked={writeForm.agree}
+                      disabled={isWriting}
                       onChange={(event) =>
                         handleWriteFieldChange("agree", event.target.checked)
                       }
@@ -584,9 +634,26 @@ export default function InquiryWrite() {
                   className={formStyles.modalPrimaryButton}
                   onClick={() => void handleWriteSubmit()}
                   disabled={isWriting}
+                  aria-busy={isWriting}
                 >
                   {isWriting ? w.submitting : w.submit}
                 </button>
+              </div>
+              {isWriting && (
+                <div
+                  className={pageStyles.submittingOverlay}
+                  role="status"
+                  aria-live="polite"
+                >
+                  <div
+                    className={pageStyles.submittingSpinner}
+                    aria-hidden
+                  />
+                  <p className={pageStyles.submittingText}>
+                    {w.submittingOverlay}
+                  </p>
+                </div>
+              )}
               </div>
             </>
           )}

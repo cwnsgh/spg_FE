@@ -4,19 +4,11 @@
   gap: 1.8rem;
 }
 
-.heroCard,
 .tableCard {
   padding: 2.4rem;
   border-radius: 2rem;
   background: #fff;
   box-shadow: 0 14px 36px rgba(17, 42, 95, 0.06);
-}
-
-.heroCard {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 2rem;
 }
 
 .eyebrow {
@@ -100,17 +92,17 @@
 }
 
 .primaryButton {
-  height: 4.6rem;
-  padding: 0 1.8rem;
+  height: 4.5rem;
+  padding: 0 1.7rem;
   background: #172033;
   color: #fff;
 }
 
 .ghostButton {
-  height: 4.4rem;
-  padding: 0 1.6rem;
+  height: 4.5rem;
+  padding: 0 1.7rem;
   background: #f4f7fb;
-  color: #5f6b82;
+  color: #434e5c;
 }
 
 .inlineButton,
@@ -180,6 +172,30 @@
   gap: 0.6rem;
 }
 
+.colActions {
+  width: 14rem;
+  white-space: nowrap;
+}
+
+.subjectTd {
+  max-width: min(38rem, 46vw);
+  vertical-align: middle;
+}
+
+.subjectEllipsis {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actionsTd {
+  width: 14rem;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
 .emptyState {
   padding: 3.6rem 1.2rem !important;
   text-align: center !important;
@@ -244,10 +260,24 @@
 }
 
 .confirmText {
-  margin: 0 0 2rem;
+  margin: 0 0 1rem;
   font-size: 1.5rem;
   line-height: 1.6;
   color: #172033;
+}
+
+.confirmSubject {
+  margin: 0 0 2rem;
+  padding: 1rem 1.2rem;
+  border-radius: 0.9rem;
+  background: #f4f7fb;
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #172033;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .confirmActions {
@@ -319,6 +349,7 @@
 .modalBody {
   padding: 2rem;
   overflow-y: auto;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
 }
 
 .modalFoot {
@@ -333,13 +364,17 @@
 .formGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.2rem;
+  gap: 1.4rem;
 }
 
 .field {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  padding: 1.2rem;
+  border: 1px solid #edf1f7;
+  border-radius: 1.2rem;
+  background: #fff;
 }
 
 .field span {
@@ -368,6 +403,39 @@
 .field textarea {
   min-height: 16rem;
   resize: vertical;
+  line-height: 1.6;
+}
+
+.bodyFieldHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.toggleLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #5f6b82;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggleLabel input {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+  accent-color: #1d5ee8;
+}
+
+.bodyTextarea {
+  min-height: 18rem;
 }
 
 .fullField {
@@ -419,6 +487,7 @@
 .urlRow {
   display: flex;
   gap: 0.8rem;
+  align-items: center;
 }
 
 .urlRow input {
@@ -441,6 +510,10 @@
 
 .imageStripWrap {
   margin-top: 0.4rem;
+  padding: 1.2rem;
+  border: 1px solid #edf1f7;
+  border-radius: 1.2rem;
+  background: #fff;
 }
 
 .imageStrip {

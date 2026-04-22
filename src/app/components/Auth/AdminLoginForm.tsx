@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ApiError } from "@/api";
+import { ApiError, isUserAdmin } from "@/api";
 import { useAuth } from "@/contexts/AuthContext";
 import styles from "./AdminLoginForm.module.css";
 
@@ -35,7 +35,14 @@ export default function AdminLoginForm({ onSuccess }: AdminLoginFormProps) {
         mb_password: mbPassword,
       });
 
-      if (!user?.is_admin) {
+      if (user == null) {
+        setErrorMessage(
+          "로그인 응답은 왔지만 세션(me)을 확인하지 못했습니다. 새로고침 후 다시 시도하거나, 쿠키·프록시 설정을 확인해 주세요."
+        );
+        return;
+      }
+
+      if (!isUserAdmin(user)) {
         await logout();
         setErrorMessage("관리자 계정만 접근할 수 있습니다.");
         return;

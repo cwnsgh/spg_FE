@@ -755,6 +755,14 @@ export default function InquiryDetail({ postId, language }: InquiryDetailProps) 
                     <strong>작성자</strong>
                     {post.writer}
                   </span>
+                  {canManageAnswer && (
+                    <span className={styles.staffOnlyMeta}>
+                      <strong>
+                        {language === "en" ? "Contact" : "연락처"}
+                      </strong>
+                      {post.wr_1?.trim() ? post.wr_1 : "—"}
+                    </span>
+                  )}
                   <span>
                     <strong>작성일</strong>
                     {post.datetime}

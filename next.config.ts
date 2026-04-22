@@ -10,16 +10,57 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV !== "production";
 
-/** API·`toBackendAssetUrl`로 쓰는 백엔드 정적 파일 호스트 (`next/image` 허용 목록) */
-const backendImageHost = "dustinsub.mycafe24.com";
+/**
+ * `next dev`에서 브라우저가 쓰는 주소는 `/api/proxy/...`(동일 출처)뿐입니다.
+ * 아래 origin은 **Next가 rewrites로 전달할 실제 백엔드**이며, 브라우저에 직접 노출되지 않습니다.
+ * 개발만: `NEXT_PUBLIC_DEV_BACKEND_ORIGIN`으로 전달 대상을 바꿀 수 있음.
+ */
+const fallbackBackendOrigin = (
+  process.env.NEXT_PUBLIC_BACKEND_ORIGIN?.trim() ||
+  (isDev ? process.env.NEXT_PUBLIC_DEV_BACKEND_ORIGIN?.trim() : "") ||
+  "https://spg.co.kr"
+).replace(/\/+$/, "");
+
+const backendOrigin = fallbackBackendOrigin;
+
+/** rewrite `destination` 계산 — `async rewrites()` 안에서도 동일 식 사용 */
+function resolveBackendApiOriginForRewrites(): string {
+  const apiBaseEnv = process.env.NEXT_PUBLIC_API_BASE_URL?.trim() ?? "";
+  if (/^https?:\/\//i.test(apiBaseEnv)) {
+    return apiBaseEnv.replace(/\/api\/?$/, "").replace(/\/+$/, "");
+  }
+  return backendOrigin;
+}
+
+/** `next/image` remotePatterns — 백엔드 origin의 프로토콜·호스트를 그대로 따름(http 로컬 포함) */
+const backendUrlForImages = (() => {
+  try {
+    return new URL(backendOrigin);
+  } catch {
+    return new URL("https://spg.co.kr");
+  }
+})();
+
+const imageProtocol =
+  backendUrlForImages.protocol === "https:" ? ("https" as const) : ("http" as const);
+
+const extraImageHosts = (process.env.NEXT_PUBLIC_IMAGE_REMOTE_HOSTNAMES ?? "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
 
 const sharedImages: NonNullable<NextConfig["images"]> = {
   remotePatterns: [
     {
-      protocol: "https",
-      hostname: backendImageHost,
+      protocol: imageProtocol,
+      hostname: backendUrlForImages.hostname,
       pathname: "/data/**",
     },
+    ...extraImageHosts.map((hostname) => ({
+      protocol: "https" as const,
+      hostname,
+      pathname: "/data/**" as const,
+    })),
   ],
 };
 const sharedExperimental: NextConfig["experimental"] = {
@@ -47,10 +88,11 @@ const nextConfig: NextConfig = isDev
         unoptimized: true,
       },
       async rewrites() {
+        const backendApiOrigin = resolveBackendApiOriginForRewrites();
         return [
           {
             source: "/api/proxy/:path*",
-            destination: "https://dustinsub.mycafe24.com/api/:path*",
+            destination: `${backendApiOrigin}/api/:path*`,
           },
           /**
            * 카페24 정적 PDF는 `X-Frame-Options: sameorigin`이라 다른 도메인 iframe에 못 넣음.
@@ -58,7 +100,7 @@ const nextConfig: NextConfig = isDev
            */
           {
             source: "/__backend_asset/:path*",
-            destination: "https://dustinsub.mycafe24.com/:path*",
+            destination: `${backendOrigin}/:path*`,
           },
         ];
       },

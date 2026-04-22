@@ -102,14 +102,114 @@ function escapeHtmlAttr(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 }
 
-function buildNwContentFromSlides(slides: Slide[]): string {
-  if (!slides.length) return "";
-  return slides
+/** 본문 일반 텍스트 → 안전한 최소 HTML (`<p>`, 줄바꿈은 `<br />`) */
+function escapeHtmlBody(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function plainTextToSimpleHtml(plain: string): string {
+  const t = plain.replace(/\r\n/g, "\n").trimEnd();
+  if (!t) return "";
+  return t
+    .split(/\n{2,}/)
+    .map((block) => {
+      const inner = block
+        .split("\n")
+        .map((line) => escapeHtmlBody(line.trimEnd()))
+        .filter((line) => line.length > 0)
+        .join("<br />");
+      return inner ? `<p>${inner}</p>` : "";
+    })
+    .filter(Boolean)
+    .join("");
+}
+
+/** `plainTextToSimpleHtml` 결과만 있는 경우 역으로 편집용 텍스트 복원 */
+function simpleGeneratedHtmlToPlain(html: string): string {
+  if (!html.trim()) return "";
+  try {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const blocks: string[] = [];
+    doc.body.querySelectorAll("p").forEach((p) => {
+      const lines = p.innerHTML
+        .split(/<br\s*\/?>/i)
+        .map((chunk) => {
+          const d = new DOMParser().parseFromString(
+            `<div>${chunk}</div>`,
+            "text/html"
+          );
+          return (d.body.textContent ?? "").replace(/\u00a0/g, " ").trimEnd();
+        })
+        .filter((line) => line.length > 0);
+      if (lines.length) blocks.push(lines.join("\n"));
+    });
+    return blocks.join("\n\n");
+  } catch {
+    return "";
+  }
+}
+
+function htmlToPlainPreview(html: string): string {
+  if (!html.trim()) return "";
+  try {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return (doc.body.textContent ?? "").replace(/\u00a0/g, " ").trim();
+  } catch {
+    return html;
+  }
+}
+
+function normPlainComparableHtml(h: string): string {
+  return h
+    .replace(/\r\n/g, "\n")
+    .replace(/<br\s*\/?>/gi, "<br />")
+    .replace(/\n+/g, "")
+    .replace(/>\s+</g, "><")
+    .trim();
+}
+
+/** 저장된 HTML이 “일반 문장 → 자동 변환” 결과와 같으면 편집 시 일반 모드로 연다 */
+function isPlainGeneratedEquivalent(textPart: string): boolean {
+  const t = textPart.trim();
+  if (!t) return true;
+  const plain = simpleGeneratedHtmlToPlain(t);
+  const regen = plainTextToSimpleHtml(plain);
+  return normPlainComparableHtml(t) === normPlainComparableHtml(regen);
+}
+
+/** HTML 모드 끌 때 본문 textarea 초기값 */
+function popupHtmlToPlainBodyField(html: string): string {
+  if (!html.trim()) return "";
+  if (isPlainGeneratedEquivalent(html)) return simpleGeneratedHtmlToPlain(html);
+  return htmlToPlainPreview(html);
+}
+
+function parseTextHtmlFromContent(html: string): string {
+  if (!html.trim()) return "";
+  try {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    doc.querySelectorAll("img").forEach((img) => img.remove());
+    const cleaned = doc.body.innerHTML.trim();
+    return cleaned;
+  } catch {
+    return "";
+  }
+}
+
+function buildNwContent(contentHtml: string, slides: Slide[]): string {
+  const normalizedText = contentHtml.trim();
+  const imageHtml = slides
     .map(
       (s) =>
         `<p><img src="${escapeHtmlAttr(s.src)}" alt="" style="max-width:100%;height:auto;display:block;" /></p>`
     )
     .join("\n");
+  if (normalizedText && imageHtml) return `${normalizedText}\n${imageHtml}`;
+  return normalizedText || imageHtml;
 }
 
 function thumbSrc(src: string): string {
@@ -129,6 +229,11 @@ export default function AdminPopupsPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<AdminPopupSavePayload>(defaultFormState);
   const [slides, setSlides] = useState<Slide[]>([]);
+  const [contentHtml, setContentHtml] = useState("");
+  /** 일반 문장 모드용 (HTML 태그를 직접 쓰지 않음) */
+  const [plainBody, setPlainBody] = useState("");
+  /** true면 `contentHtml` 그대로 저장, false면 `plainBody`를 자동 `<p>` 변환 */
+  const [bodyIsHtml, setBodyIsHtml] = useState(false);
   const [pendingImageUrl, setPendingImageUrl] = useState("");
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -159,6 +264,9 @@ export default function AdminPopupsPage() {
     setEditingId(null);
     setForm(defaultFormState());
     setSlides([]);
+    setContentHtml("");
+    setPlainBody("");
+    setBodyIsHtml(false);
     setPendingImageUrl("");
     setFormError("");
     setModalOpen(true);
@@ -169,6 +277,11 @@ export default function AdminPopupsPage() {
     setEditingId(row.nw_id);
     setForm(rowToPayload(row));
     setSlides(parseSlidesFromHtml(String(row.nw_content ?? "")));
+    const textPart = parseTextHtmlFromContent(String(row.nw_content ?? ""));
+    setContentHtml(textPart);
+    const usePlainEditor = isPlainGeneratedEquivalent(textPart);
+    setBodyIsHtml(!usePlainEditor);
+    setPlainBody(usePlainEditor ? htmlToPlainPreview(textPart) : "");
     setPendingImageUrl("");
     setFormError("");
     setModalOpen(true);
@@ -182,9 +295,12 @@ export default function AdminPopupsPage() {
   const handleSave = async () => {
     setFormError("");
     setSaving(true);
+    const textPart = bodyIsHtml
+      ? contentHtml.trim()
+      : plainTextToSimpleHtml(plainBody);
     const payload: AdminPopupSavePayload = {
       ...form,
-      nw_content: buildNwContentFromSlides(slides),
+      nw_content: buildNwContent(textPart, slides),
       nw_content_html: 2,
     };
     try {
@@ -242,43 +358,28 @@ export default function AdminPopupsPage() {
 
   return (
     <main className={styles.page}>
-      <div className={styles.heroCard}>
-        <div>
-          <p className={styles.eyebrow}>메인 · 공지</p>
-          <h1 className={styles.title}>팝업 관리</h1>
-          <p className={styles.description}>
-            본문은 <strong>이미지 URL 슬라이드</strong>만 넣습니다(저장 시 HTML로 합쳐짐). 아래 주소로
-            요청합니다. 404면 카페24(또는 API 호스트)의 <code>www/api/admin/popup.php</code>에
-            올렸는지 확인하세요. SFTP로 <code>spg-hasy-j/www/api/admin/popup.php</code>와 동일
-            경로에 업로드하면 됩니다.
-          </p>
-          <div className={styles.apiHint}>
-            <p className={styles.apiHintTitle}>현재 팝업 API (목록·저장 공통)</p>
-            <code className={styles.apiHintUrl}>{getAdminPopupApiUrl()}</code>
-            <p className={styles.apiHintMeta}>
-              API 베이스: <code>{API_BASE_URL}</code>
-              <br />
-              경로만 다르면: <code>.env.local</code>에{" "}
-              <code>NEXT_PUBLIC_API_ADMIN_POPUP_PATH=/실제경로.php</code> 후 개발 서버 재시작.
-            </p>
-          </div>
-        </div>
-        <div className={styles.heroActions}>
-          <button type="button" className={styles.primaryButton} onClick={openCreate}>
-            새 팝업
-          </button>
-        </div>
-      </div>
-
       {toast ? <p className={styles.successMessage}>{toast}</p> : null}
       {listError ? <p className={styles.errorMessage}>{listError}</p> : null}
 
       <section className={styles.tableCard}>
         <div className={styles.tableHeader}>
           <h2 className={styles.tableTitle}>목록</h2>
-          <button type="button" className={styles.ghostButton} onClick={() => void fetchList()}>
-            새로고침
-          </button>
+          <div style={{ display: "flex", gap: "1rem" }}>
+            <button
+              type="button"
+              className={styles.ghostButton}
+              onClick={() => void fetchList()}
+            >
+              새로고침
+            </button>
+            <button
+              type="button"
+              className={styles.primaryButton}
+              onClick={openCreate}
+            >
+              새 팝업
+            </button>
+          </div>
         </div>
 
         {loading ? (
@@ -288,13 +389,13 @@ export default function AdminPopupsPage() {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th>순번</th>
                   <th>제목</th>
                   <th>기기</th>
                   <th>시작</th>
                   <th>종료</th>
                   <th>크기(W×H)</th>
-                  <th style={{ width: "14rem" }}>관리</th>
+                  <th className={styles.colActions}>관리</th>
                 </tr>
               </thead>
               <tbody>
@@ -305,17 +406,24 @@ export default function AdminPopupsPage() {
                     </td>
                   </tr>
                 ) : (
-                  rows.map((row) => (
+                  rows.map((row, index) => (
                     <tr key={row.nw_id}>
-                      <td>{row.nw_id}</td>
-                      <td>{row.nw_subject}</td>
+                      <td>{index + 1}</td>
+                      <td className={styles.subjectTd}>
+                        <span
+                          className={styles.subjectEllipsis}
+                          title={String(row.nw_subject ?? "")}
+                        >
+                          {row.nw_subject}
+                        </span>
+                      </td>
                       <td>{row.nw_device}</td>
                       <td>{String(row.nw_begin_time).slice(0, 16)}</td>
                       <td>{String(row.nw_end_time).slice(0, 16)}</td>
                       <td>
                         {row.nw_width}×{row.nw_height}
                       </td>
-                      <td>
+                      <td className={styles.actionsTd}>
                         <div className={styles.rowActions}>
                           <button
                             type="button"
@@ -365,7 +473,9 @@ export default function AdminPopupsPage() {
               </button>
             </div>
             <div className={styles.modalBody}>
-              {formError ? <p className={styles.formError}>{formError}</p> : null}
+              {formError ? (
+                <p className={styles.formError}>{formError}</p>
+              ) : null}
               <div className={styles.formGrid}>
                 <label className={styles.field}>
                   <span>제목</span>
@@ -384,7 +494,8 @@ export default function AdminPopupsPage() {
                     onChange={(e) =>
                       setForm((f) => ({
                         ...f,
-                        nw_device: e.target.value as AdminPopupSavePayload["nw_device"],
+                        nw_device: e.target
+                          .value as AdminPopupSavePayload["nw_device"],
                       }))
                     }
                   >
@@ -440,7 +551,10 @@ export default function AdminPopupsPage() {
                     type="number"
                     value={form.nw_left}
                     onChange={(e) =>
-                      setForm((f) => ({ ...f, nw_left: Number(e.target.value) || 0 }))
+                      setForm((f) => ({
+                        ...f,
+                        nw_left: Number(e.target.value) || 0,
+                      }))
                     }
                   />
                 </label>
@@ -450,7 +564,10 @@ export default function AdminPopupsPage() {
                     type="number"
                     value={form.nw_top}
                     onChange={(e) =>
-                      setForm((f) => ({ ...f, nw_top: Number(e.target.value) || 0 }))
+                      setForm((f) => ({
+                        ...f,
+                        nw_top: Number(e.target.value) || 0,
+                      }))
                     }
                   />
                 </label>
@@ -484,7 +601,51 @@ export default function AdminPopupsPage() {
                 </label>
 
                 <div className={`${styles.field} ${styles.fullField}`}>
-                  <span>이미지 URL 추가 (https://... 또는 /data/...)</span>
+                  <div className={styles.bodyFieldHead}>
+                    <span>팝업 문구</span>
+                    <label className={styles.toggleLabel}>
+                      <input
+                        type="checkbox"
+                        checked={bodyIsHtml}
+                        onChange={(e) => {
+                          const next = e.target.checked;
+                          if (next) {
+                            setContentHtml(plainTextToSimpleHtml(plainBody));
+                          } else {
+                            setPlainBody(
+                              popupHtmlToPlainBodyField(contentHtml) ||
+                                plainBody
+                            );
+                          }
+                          setBodyIsHtml(next);
+                        }}
+                      />
+                      HTML 직접 입력 (표·링크·굵게 등)
+                    </label>
+                  </div>
+                  <textarea
+                    className={styles.bodyTextarea}
+                    value={bodyIsHtml ? contentHtml : plainBody}
+                    placeholder={
+                      bodyIsHtml
+                        ? "예) <p><strong>제목</strong></p><p>본문</p>"
+                        : "예)\n안녕하세요\n이벤트는 4월 30일까지입니다."
+                    }
+                    onChange={(e) =>
+                      bodyIsHtml
+                        ? setContentHtml(e.target.value)
+                        : setPlainBody(e.target.value)
+                    }
+                  />
+                  <p className={styles.dropZoneSub}>
+                    {bodyIsHtml
+                      ? "태그를 직접 쓰는 모드입니다. 잘못된 HTML은 화면이 깨질 수 있습니다."
+                      : "저장할 때 자동으로 안전한 HTML로 바꿉니다. 비우면 아래 이미지만 표시됩니다."}
+                  </p>
+                </div>
+
+                <div className={`${styles.field} ${styles.fullField}`}>
+                  <span>이미지 URL 추가</span>
                   <div className={styles.urlRow}>
                     <input
                       value={pendingImageUrl}
@@ -497,18 +658,21 @@ export default function AdminPopupsPage() {
                         }
                       }}
                     />
-                    <button type="button" className={styles.inlineButton} onClick={addImageByUrl}>
+                    <button
+                      type="button"
+                      className={styles.inlineButton}
+                      onClick={addImageByUrl}
+                    >
                       추가
                     </button>
                   </div>
-                  <p className={styles.dropZoneSub}>
-                    DB 용량 초과 방지를 위해 base64 업로드는 비활성화했습니다.
-                  </p>
                 </div>
 
                 <div className={`${styles.fullField} ${styles.imageStripWrap}`}>
                   {slides.length === 0 ? (
-                    <p className={styles.previewEmpty}>등록된 이미지가 없습니다.</p>
+                    <p className={styles.previewEmpty}>
+                      등록된 이미지가 없습니다.
+                    </p>
                   ) : (
                     <ul className={styles.imageStrip}>
                       {slides.map((slide, index) => (
@@ -537,7 +701,11 @@ export default function AdminPopupsPage() {
               </div>
             </div>
             <div className={styles.modalFoot}>
-              <button type="button" className={styles.ghostButton} onClick={closeModal}>
+              <button
+                type="button"
+                className={styles.ghostButton}
+                onClick={closeModal}
+              >
                 취소
               </button>
               <button
@@ -558,7 +726,8 @@ export default function AdminPopupsPage() {
           className={styles.confirmOverlay}
           role="presentation"
           onClick={(e) => {
-            if (e.target === e.currentTarget && !deleteLoading) setDeleteTarget(null);
+            if (e.target === e.currentTarget && !deleteLoading)
+              setDeleteTarget(null);
           }}
         >
           <div
@@ -572,8 +741,13 @@ export default function AdminPopupsPage() {
               팝업 삭제
             </h2>
             <p className={styles.confirmText}>
-              「{deleteTarget.nw_subject}」을(를) 삭제할까요? 이 작업은 되돌릴 수
-              없습니다.
+              다음 제목의 팝업을 삭제할까요? 이 작업은 되돌릴 수 없습니다.
+            </p>
+            <p
+              className={styles.confirmSubject}
+              title={deleteTarget.nw_subject}
+            >
+              {deleteTarget.nw_subject}
             </p>
             <div className={styles.confirmActions}>
               <button

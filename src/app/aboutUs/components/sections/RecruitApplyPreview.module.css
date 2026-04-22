@@ -282,13 +282,20 @@
 
 .spgAwardSplit {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 0.35rem 0.5rem;
   align-items: start;
 }
 
 .spgAwardHalf {
   width: 100%;
+  min-width: 0;
+}
+
+/* 2열 그리드 안 표: 좌우 반씩 쓸 때 항목 열이 과하게 넓어지지 않게 */
+.spgAwardSplit .spgTable tbody th {
+  width: 5.8rem;
+  max-width: 42%;
 }
 
 .spgTableCareer {
@@ -306,12 +313,17 @@
 }
 
 .spgBlankLine {
-  min-height: 1.6rem;
+  height: 5rem;
 }
 
 .spgTallBlank {
-  min-height: 6rem;
+  height: 9.6rem;
   vertical-align: top;
+}
+
+.spgInterviewHead {
+  text-align: center !important;
+  vertical-align: middle !important;
 }
 
 .spgAttachBlock {
@@ -868,6 +880,15 @@
   /* 인쇄 시 모든 블록을 avoid 하면 페이지 나눔·미리보기가 불안정해질 수 있음 */
   .spgSection {
     break-inside: auto;
+  }
+
+  /* 인쇄 1페이지 유지: 면접소견 영역은 화면보다 낮은 높이로 고정 */
+  .spgBlankLine {
+    height: 1.6rem;
+  }
+
+  .spgTallBlank {
+    height: 6rem;
   }
 
   .filePreviewBackdrop {

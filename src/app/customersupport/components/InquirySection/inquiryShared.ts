@@ -28,6 +28,8 @@ export const INQUIRY_COPY: Record<
       subjectPh: string;
       writer: string;
       writerPh: string;
+      contact: string;
+      contactPh: string;
       secretRow: string;
       secretCheck: string;
       password: string;
@@ -45,6 +47,8 @@ export const INQUIRY_COPY: Record<
       cancel: string;
       submit: string;
       submitting: string;
+      /** 등록 요청 중 폼 위 오버레이 안내 */
+      submittingOverlay: string;
     };
     writeErrors: {
       checkingPermission: string;
@@ -53,6 +57,7 @@ export const INQUIRY_COPY: Record<
       categoryRequired: string;
       subjectRequired: string;
       writerRequired: string;
+      contactRequired: string;
       passwordRequired: string;
       passwordMismatch: string;
       contentRequired: string;
@@ -75,6 +80,8 @@ export const INQUIRY_COPY: Record<
       subjectPh: "제목을 입력해 주세요",
       writer: "이름",
       writerPh: "이름을 입력해 주세요",
+      contact: "연락처",
+      contactPh: "전화번호 등 연락 가능한 번호를 입력해 주세요",
       secretRow: "비밀글 여부",
       secretCheck: "비밀글로 등록",
       password: "비밀번호",
@@ -93,6 +100,7 @@ export const INQUIRY_COPY: Record<
       cancel: "취소",
       submit: "등록",
       submitting: "등록 중...",
+      submittingOverlay: "문의를 등록하는 중입니다. 잠시만 기다려 주세요.",
     },
     writeErrors: {
       checkingPermission: "권한 정보를 확인하는 중입니다.",
@@ -101,6 +109,7 @@ export const INQUIRY_COPY: Record<
       categoryRequired: "구분을 선택해 주세요.",
       subjectRequired: "제목을 입력해 주세요.",
       writerRequired: "이름을 입력해 주세요.",
+      contactRequired: "연락처를 입력해 주세요.",
       passwordRequired: "비밀번호를 입력해 주세요.",
       passwordMismatch: "비밀번호 확인이 일치하지 않습니다.",
       contentRequired: "내용을 입력해 주세요.",
@@ -123,6 +132,8 @@ export const INQUIRY_COPY: Record<
       subjectPh: "Enter a subject",
       writer: "Name",
       writerPh: "Enter your name",
+      contact: "Contact",
+      contactPh: "Phone or other contact we can reach you at",
       secretRow: "Private post",
       secretCheck: "Post as private",
       password: "Password",
@@ -140,6 +151,7 @@ export const INQUIRY_COPY: Record<
       cancel: "Cancel",
       submit: "Submit",
       submitting: "Submitting...",
+      submittingOverlay: "Submitting your inquiry. Please wait.",
     },
     writeErrors: {
       checkingPermission: "Checking permissions…",
@@ -148,6 +160,7 @@ export const INQUIRY_COPY: Record<
       categoryRequired: "Please select a category.",
       subjectRequired: "Please enter a subject.",
       writerRequired: "Please enter your name.",
+      contactRequired: "Please enter your contact information.",
       passwordRequired: "Please enter a password.",
       passwordMismatch: "Passwords do not match.",
       contentRequired: "Please enter your message.",
@@ -161,6 +174,8 @@ export interface InquiryWriteFormState {
   category: string;
   subject: string;
   writer: string;
+  /** 게시판 확장 필드 `wr_1` — API에서 연락처(필수)로 사용 */
+  contact: string;
   isSecret: boolean;
   password: string;
   passwordConfirm: string;
@@ -201,6 +216,7 @@ export function createInitialInquiryWriteForm(
     category: nextCategories[0] ?? "",
     subject: "",
     writer: "",
+    contact: "",
     isSecret: false,
     password: "",
     passwordConfirm: "",

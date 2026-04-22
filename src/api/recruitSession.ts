@@ -201,6 +201,9 @@ export const RECRUIT_STATUS_LABELS = [
   "삭제대기",
 ] as const;
 
+/** `ajax.application_delete.php` 가 영구삭제하는 상태값 (삭제대기). */
+export const RECRUIT_STATUS_DELETE_PENDING = RECRUIT_STATUS_LABELS.indexOf("삭제대기");
+
 export function recruitStatusLabel(code: number): string {
   if (code >= 0 && code < RECRUIT_STATUS_LABELS.length) {
     return RECRUIT_STATUS_LABELS[code] ?? `상태(${code})`;

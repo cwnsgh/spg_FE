@@ -18,7 +18,11 @@ export default function Vision() {
 
       {/* Core Value 섹션 */}
       <section className={styles.coreValue}>
-        <img src="/images/aboutus/vision/main_pic.png" alt="Core Value" />
+        <img
+          className={styles.coreValueImage}
+          src="/images/aboutus/vision/main_pic.png"
+          alt="Core Value"
+        />
       </section>
 
       {/* Vision 섹션 */}

@@ -77,11 +77,6 @@ const adminMenuGroups: { title: string; items: AdminMenuItem[] }[] = [
         description: "지원서 목록·열람",
         href: "/admin/customersupport/recruit",
       },
-      {
-        label: "문의 설정",
-        description: "문의 폼·안내 문구",
-        href: "/admin/customersupport/qa-config",
-      },
     ],
   },
   {
@@ -136,9 +131,6 @@ function isItemActive(pathname: string, href?: string) {
   }
   if (href === "/admin/analytics/visitors") {
     return pathname.startsWith("/admin/analytics");
-  }
-  if (href === "/admin/customersupport/qa-config") {
-    return pathname === href;
   }
   return pathname.startsWith(href);
 }

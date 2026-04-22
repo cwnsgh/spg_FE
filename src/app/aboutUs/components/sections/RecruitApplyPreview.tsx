@@ -650,53 +650,53 @@ export default function RecruitApplyPreview({
           </section>
 
           <section className={styles.spgSection}>
-            <h2 className={styles.spgSectionTitle}>OA 활용</h2>
-            <table className={`${styles.spgTable} ${styles.spgTableCentered}`}>
-              <tbody>
-                {OA_LABELS.map((label, i) => (
-                  <tr key={label}>
-                    <th>{label}</th>
-                    <td>{norm(oaArr[i])}</td>
+            <h2 className={styles.spgSectionTitle}>OA 활용 · 기타사항</h2>
+            <div className={styles.spgAwardSplit}>
+              <table
+                className={`${styles.spgTable} ${styles.spgTableCentered} ${styles.spgAwardHalf}`}
+              >
+                <tbody>
+                  {OA_LABELS.map((label, i) => (
+                    <tr key={label}>
+                      <th>{label}</th>
+                      <td>{norm(oaArr[i])}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <table className={`${styles.spgTable} ${styles.spgAwardHalf}`}>
+                <tbody>
+                  <tr>
+                    <th>통근방법</th>
+                    <td>{norm(add.trans)}</td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-
-          <section className={styles.spgSection}>
-            <h2 className={styles.spgSectionTitle}>기타사항</h2>
-            <table className={styles.spgTable}>
-              <tbody>
-                <tr>
-                  <th>통근방법</th>
-                  <td>{norm(add.trans)}</td>
-                </tr>
-                <tr>
-                  <th>과거병력</th>
-                  <td>{norm(add.disease)}</td>
-                </tr>
-                <tr>
-                  <th>보훈대상</th>
-                  <td>{norm(add.patriot)}</td>
-                </tr>
-                <tr>
-                  <th>장애여부</th>
-                  <td>{norm(add.disability)}</td>
-                </tr>
-                <tr>
-                  <th>연장근무</th>
-                  <td>{norm(add.over)}</td>
-                </tr>
-                <tr>
-                  <th>주야 교대근무</th>
-                  <td>{norm(add.change)}</td>
-                </tr>
-                <tr>
-                  <th>희망연봉(만원)</th>
-                  <td>{norm(add.salary)}</td>
-                </tr>
-              </tbody>
-            </table>
+                  <tr>
+                    <th>과거병력</th>
+                    <td>{norm(add.disease)}</td>
+                  </tr>
+                  <tr>
+                    <th>보훈대상</th>
+                    <td>{norm(add.patriot)}</td>
+                  </tr>
+                  <tr>
+                    <th>장애여부</th>
+                    <td>{norm(add.disability)}</td>
+                  </tr>
+                  <tr>
+                    <th>연장근무</th>
+                    <td>{norm(add.over)}</td>
+                  </tr>
+                  <tr>
+                    <th>주야 교대근무</th>
+                    <td>{norm(add.change)}</td>
+                  </tr>
+                  <tr>
+                    <th>희망연봉(만원)</th>
+                    <td>{norm(add.salary)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <section className={styles.spgSection}>
@@ -704,21 +704,21 @@ export default function RecruitApplyPreview({
             <table className={styles.spgTable}>
               <tbody>
                 <tr>
-                  <th>면접일</th>
+                  <th className={styles.spgInterviewHead}>면접일</th>
                   <td colSpan={3} className={styles.spgBlankLine}>
                     &nbsp;
                   </td>
                 </tr>
                 <tr>
-                  <th>면접소견</th>
+                  <th className={styles.spgInterviewHead}>면접소견</th>
                   <td colSpan={3} className={styles.spgTallBlank}>
                     &nbsp;
                   </td>
                 </tr>
                 <tr>
-                  <th>최종결정연봉</th>
+                  <th className={styles.spgInterviewHead}>최종결정연봉</th>
                   <td className={styles.spgBlankLine}>&nbsp;</td>
-                  <th>비고</th>
+                  <th className={styles.spgInterviewHead}>비고</th>
                   <td className={styles.spgBlankLine}>&nbsp;</td>
                 </tr>
               </tbody>

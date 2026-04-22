@@ -4,8 +4,10 @@ import {
   ApiError,
   API_BASE_URL,
   BACKEND_ORIGIN,
+  deleteAdminRecruitApplications,
   getAdminRecruitApplications,
   getAdminRecruitApplyPreview,
+  RECRUIT_STATUS_DELETE_PENDING,
   type RecruitApplicationFilePreview,
   type RecruitApplicationRow,
   type RecruitApplicationsResponse,
@@ -17,7 +19,7 @@ import {
   recruitUploadPreviewKind,
 } from "@/app/aboutUs/components/sections/recruitApplyAssets";
 import { requestRecruitApplyPreviewPrint } from "@/app/aboutUs/components/sections/requestRecruitApplyPreviewPrint";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./page.module.css";
 
 /** pt_file에 동일 pf_file(또는 url)이 여러 번 쌓이면 배지가 중복 — 화면에서는 한 번만 */
@@ -82,6 +84,9 @@ export default function AdminRecruitApplicationsPage() {
     nextLabel: string;
   } | null>(null);
   const [statusChanging, setStatusChanging] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const selectAllRef = useRef<HTMLInputElement>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -124,11 +129,69 @@ export default function AdminRecruitApplicationsPage() {
     void load();
   }, [load]);
 
+  useEffect(() => {
+    setSelectedIds([]);
+  }, [page, refreshKey]);
+
   const list = payload?.list ?? [];
   const pagination = payload?.pagination;
   const postOptions = payload?.filter_options?.post_options ?? [];
   const statusOptions = payload?.filter_options?.status_options ?? [];
   const workOptions = payload?.filter_options?.work_options ?? [];
+
+  const pageIds = useMemo(() => list.map((r) => r.re_id), [list]);
+  const allOnPageSelected =
+    pageIds.length > 0 && pageIds.every((id) => selectedIds.includes(id));
+  const someOnPageSelected = pageIds.some((id) => selectedIds.includes(id));
+
+  useEffect(() => {
+    const el = selectAllRef.current;
+    if (!el) return;
+    el.indeterminate = !allOnPageSelected && someOnPageSelected;
+  }, [allOnPageSelected, someOnPageSelected]);
+
+  const selectedRowsResolved = useMemo(() => {
+    return selectedIds
+      .map((id) => list.find((r) => r.re_id === id))
+      .filter((r): r is RecruitApplicationRow => Boolean(r));
+  }, [list, selectedIds]);
+
+  const canDeleteSelected =
+    selectedIds.length > 0 &&
+    selectedRowsResolved.length === selectedIds.length &&
+    selectedRowsResolved.every((r) => r.re_status === RECRUIT_STATUS_DELETE_PENDING);
+
+  const toggleRowSelected = (reId: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(reId) ? prev.filter((id) => id !== reId) : [...prev, reId]
+    );
+  };
+
+  const toggleSelectAllOnPage = () => {
+    if (allOnPageSelected) {
+      setSelectedIds((prev) => prev.filter((id) => !pageIds.includes(id)));
+    } else {
+      setSelectedIds((prev) => [...new Set([...prev, ...pageIds])]);
+    }
+  };
+
+  const confirmBulkDelete = async () => {
+    if (!canDeleteSelected || selectedIds.length === 0) return;
+    const ok = window.confirm(
+      `선택한 ${selectedIds.length}건을 영구 삭제합니다.\n삭제대기 상태인 지원서만 서버에서 삭제됩니다.`
+    );
+    if (!ok) return;
+    setBulkDeleting(true);
+    try {
+      await deleteAdminRecruitApplications(selectedIds);
+      setSelectedIds([]);
+      setRefreshKey((k) => k + 1);
+    } catch (e) {
+      alert(e instanceof ApiError ? e.message : "삭제에 실패했습니다.");
+    } finally {
+      setBulkDeleting(false);
+    }
+  };
 
   const applyFilters = () => {
     setPage(1);
@@ -379,6 +442,9 @@ export default function AdminRecruitApplicationsPage() {
         <table className={styles.table}>
           <thead>
             <tr>
+              <th className={styles.colSelect} scope="col">
+                <span className={styles.srOnly}>선택</span>
+              </th>
               <th className={styles.colStatus}>상태</th>
               <th className={styles.colPost}>공고명</th>
               <th className={styles.colType}>모집분야</th>
@@ -392,7 +458,7 @@ export default function AdminRecruitApplicationsPage() {
           <tbody>
             {list.length === 0 && !loading ? (
               <tr>
-                <td colSpan={8} className={styles.muted}>
+                <td colSpan={9} className={styles.muted}>
                   데이터가 없습니다.
                 </td>
               </tr>
@@ -401,6 +467,15 @@ export default function AdminRecruitApplicationsPage() {
                 const previewFiles = dedupeRecruitFilesPreview(row.files_preview);
                 return (
                 <tr key={row.re_id}>
+                  <td className={styles.colSelect}>
+                    <input
+                      type="checkbox"
+                      className={styles.rowCheckbox}
+                      checked={selectedIds.includes(row.re_id)}
+                      onChange={() => toggleRowSelected(row.re_id)}
+                      aria-label={`${row.applicant.name || `지원서 ${row.re_id}`} 선택`}
+                    />
+                  </td>
                   <td>
                     <select
                       className={styles.statusSelect}
@@ -465,6 +540,40 @@ export default function AdminRecruitApplicationsPage() {
           </tbody>
         </table>
       </div>
+
+      {!loading && list.length > 0 ? (
+        <div className={styles.bulkBar}>
+          <div className={styles.bulkBarLeft}>
+            <label className={styles.selectAllLabel}>
+              <input
+                ref={selectAllRef}
+                type="checkbox"
+                className={styles.rowCheckbox}
+                checked={allOnPageSelected}
+                onChange={toggleSelectAllOnPage}
+              />
+              전체선택
+            </label>
+            <button
+              type="button"
+              className={styles.dangerButton}
+              disabled={!canDeleteSelected || bulkDeleting}
+              title={
+                canDeleteSelected
+                  ? "선택한 삭제대기 지원서를 영구 삭제합니다."
+                  : "삭제대기 상태인 행만 선택한 뒤 사용할 수 있습니다."
+              }
+              onClick={() => void confirmBulkDelete()}
+            >
+              {bulkDeleting ? "삭제 중…" : "삭제대기 선택삭제"}
+            </button>
+          </div>
+          <p className={styles.bulkHint}>
+            선택한 항목이 모두「삭제대기」일 때만 삭제됩니다. 그 외 상태는 먼저 상태를
+            삭제대기로 바꾼 뒤 삭제하세요.
+          </p>
+        </div>
+      ) : null}
 
       {previewOpen ? (
         <div className={styles.modalOverlay} role="dialog" aria-modal="true" aria-label="지원서 미리보기">

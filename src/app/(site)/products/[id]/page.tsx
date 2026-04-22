@@ -4,7 +4,7 @@ import ProductDetailClient from "./ProductDetailClient";
 const DEFAULT_BUILD_API =
   process.env.BUILD_API_BASE_URL ||
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://dustinsub.mycafe24.com/api";
+  "https://spg.co.kr/api";
 
 /** 정적 export 시 빌드 타임에 상품 id 목록을 받아 HTML 생성 (API 실패 시 목업 id만) */
 async function fetchProductIdsForBuild(): Promise<{ id: string }[]> {
