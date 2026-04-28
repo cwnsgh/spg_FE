@@ -123,7 +123,10 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                                   prefetch={false}
                                   onClick={handleLinkClick}
                                 >
-                                  {bigCate.label}
+                                  <span className={styles.hamKo}>{bigCate.label}</span>
+                                  {bigCate.titleEn ? (
+                                    <span className={styles.hamEn}>{bigCate.titleEn}</span>
+                                  ) : null}
                                 </Link>
                                 <button
                                   type="button"
@@ -149,7 +152,10 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                                 prefetch={false}
                                 onClick={handleLinkClick}
                               >
-                                {bigCate.label}
+                                <span className={styles.hamKo}>{bigCate.label}</span>
+                                {bigCate.titleEn ? (
+                                  <span className={styles.hamEn}>{bigCate.titleEn}</span>
+                                ) : null}
                               </Link>
                             )}
                             {hasSmall && (
@@ -169,7 +175,10 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                                         prefetch={false}
                                         onClick={handleLinkClick}
                                       >
-                                        {smallCate.label}
+                                        <span className={styles.hamKo}>{smallCate.label}</span>
+                                        {smallCate.titleEn ? (
+                                          <span className={styles.hamEn}>{smallCate.titleEn}</span>
+                                        ) : null}
                                       </Link>
                                     </li>
                                   )
@@ -219,14 +228,20 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                                 rel="noopener noreferrer"
                                 onClick={handleLinkClick}
                               >
-                                {bigCate.label}
+                                <span className={styles.hamKo}>{bigCate.label}</span>
+                                {bigCate.titleEn ? (
+                                  <span className={styles.hamEn}>{bigCate.titleEn}</span>
+                                ) : null}
                               </a>
                             ) : (
                               <Link
                                 href={bigCate.href}
                                 onClick={handleLinkClick}
                               >
-                                {bigCate.label}
+                                <span className={styles.hamKo}>{bigCate.label}</span>
+                                {bigCate.titleEn ? (
+                                  <span className={styles.hamEn}>{bigCate.titleEn}</span>
+                                ) : null}
                               </Link>
                             )}
                             {bigCate.smallCategories && (
@@ -238,7 +253,10 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                                         href={smallCate.href}
                                         onClick={handleLinkClick}
                                       >
-                                        {smallCate.label}
+                                        <span className={styles.hamKo}>{smallCate.label}</span>
+                                        {smallCate.titleEn ? (
+                                          <span className={styles.hamEn}>{smallCate.titleEn}</span>
+                                        ) : null}
                                       </Link>
                                     </li>
                                   )

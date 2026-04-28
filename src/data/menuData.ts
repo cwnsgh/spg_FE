@@ -97,8 +97,9 @@ export interface HamburgerMenuSection {
   titleEn: string;
   bigCateGroups: {
     label: string;
+    titleEn?: string;
     href: string;
-    smallCategories?: { label: string; href: string }[];
+    smallCategories?: { label: string; titleEn?: string; href: string }[];
   }[][];
 }
 
@@ -108,8 +109,9 @@ export interface HamburgerMenuColumn {
   titleEn?: string;
   bigCateGroups?: {
     label: string;
+    titleEn?: string;
     href: string;
-    smallCategories?: { label: string; href: string }[];
+    smallCategories?: { label: string; titleEn?: string; href: string }[];
   }[][];
   // 나머지 컬럼용: 여러 섹션
   sections?: HamburgerMenuSection[];
@@ -186,25 +188,30 @@ export const hamburgerMenuData: HamburgerMenuColumn[] = [
           [
             {
               label: "해외지사",
+              titleEn: "Overseas Branches",
               href: "/marketing?tab=global-network&type=overseas&category=branch",
             },
             {
               label: "국방대리점",
+              titleEn: "Defense Agencies",
               href: "/marketing?tab=global-network&type=domestic&category=defense",
             },
             {
               label: "국내대리점",
+              titleEn: "Domestic Agencies",
               href: "/marketing?tab=global-network&type=domestic&category=domestic",
             },
             {
               label: "해외대리점",
+              titleEn: "Overseas Agencies",
               href: "/marketing?tab=global-network&type=overseas&category=dealer",
             },
             {
               label: "전문특판점",
+              titleEn: "Specialty Stores",
               href: "/marketing?tab=global-network&type=domestic&category=specialty",
             },
-            { label: "주요고객사", href: "/marketing?tab=customers" },
+            { label: "주요고객사", titleEn: "Key Customers", href: "/marketing?tab=customers" },
           ],
         ],
       },
@@ -213,11 +220,11 @@ export const hamburgerMenuData: HamburgerMenuColumn[] = [
         titleEn: "IR Information",
         bigCateGroups: [
           [
-            { label: "IR 공고", href: "/Irinformation?tab=1" },
-            { label: "IR 행사", href: "/Irinformation?tab=3" },
-            { label: "공시정보", href: "/Irinformation?tab=0" },
-            { label: "IR 콘텐츠", href: "/Irinformation?tab=2" },
-            { label: "IR 자료실", href: "/Irinformation?tab=4" },
+            { label: "IR 공고", titleEn: "IR Notice", href: "/Irinformation?tab=1" },
+            { label: "IR 행사", titleEn: "IR Events", href: "/Irinformation?tab=3" },
+            { label: "공시정보", titleEn: "Disclosure Info", href: "/Irinformation?tab=0" },
+            { label: "IR 콘텐츠", titleEn: "IR Contents", href: "/Irinformation?tab=2" },
+            { label: "IR 자료실", titleEn: "IR Library", href: "/Irinformation?tab=4" },
           ],
         ],
       },
@@ -231,15 +238,16 @@ export const hamburgerMenuData: HamburgerMenuColumn[] = [
         titleEn: "Customer Support",
         bigCateGroups: [
           [
-            { label: "제품문의", href: "/customersupport?tab=inquiry" },
-            { label: "메뉴얼 다운로드", href: "http://spgm.co.kr/" },
-            { label: "FAQ", href: "/customersupport?tab=faq" },
+            { label: "제품문의", titleEn: "Product Inquiry", href: "/customersupport?tab=inquiry" },
+            { label: "메뉴얼 다운로드", titleEn: "Manual Download", href: "http://spgm.co.kr/" },
+            { label: "FAQ", titleEn: "FAQ", href: "/customersupport?tab=faq" },
             {
               label: "서보용 유성감속기 선정",
+              titleEn: "Servo Planetary Selection",
               href: "https://webcatalog.spg.co.kr/",
             },
-            { label: "감속기선정", href: "/customersupport" },
-            { label: "기술자료", href: "/customersupport?tab=technical" },
+            { label: "감속기선정", titleEn: "Reducer Selection", href: "/customersupport" },
+            { label: "기술자료", titleEn: "Technical Data", href: "/customersupport?tab=technical" },
           ],
         ],
       },
@@ -248,12 +256,12 @@ export const hamburgerMenuData: HamburgerMenuColumn[] = [
         titleEn: "About Us",
         bigCateGroups: [
           [
-            { label: "인사말", href: "/aboutUs?tab=0" },
-            { label: "경영이념 및 비전", href: "/aboutUs?tab=1" },
-            { label: "회사연혁", href: "/aboutUs?tab=2" },
-            { label: "채용정보", href: "/aboutUs?tab=3" },
-            { label: "찾아오시는 길", href: "/aboutUs?tab=4" },
-            { label: "윤리규정", href: "/aboutUs?tab=5" },
+            { label: "인사말", titleEn: "Greetings", href: "/aboutUs?tab=0" },
+            { label: "경영이념 및 비전", titleEn: "Vision", href: "/aboutUs?tab=1" },
+            { label: "회사연혁", titleEn: "History", href: "/aboutUs?tab=2" },
+            { label: "채용정보", titleEn: "Recruitment", href: "/aboutUs?tab=3" },
+            { label: "찾아오시는 길", titleEn: "Directions", href: "/aboutUs?tab=4" },
+            { label: "윤리규정", titleEn: "Code of Ethics", href: "/aboutUs?tab=5" },
           ],
         ],
       },

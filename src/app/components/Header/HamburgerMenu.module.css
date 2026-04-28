@@ -94,10 +94,30 @@
   font-size: 1.8rem;
   font-weight: 400;
   padding: 1.1rem 0;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
   line-height: 1.35;
   letter-spacing: -0.02em;
   word-break: keep-all;
+}
+
+.hamKo {
+  display: block;
+  font-size: inherit;
+  font-weight: inherit;
+  color: #fff;
+  line-height: 1.25;
+}
+
+.hamEn {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #8f98aa;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 /* 제품 1뎁스 + 소분류 토글 (모든 뷰포트) */
@@ -176,12 +196,20 @@
   font-weight: 600;
   line-height: 1.25;
   padding: 0.55rem 0;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
   letter-spacing: -0.02em;
   transition: color 0.2s ease;
 }
 .smallCate li:hover a {
   color: #bbb;
+}
+
+.smallCate li a .hamEn {
+  font-size: 1.2rem;
+  color: #6f7889;
 }
 
 /* 반응형 - 모바일 (헤더 100px에 맞춤) */
@@ -256,6 +284,12 @@
     color: #acacac;
     letter-spacing: -0.02em;
     line-height: 1.2;
+  }
+
+  .menuColumn .menu .bigCate > li > a .hamEn,
+  .menuColumn .menu .bigCate > li > .productBigRow > a .hamEn {
+    font-size: 1.2rem;
+    color: #707784;
   }
 
   .menuColumn .menu:first-of-type {

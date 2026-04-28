@@ -66,6 +66,7 @@ const Header: React.FC = () => {
             children.length > 0
               ? children.map((c) => ({
                   label: c.name_ko,
+                  titleEn: (c.name_en ?? "").trim() || undefined,
                   href: buildProductsUrl({
                     rootId: r.ca_id,
                     subId: c.ca_id,
@@ -73,7 +74,12 @@ const Header: React.FC = () => {
                   }),
                 }))
               : undefined;
-          return { label: r.name_ko, href, smallCategories };
+          return {
+            label: r.name_ko,
+            titleEn: (r.name_en ?? "").trim() || undefined,
+            href,
+            smallCategories,
+          };
         };
 
         /** 햄버거 `productMenu` 2열 그리드에 맞춰 1뎁스를 좌/우로 나눕니다. */
