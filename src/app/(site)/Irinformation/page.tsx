@@ -12,11 +12,11 @@ import styles from "../../Irinformation/page.module.css";
 import aboutUsBanner from "../../../assets/aboutus_banner.png";
 
 const IR_INFORMATION_TABS: TabItem[] = [
-  { label: "공시정보", value: 0 },
-  { label: "IR공고", value: 1 },
-  { label: "IR콘텐츠", value: 2 },
-  { label: "IR행사", value: 3 },
-  { label: "IR 자료실", value: 4 },
+  { label: "공시정보", titleEn: "Disclosure Info", value: 0 },
+  { label: "IR공고", titleEn: "IR Notice", value: 1 },
+  { label: "IR콘텐츠", titleEn: "IR Contents", value: 2 },
+  { label: "IR행사", titleEn: "IR Events", value: 3 },
+  { label: "IR 자료실", titleEn: "IR Library", value: 4 },
 ];
 
 function IRInformationContent() {
@@ -42,6 +42,7 @@ function IRInformationContent() {
     <>
       <HeroBanner
         title="IR정보"
+        titleEn="IR Information"
         tabs={IR_INFORMATION_TABS}
         useUrlParams={true}
         backgroundImage={aboutUsBanner.src}

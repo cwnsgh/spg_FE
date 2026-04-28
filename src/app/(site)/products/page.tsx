@@ -151,6 +151,7 @@ function ProductsContentInner() {
     () =>
       roots.map((r) => ({
         label: r.name_ko,
+        titleEn: (r.name_en ?? "").trim() || undefined,
         value: r.ca_id,
       })),
     [roots]
@@ -295,6 +296,7 @@ function ProductsContentInner() {
     <>
       <HeroBanner
         title="제품소개"
+        titleEn="Products"
         backgroundImage={productBanner.src}
         tabs={heroTabs}
         activeTab={validRoot.ca_id}

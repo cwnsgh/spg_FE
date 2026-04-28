@@ -15,8 +15,12 @@ import styles from "../../marketing/page.module.css";
 function MarketingContent() {
   const searchParams = useSearchParams();
   const aboutTabs = [
-    { label: "글로벌 네트워크", value: MARKETING_TAB_VALUES.globalNetwork },
-    { label: "주요고객사", value: MARKETING_TAB_VALUES.customers },
+    {
+      label: "글로벌 네트워크",
+      titleEn: "Global Network",
+      value: MARKETING_TAB_VALUES.globalNetwork,
+    },
+    { label: "주요고객사", titleEn: "Key Customers", value: MARKETING_TAB_VALUES.customers },
   ];
   const activeTab = resolveMarketingTab(searchParams.get("tab"));
 
@@ -40,6 +44,7 @@ function MarketingContent() {
     <>
       <HeroBanner
         title="마케팅"
+        titleEn="Marketing"
         backgroundImage={marketingBanner.src}
         tabs={aboutTabs}
         activeTab={activeTab}

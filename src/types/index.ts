@@ -5,6 +5,7 @@
 // 메뉴 아이템 타입
 export interface MenuItem {
   label: string;
+  titleEn?: string;
   href: string;
   subMenu?: MenuItem[];
 }

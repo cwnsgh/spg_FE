@@ -18,8 +18,13 @@
   padding: 0rem 3.7rem;
   font-size: 1.8rem;
   font-weight: 700;
-  line-height: 100px;
-  display: block;
+  line-height: 1.1;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
   text-decoration: none;
   position: relative;
   z-index: 1;
@@ -33,6 +38,38 @@
   color: #000;
 }
 
+.mainKo,
+.mainEn {
+  display: block;
+  white-space: nowrap;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+.mainKo {
+  color: #9fa7b5;
+  font-size: 1.8rem;
+  font-weight: 700;
+  opacity: 1;
+}
+
+.mainEn {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #9fa7b5;
+  opacity: 1;
+}
+
+.gnb:not(.scrolled) > li > a .mainEn {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.gnb:not(.scrolled) > li > a .mainKo {
+  color: #fff;
+}
+
 /* 1뎁스 호버 — 서브 링크(#112e64 + 연한 배경)와 같은 계열 */
 .gnb:not(.scrolled) > li:hover > a {
   color: #fff;
@@ -42,6 +79,24 @@
 .gnb.scrolled > li:hover > a {
   color: #112e64;
   background-color: rgba(17, 46, 100, 0.07);
+}
+
+/* GNB 전체 hover 시 비호버 1뎁스도 대비되는 컬러로 변경 */
+
+.gnb > li:hover > a .mainEn {
+  opacity: 1;
+  transform: translateY(0);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: currentColor;
+}
+
+.gnb > li:hover > a .mainKo {
+  opacity: 1;
+  transform: translateY(0);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: currentColor;
 }
 
 /* 메뉴 ↔ 서브 사이 마우스 이동 시 끊김 완화 */
@@ -91,12 +146,10 @@
 
 .subMenu li a {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 17px 28px 17px 30px;
-  line-height: 1;
-  font-size: 1.8rem;
-  font-weight: 500;
+  line-height: 1.2;
   color: #1e293b;
   text-decoration: none;
   cursor: pointer;
@@ -104,6 +157,25 @@
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
+}
+
+.subText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.subKo {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+.subEn {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #97a3b8;
 }
 
 .subMenu li a::after {
@@ -120,6 +192,10 @@
 .subMenu li a:hover {
   background-color: rgba(17, 46, 100, 0.08);
   color: #112e64;
+}
+
+.subMenu li a:hover .subEn {
+  color: #5f7395;
 }
 
 .subMenu li a:focus-visible {

@@ -11,10 +11,10 @@ import styles from "../../customersupport/page.module.css";
 function CustomerSupportContent() {
   const searchParams = useSearchParams();
   const supportTabs = [
-    { label: "제품문의", value: "inquiry" },
-    { label: "FAQ", value: "faq" },
-    { label: "다운로드", value: "download" },
-    { label: "기술자료", value: "technical" },
+    { label: "제품문의", titleEn: "Product Inquiry", value: "inquiry" },
+    { label: "FAQ", titleEn: "FAQ", value: "faq" },
+    { label: "다운로드", titleEn: "Download", value: "download" },
+    { label: "기술자료", titleEn: "Technical Data", value: "technical" },
   ];
 
   const breadcrumb = useMemo<BreadcrumbItem[]>(() => {
@@ -43,6 +43,7 @@ function CustomerSupportContent() {
     <>
       <HeroBanner
         title="고객지원"
+        titleEn="Customer Support"
         backgroundImage={customerSupportBanner.src}
         tabs={supportTabs}
         useUrlParams={true}

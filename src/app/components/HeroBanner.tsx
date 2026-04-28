@@ -30,11 +30,13 @@ export type { BreadcrumbItem };
 
 export interface TabItem {
   label: string;
+  titleEn?: string;
   value: string | number;
 }
 
 interface HeroBannerProps {
   title: string; // 페이지 제목 (필수)
+  titleEn?: string; // 페이지 영문 제목 (선택)
   backgroundImage?: string; // 배경 이미지 경로 (선택적, 없으면 기본 그라데이션)
   categoryLinks?: string[]; // 제품 카테고리 링크 (제품소개 페이지용)
   breadcrumb?: BreadcrumbItem[]; // 브레드크럼 (마케팅 페이지용)
@@ -49,6 +51,7 @@ interface HeroBannerProps {
 /** `useSearchParams` 없이 렌더 (정적 export·프리렌더용). URL 동기화는 `useUrlParams`일 때만 내부 래퍼에서 처리 */
 function HeroBannerBody({
   title,
+  titleEn,
   backgroundImage,
   categoryLinks,
   breadcrumb,
@@ -189,7 +192,10 @@ function HeroBannerBody({
             </div>
           )}
 
-          <h1 className={styles.title}>{title}</h1>
+          <h1 className={styles.title}>
+            <span className={styles.titleKo}>{title}</span>
+            {titleEn ? <span className={styles.titleEn}>{titleEn}</span> : null}
+          </h1>
 
           {/* 제품 카테고리 링크 (제품소개 페이지용) */}
           {categoryLinks && categoryLinks.length > 0 && (
@@ -232,7 +238,10 @@ function HeroBannerBody({
                       className={`${styles.tab} ${isActive ? styles.active : ""}`}
                       onClick={() => handleTabChange(tabValue)}
                     >
-                      {tab.label}
+                      <span className={styles.tabKo}>{tab.label}</span>
+                      {tab.titleEn ? (
+                        <span className={styles.tabEn}>{tab.titleEn}</span>
+                      ) : null}
                     </button>
                   );
                 })}

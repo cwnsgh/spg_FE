@@ -22,6 +22,7 @@ import {
   RECRUIT_SCHOOL_END_OPTIONS,
 } from "./recruitApplyStep1Options";
 import { recruitProfileImageUrl } from "./recruitApplyAssets";
+import { coerceRecruitJsonArray, unwrapRecruitJsonString } from "./recruitApplyCoerce";
 import { toDateInputValue } from "./recruitFormRules";
 import RecruitApplyPreview from "./RecruitApplyPreview";
 import { requestRecruitApplyPreviewPrint } from "./requestRecruitApplyPreviewPrint";
@@ -202,8 +203,9 @@ function emptySchoolRow(): SchoolRow {
 }
 
 function mapSchool(v: unknown): SchoolRow[] {
-  if (!Array.isArray(v) || v.length === 0) return [emptySchoolRow()];
-  return v.map((r) => {
+  const arr = coerceRecruitJsonArray(v);
+  if (arr.length === 0) return [emptySchoolRow()];
+  return arr.map((r) => {
     if (!r || typeof r !== "object") return emptySchoolRow();
     const o = r as Record<string, unknown>;
     return {
@@ -218,20 +220,22 @@ function mapSchool(v: unknown): SchoolRow[] {
 }
 
 function mapArmyHydrate(v: unknown): ArmyShape {
-  if (v && typeof v === "object" && !Array.isArray(v)) {
-    const o = v as Record<string, unknown>;
+  const x = unwrapRecruitJsonString(v);
+  if (x && typeof x === "object" && !Array.isArray(x)) {
+    const o = x as Record<string, unknown>;
     return { type: norm(o.type), cont: norm(o.cont) };
   }
-  if (Array.isArray(v) && v[0] && typeof v[0] === "object") {
-    const o = v[0] as Record<string, unknown>;
+  if (Array.isArray(x) && x[0] && typeof x[0] === "object") {
+    const o = x[0] as Record<string, unknown>;
     return { type: norm(o.type), cont: norm(o.cont) };
   }
   return { type: "", cont: "" };
 }
 
 function mapLicence(v: unknown): LicenceRow[] {
-  if (!Array.isArray(v) || v.length === 0) return [emptyLicenceRow()];
-  return v.map((r) => {
+  const arr = coerceRecruitJsonArray(v);
+  if (arr.length === 0) return [emptyLicenceRow()];
+  return arr.map((r) => {
     if (!r || typeof r !== "object") return emptyLicenceRow();
     const o = r as Record<string, unknown>;
     const pub = norm(o.publisher);
@@ -246,8 +250,9 @@ function mapLicence(v: unknown): LicenceRow[] {
 }
 
 function mapCareer(v: unknown): CareerRow[] {
-  if (!Array.isArray(v) || v.length === 0) return [emptyCareerRow()];
-  return v.map((r) => {
+  const arr = coerceRecruitJsonArray(v);
+  if (arr.length === 0) return [emptyCareerRow()];
+  return arr.map((r) => {
     if (!r || typeof r !== "object") return emptyCareerRow();
     const o = r as Record<string, unknown>;
     return {
@@ -266,8 +271,9 @@ function mapCareer(v: unknown): CareerRow[] {
 }
 
 function mapAward(v: unknown): AwardRow[] {
-  if (!Array.isArray(v) || v.length === 0) return [emptyAwardRow()];
-  return v.map((r) => {
+  const arr = coerceRecruitJsonArray(v);
+  if (arr.length === 0) return [emptyAwardRow()];
+  return arr.map((r) => {
     if (!r || typeof r !== "object") return emptyAwardRow();
     const o = r as Record<string, unknown>;
     const cont = norm(o.cont);
@@ -282,9 +288,10 @@ function mapAward(v: unknown): AwardRow[] {
 
 function mapLang(v: unknown): LangRow[] {
   const base = defaultLangRows();
-  if (!Array.isArray(v)) return base;
+  const arr = coerceRecruitJsonArray(v);
+  if (arr.length === 0) return base;
   for (let i = 0; i < 2; i++) {
-    const o = v[i];
+    const o = arr[i];
     if (o && typeof o === "object") {
       const r = o as Record<string, unknown>;
       base[i] = {
@@ -295,8 +302,8 @@ function mapLang(v: unknown): LangRow[] {
       };
     }
   }
-  for (let i = 2; i < v.length; i++) {
-    const o = v[i];
+  for (let i = 2; i < arr.length; i++) {
+    const o = arr[i];
     if (o && typeof o === "object") {
       const r = o as Record<string, unknown>;
       base.push({
@@ -311,25 +318,28 @@ function mapLang(v: unknown): LangRow[] {
 }
 
 function mapOa(v: unknown): string[] {
-  if (!Array.isArray(v)) return ["", "", "", ""];
-  const o = [...v].slice(0, 4).map((x) => norm(x));
+  const arr = coerceRecruitJsonArray(v);
+  if (arr.length === 0) return ["", "", "", ""];
+  const o = [...arr].slice(0, 4).map((x) => norm(x));
   while (o.length < 4) o.push("");
   return o;
 }
 
 function mapAdd(v: unknown): AddShape {
-  if (!v || typeof v !== "object") {
-    return {
-      trans: "",
-      disease: "",
-      patriot: "",
-      disability: "",
-      over: "",
-      change: "",
-      salary: "",
-    };
+  const empty: AddShape = {
+    trans: "",
+    disease: "",
+    patriot: "",
+    disability: "",
+    over: "",
+    change: "",
+    salary: "",
+  };
+  const x = unwrapRecruitJsonString(v);
+  if (!x || typeof x !== "object" || Array.isArray(x)) {
+    return empty;
   }
-  const o = v as Record<string, unknown>;
+  const o = x as Record<string, unknown>;
   return {
     trans: norm(o.trans),
     disease: norm(o.disease),
@@ -342,8 +352,9 @@ function mapAdd(v: unknown): AddShape {
 }
 
 function mapHistory(v: unknown): HistoryRow[] {
-  if (!Array.isArray(v) || v.length === 0) return [emptyHistoryRow()];
-  return v.map((r) => {
+  const arr = coerceRecruitJsonArray(v);
+  if (arr.length === 0) return [emptyHistoryRow()];
+  return arr.map((r) => {
     if (!r || typeof r !== "object") return emptyHistoryRow();
     const o = r as Record<string, unknown>;
     const sdate = toDateInputValue(norm(o.sdate));
@@ -644,7 +655,7 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
     if (!licenceOk) missing.push("자격/면허");
 
     const careerOk = re_career.some((r) => r.name.trim() && r.sdate.trim());
-    if (!careerOk) missing.push("경력사항(회사/내용+시작일)");
+    if (!careerOk) missing.push("경력사항(업체명+근무 시작일)");
 
     const awardOk = re_award.some((r) => r.cont.trim());
     if (!awardOk) missing.push("상벌내용");
@@ -2766,12 +2777,12 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
                         aria-label="근무 년"
                         maxLength={3}
                         onChange={(e) => {
-                          const n = [...re_history];
-                          n[i] = {
-                            ...row,
-                            year: e.target.value.replace(/\D/g, "").slice(0, 3),
-                          };
-                          setRe_history(n);
+                          const year = e.target.value.replace(/\D/g, "").slice(0, 3);
+                          setRe_history((prev) => {
+                            const n = [...prev];
+                            n[i] = { ...prev[i], year };
+                            return n;
+                          });
                         }}
                       />
                       년
@@ -2784,14 +2795,12 @@ export default function RecruitApplyWizard({ wrId, onExit }: Props) {
                         aria-label="근무 개월"
                         maxLength={2}
                         onChange={(e) => {
-                          const n = [...re_history];
-                          n[i] = {
-                            ...row,
-                            month: e.target.value
-                              .replace(/\D/g, "")
-                              .slice(0, 2),
-                          };
-                          setRe_history(n);
+                          const month = e.target.value.replace(/\D/g, "").slice(0, 2);
+                          setRe_history((prev) => {
+                            const n = [...prev];
+                            n[i] = { ...prev[i], month };
+                            return n;
+                          });
                         }}
                       />
                       개월)

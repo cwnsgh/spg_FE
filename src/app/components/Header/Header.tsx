@@ -90,6 +90,7 @@ const Header: React.FC = () => {
 
         const subMenu = roots.map((r) => ({
           label: r.name_ko,
+          titleEn: (r.name_en ?? "").trim() || undefined,
           href: buildProductsUrl({
             rootId: r.ca_id,
             subId: null,

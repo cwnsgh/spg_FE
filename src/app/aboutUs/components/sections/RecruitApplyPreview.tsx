@@ -7,6 +7,7 @@ import {
   recruitUploadPreviewKind,
 } from "./recruitApplyAssets";
 import RecruitPrivacyConsentPreview from "./RecruitPrivacyConsentPreview";
+import { coerceRecruitJsonArray, unwrapRecruitJsonString } from "./recruitApplyCoerce";
 import styles from "./RecruitApplyPreview.module.css";
 
 function norm(v: unknown): string {
@@ -14,16 +15,7 @@ function norm(v: unknown): string {
 }
 
 function asArray(v: unknown): unknown[] {
-  if (Array.isArray(v)) return v;
-  if (typeof v === "string" && v.trim()) {
-    try {
-      const p = JSON.parse(v) as unknown;
-      return Array.isArray(p) ? p : [];
-    } catch {
-      return [];
-    }
-  }
-  return [];
+  return coerceRecruitJsonArray(v);
 }
 
 function rowObj(r: unknown): Record<string, unknown> {
@@ -170,7 +162,7 @@ export default function RecruitApplyPreview({
   postSubject,
   step1Attachments,
 }: RecruitApplyPreviewProps) {
-  const armyRaw = data.re_army;
+  const armyRaw = unwrapRecruitJsonString(data.re_army);
   let armyType = "";
   let armyCont = "";
   if (Array.isArray(armyRaw) && armyRaw[0] && typeof armyRaw[0] === "object") {
@@ -193,7 +185,7 @@ export default function RecruitApplyPreview({
   const awardRows = asArray(data.re_award);
   const langRows = asArray(data.re_lang);
   const oaArr = asArray(data.re_oa);
-  const addRaw = data.re_add;
+  const addRaw = unwrapRecruitJsonString(data.re_add);
   const add =
     addRaw && typeof addRaw === "object" && !Array.isArray(addRaw)
       ? (addRaw as Record<string, unknown>)

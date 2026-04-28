@@ -41,12 +41,16 @@ const GNB: React.FC<GNBProps> = ({
           <Link
             href={menu.href}
             prefetch={true}
+            className={styles.mainLink}
             onClick={(e) => {
               // 서브메뉴가 열려있을 때도 메인 링크 클릭 허용
               e.stopPropagation();
             }}
           >
-            {menu.label}
+            <span className={styles.mainKo}>{menu.label}</span>
+            {menu.titleEn ? (
+              <span className={styles.mainEn}>{menu.titleEn}</span>
+            ) : null}
           </Link>
           {menu.subMenu && (
             <ul className={styles.subMenu}>
@@ -58,7 +62,12 @@ const GNB: React.FC<GNBProps> = ({
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {subItem.label}
+                      <span className={styles.subText}>
+                        <span className={styles.subKo}>{subItem.label}</span>
+                        {subItem.titleEn ? (
+                          <span className={styles.subEn}>{subItem.titleEn}</span>
+                        ) : null}
+                      </span>
                     </a>
                   ) : (
                     <Link
@@ -69,7 +78,12 @@ const GNB: React.FC<GNBProps> = ({
                         // stopPropagation 제거하여 링크가 정상 작동하도록 함
                       }}
                     >
-                      {subItem.label}
+                      <span className={styles.subText}>
+                        <span className={styles.subKo}>{subItem.label}</span>
+                        {subItem.titleEn ? (
+                          <span className={styles.subEn}>{subItem.titleEn}</span>
+                        ) : null}
+                      </span>
                     </Link>
                   )}
                 </li>
