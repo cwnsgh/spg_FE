@@ -110,7 +110,7 @@
   align-items: center;
   width: 100%;
   min-width: max-content;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 .tabsWrap {
@@ -148,7 +148,7 @@
   background: #fff;
   position: absolute;
   top: 50%;
-  transform: translateY(calc(-50% - 1.5rem));
+  transform: translateY(calc(-50% - 0.5rem));
   z-index: 2;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition:
@@ -219,7 +219,7 @@
 }
 
 .tabEn {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 500;
   color: #9da6b7;
 }
