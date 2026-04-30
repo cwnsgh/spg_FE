@@ -29,13 +29,15 @@
 }
 
 .menuColumn:nth-child(1) {
-  margin-right: 3%;
+  margin-right: 7%;
 }
 
 .menuColumn:nth-child(2) {
+  width: 70%;
 }
 
 .menuColumn:nth-child(3) {
+  width: 70%;
   padding-left: 4%;
 }
 

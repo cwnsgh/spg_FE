@@ -124,7 +124,8 @@
   display: none;
   /* 탭(li) 왼쪽에 붙임 — 중앙 정렬(50%/-50%)은 좁은 li에서 로고 쪽으로 밀려 보임 */
   min-width: max(100%, 32rem);
-  padding: 1rem 1rem 1.2rem;
+  /* 아래쪽 둥근 모서리·스크롤 끝에서 마지막 항목이 잘려 보이지 않도록 하단 여백 확보 */
+  padding: 1rem 1rem 2.5rem;
   margin-top: 0;
   background: #fff;
   border-radius: 0 0 2rem 2rem;
@@ -133,6 +134,81 @@
   border: 1px solid #f0f0f0;
   border-top: none;
   box-shadow: 0 0.6rem 2rem rgba(17, 42, 95, 0.08);
+  /* 1차 항목이 많을 때 패널 높이 고정 후 내부 스크롤 */
+  max-height: min(74vh, 50rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-bottom: 1rem;
+  /*
+   * Chromium 121+ 에서 scrollbar-width/color 와 ::-webkit-scrollbar* 를 같이 쓰면
+   * Windows 스타일 스크롤바(위·아래 화살표)가 남는 경우가 있어, WebKit 계열은 아래 블록만 사용.
+   * Firefox 는 파일 말미 @supports 블록에서만 scrollbar-* 적용.
+   */
+}
+
+/* Chrome·Edge·Safari(WebKit) — 트랙+thumb만, 화살표 슬롯 제거 */
+.subMenu::-webkit-scrollbar-button,
+.subMenu::-webkit-scrollbar-button:single-button,
+.subMenu::-webkit-scrollbar-button:double-button,
+.subMenu::-webkit-scrollbar-button:vertical:start:decrement,
+.subMenu::-webkit-scrollbar-button:vertical:end:increment,
+.subMenu::-webkit-scrollbar-button:vertical:start:increment,
+.subMenu::-webkit-scrollbar-button:vertical:end:decrement {
+  display: block;
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  height: 0;
+  min-height: 0;
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.subMenu::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.subMenu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.subMenu::-webkit-scrollbar-track {
+  margin: 0.4rem 0;
+  background: rgba(17, 46, 100, 0.06);
+  border-radius: 100px;
+}
+
+.subMenu::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(17, 46, 100, 0.35) 0%,
+    rgba(17, 46, 100, 0.55) 100%
+  );
+  border-radius: 100px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.subMenu::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(17, 46, 100, 0.5) 0%,
+    rgba(17, 46, 100, 0.72) 100%
+  );
+  background-clip: padding-box;
+}
+
+/* Firefox만: Chromium 에서는 scrollbar-* 를 쓰지 않음(121+ OS 스크롤바·화살표와 충돌 방지) */
+@supports (-moz-appearance: none) {
+  .subMenu {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(17, 46, 100, 0.45) rgba(17, 46, 100, 0.06);
+  }
 }
 
 .gnb li:hover .subMenu {
@@ -146,7 +222,8 @@
 
 .subMenu li a {
   display: flex;
-  align-items: flex-start;
+  /* 한글+영문(subText) 묶음 전체 높이 기준으로 오른쪽 화살표(::after) 세로 중앙 */
+  align-items: center;
   justify-content: space-between;
   padding: 17px 28px 17px 30px;
   line-height: 1.2;
@@ -182,6 +259,7 @@
   content: "";
   background: url("/images/icon/arrow_04.png") no-repeat;
   width: 0.8rem;
+  flex-shrink: 0;
   display: block;
   filter: invert(0.5);
   aspect-ratio: 7/11;
