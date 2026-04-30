@@ -1,5 +1,6 @@
 "use client";
 
+/** 고객지원 기술자료 탭 — 공개 제품 카테고리 트리에서 첨부 표시. 사용처: `SupportTabs.tsx`. */
 import { useEffect, useMemo, useState } from "react";
 import { fetchProductCategoryTree, type ProductCategoryNode } from "@/api/product";
 import { toBackendAssetUrl } from "@/api/config";

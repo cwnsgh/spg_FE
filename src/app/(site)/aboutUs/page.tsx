@@ -1,3 +1,4 @@
+/** Next.js 페이지: 회사소개. URL `/aboutUs` */
 "use client";
 
 import { Suspense, useMemo } from "react";

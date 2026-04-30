@@ -1,6 +1,5 @@
 /**
- * GNB (Global Navigation Bar) 컴포넌트
- * - 메인 네비게이션 메뉴와 서브메뉴 표시
+ * GNB — 데스크톱 1·2뎁스 메뉴. 사용처: `Header/Header.tsx`만.
  */
 "use client";
 

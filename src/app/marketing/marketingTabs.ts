@@ -1,3 +1,7 @@
+/**
+ * 마케팅 페이지 URL 쿼리 `tab` 값과 상수 매핑.
+ * 사용처: `marketing/page.tsx`, `MainTabs.tsx`.
+ */
 export const MARKETING_TAB_VALUES = {
   globalNetwork: "global-network",
   customers: "customers",

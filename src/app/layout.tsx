@@ -1,15 +1,6 @@
 /**
- * RootLayout 컴포넌트
- *
- * Next.js의 루트 레이아웃입니다. 모든 페이지에 공통으로 적용됩니다.
- * 구조:
- * 1. Header: 상단 헤더 (모든 페이지에 표시)
- * 2. {children}: 각 페이지의 콘텐츠 (동적으로 변경됨)
- * 3. Footer: 하단 푸터 (모든 페이지에 표시)
- *
- * 메타데이터:
- * - title: 브라우저 탭에 표시되는 제목
- * - description: SEO를 위한 사이트 설명
+ * Next.js 루트 레이아웃 — 전역 HTML/body, globals.css, AuthProvider만 적용.
+ * 공개 사이트 헤더·푸터는 `(site)/layout.tsx`에서 감쌉니다.
  */
 import type { Metadata } from "next";
 import "./globals.css";

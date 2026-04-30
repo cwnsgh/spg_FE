@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 문의 글 상세·답변·수정. 사용처: `customersupport/inquiry/[language]/[id]/page.tsx`.
+ */
 import {
   ApiError,
   BoardInfo,

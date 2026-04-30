@@ -1,3 +1,4 @@
+/** Next.js 페이지: 공시 상세. URL `/Irinformation/announcement/[id]` */
 import IRAnnouncementDetail from "@/app/Irinformation/components/sections/IRAnnouncementDetail";
 import { fetchAllPostIdsForBoard } from "@/lib/staticExportBoardIds";
 import { notFound } from "next/navigation";

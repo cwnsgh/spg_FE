@@ -1,3 +1,4 @@
+/** IR 콘텐츠 상세 page용 래퍼. 사용처: `Irinformation/content/[id]/page.tsx`. */
 import IRBoardDetail from "./IRBoardDetail";
 
 interface IRContentDetailProps {

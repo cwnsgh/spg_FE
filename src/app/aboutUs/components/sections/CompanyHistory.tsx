@@ -1,5 +1,6 @@
 "use client";
 
+/** 회사소개 탭 2 연혁(타임라인) — `AboutTabs.tsx`에서만 렌더. */
 import { useState, useRef, useEffect } from "react";
 import styles from "./CompanyHistory.module.css";
 

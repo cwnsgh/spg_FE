@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 문의 유형(제품·기술·품질) 탭 UI. 현재 저장소에서 import되는 곳 없음(예비 컴포넌트).
+ */
 import styles from "./InquiryTypeTabs.module.css";
 
 interface InquiryTypeTabsProps {

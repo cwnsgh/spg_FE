@@ -1,5 +1,6 @@
 /**
- * 입사지원서 미리보기에서만 `globals.css`의 인쇄 규칙이 적용되도록 한 뒤 `print()` 호출.
+ * 입사지원서 미리보기 인쇄 트리거. 사용처: `RecruitApplyPreview.tsx`.
+ * `globals.css` 인쇄 규칙 적용 후 `print()` 호출.
  * (헤더·나머지 페이지는 숨기고 `#recruit-apply-print-root` 안만 PDF/인쇄에 나가게 함)
  */
 export function requestRecruitApplyPreviewPrint(): void {

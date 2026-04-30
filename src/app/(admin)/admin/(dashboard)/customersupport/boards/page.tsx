@@ -1,3 +1,4 @@
+/** Next.js 페이지: 게시판(IR·고객지원 등) 설정·글 관리. URL `/admin/customersupport/boards` */
 "use client";
 
 import {

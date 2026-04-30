@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 관리자 IR·고객지원 게시판 글 목록·에디터. 사용처: `ir/announcement|content|event`, `customersupport/boards` page.
+ */
 import {
   ApiError,
   BoardFile,

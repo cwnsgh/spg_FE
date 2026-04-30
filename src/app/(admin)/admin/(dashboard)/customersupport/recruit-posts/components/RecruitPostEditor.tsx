@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 관리자 채용공고 작성·수정·미리보기. 사용처: `recruit-posts/new`, `recruit-posts/edit` page.
+ */
 import {
   ApiError,
   deleteAdminRecruitManagePosts,

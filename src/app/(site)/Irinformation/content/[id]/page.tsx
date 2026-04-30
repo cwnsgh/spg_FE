@@ -1,3 +1,4 @@
+/** Next.js 페이지: IR 콘텐츠 상세. URL `/Irinformation/content/[id]` */
 import IRContentDetail from "@/app/Irinformation/components/sections/IRContentDetail";
 import { fetchAllPostIdsForBoard } from "@/lib/staticExportBoardIds";
 import { notFound } from "next/navigation";

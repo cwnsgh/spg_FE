@@ -1,3 +1,4 @@
+/** 회사소개 탭 0 인사말 — `AboutTabs.tsx`에서만 렌더. */
 import Image from "next/image";
 import ceoImage from "../../../../assets/aboutus/about_ceo.png";
 import styles from "./Greeting.module.css";

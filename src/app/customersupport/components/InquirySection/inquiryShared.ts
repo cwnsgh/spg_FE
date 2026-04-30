@@ -1,4 +1,6 @@
-/** 제품문의 게시판·작성 폼에서 공통으로 쓰는 상수·타입·헬퍼 */
+/**
+ * 제품문의 게시판 상수·검증·타입. 사용처: `InquirySection.tsx`, `InquiryWrite.tsx`, `InquiryDetail.tsx`, 상세 page.
+ */
 
 export const INQUIRY_BOARD_TABLE = {
   ko: "cus_res",

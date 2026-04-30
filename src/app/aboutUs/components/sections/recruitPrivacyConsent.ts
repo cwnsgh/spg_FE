@@ -1,4 +1,4 @@
-/** 신규 입사지원 시 표시하는 개인정보 수집·이용·제공 동의 전문 */
+/** 신규 입사지원 시 동의 전문 텍스트. 사용처: `RecruitApplyWizard.tsx`, `RecruitPrivacyConsentPreview.tsx`. */
 export const RECRUIT_PRIVACY_CONSENT_FULL_TEXT = `개인정보 수집·이용·제공 동의서
 
 (주)에스피지와의 채용절차와 관련하여 귀사가 본인의 개인정보를 수집·이용하거나 제3자에게 제공하고자 하는 경우에는 「개인정보보호법」에 따라 본인의 동의를 얻어야 합니다.

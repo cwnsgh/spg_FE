@@ -1,5 +1,6 @@
 "use client";
 
+/** 마케팅 글로벌 네트워크 국내 시설 탭 — `GlobalNetwork.tsx`에서 domestic 탭일 때만 마운트. URL `/marketing?tab=global` 등. */
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import {

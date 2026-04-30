@@ -1,3 +1,4 @@
+/** Next.js 페이지: 관리자 대시보드 홈. URL `/admin` */
 "use client";
 
 import Link from "next/link";

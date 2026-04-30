@@ -1,3 +1,4 @@
+/** Next.js 페이지: 고객지원 허브. URL `/customersupport` */
 "use client";
 
 import { Suspense, useMemo } from "react";

@@ -1,3 +1,4 @@
+/** Next.js 페이지: 제품 카테고리 트리 관리. URL `/admin/products/categories` */
 "use client";
 
 import {

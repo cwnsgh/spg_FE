@@ -1,5 +1,9 @@
 # spg_FE
 
+## 미사용(import 없음) 모듈 목록
+
+정적 스캔 결과·병합 후보는 **[UNUSED_IMPORTS.md](./UNUSED_IMPORTS.md)** 를 참고하세요. (`node scripts/find-unused-modules.mjs` 로 재생성 가능)
+
 ## 작업 로그 (2026-04-07)
 
 ### 1) 채용 지원 폼(입사지원) 스텝 검증 보강

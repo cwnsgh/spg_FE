@@ -1,6 +1,5 @@
 /**
- * PHP/DB에서 JSON 문자열로 내려오는 배열 필드(re_career, re_history 등)를 배열로 통일합니다.
- * `RecruitApplyPreview`의 `asArray`와 동일한 규칙입니다.
+ * PHP JSON 문자열 필드를 배열로 통일. 사용처: `RecruitApplyPreview.tsx` 등 지원서 UI.
  */
 export function coerceRecruitJsonArray(v: unknown): unknown[] {
   if (Array.isArray(v)) return v;

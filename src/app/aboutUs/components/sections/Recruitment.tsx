@@ -1,5 +1,6 @@
 "use client";
 
+/** 회사소개 탭 3 채용(공고·지원 마법사 진입) — `AboutTabs.tsx`에서만 렌더. */
 import {
   ApiError,
   getRecruitPostDetail,

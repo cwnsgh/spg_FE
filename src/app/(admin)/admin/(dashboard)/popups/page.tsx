@@ -1,3 +1,4 @@
+/** Next.js 페이지: 메인 팝업 관리. URL `/admin/popups` */
 "use client";
 
 import {

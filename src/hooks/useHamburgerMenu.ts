@@ -1,5 +1,6 @@
 /**
- * 햄버거 메뉴 상태 관리 훅
+ * 햄버거 메뉴 열림·닫힘 및 body 스크롤 잠금.
+ * 사용처: `components/Header/Header.tsx`.
  */
 'use client';
 

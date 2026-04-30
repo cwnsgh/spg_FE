@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * IR 허브 탭(공시·공고·콘텐츠·행사·전자공고). 사용처: `Irinformation/page.tsx`(`/Irinformation`).
+ */
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Disclosure from "./sections/Disclosure";

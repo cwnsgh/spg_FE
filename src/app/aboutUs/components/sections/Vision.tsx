@@ -1,3 +1,4 @@
+/** 회사소개 탭 1 비전 — `AboutTabs.tsx`에서만 렌더. */
 import styles from "./Vision.module.css";
 
 export default function Vision() {

@@ -1,5 +1,6 @@
 "use client";
 
+/** IR 탭 0 DART iframe 공시. 사용처: `IRTabs.tsx`. */
 import styles from "./Disclosure.module.css";
 
 export default function Disclosure() {

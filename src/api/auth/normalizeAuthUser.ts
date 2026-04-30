@@ -1,3 +1,6 @@
+/**
+ * 로그인·me 응답의 사용자 객체 정규화(레벨·관리자 플래그). 사용처: `api/auth/index.ts`, `AuthContext.tsx`.
+ */
 import type { AuthUser } from "./types";
 
 function parseLevel(raw: unknown): number {

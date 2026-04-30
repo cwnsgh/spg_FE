@@ -1,5 +1,5 @@
 /**
- * 글로벌 네트워크 브랜치 데이터
+ * 메인 홈 지점 슬라이더용 정적 이미지·지역 목록. 사용처: `home/.../BrandInfo/GlobalNetwork.tsx`.
  */
 import { BranchData } from '../types';
 

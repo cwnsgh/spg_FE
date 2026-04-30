@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 관리자 재무·손익·현금흐름표 편집 UI. 사용처: `ir/financial-statement`, `income-statement`, `cash-flow` page.
+ */
 import {
   ApiError,
   AdminIrListData,

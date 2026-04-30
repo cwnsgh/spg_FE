@@ -1,3 +1,4 @@
+/** Next.js 페이지: FAQ 마스터·항목 관리. URL `/admin/customersupport/faq` */
 "use client";
 
 import {

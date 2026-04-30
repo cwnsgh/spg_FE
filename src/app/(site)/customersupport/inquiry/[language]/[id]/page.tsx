@@ -1,3 +1,4 @@
+/** Next.js 페이지: 문의 상세. URL `/customersupport/inquiry/[language]/[id]` */
 import InquiryDetail from "@/app/customersupport/components/InquirySection/InquiryDetail";
 import { INQUIRY_BOARD_TABLE } from "@/app/customersupport/components/InquirySection/inquiryShared";
 import { fetchAllPostIdsForBoard } from "@/lib/staticExportBoardIds";

@@ -1,5 +1,5 @@
 /**
- * MainTabs 컴포넌트
+ * MainTabs 컴포넌트 — `marketing/page.tsx` 전용. URL 쿼리 `tab`과 연동.
  *
  * 마케팅 페이지의 탭 콘텐츠를 관리하는 컴포넌트입니다.
  * 기능:

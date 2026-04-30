@@ -1,5 +1,5 @@
 /**
- * SupportTabs 컴포넌트
+ * SupportTabs — `customersupport/page.tsx` 전용(`/customersupport`, 쿼리 `tab`).
  *
  * 고객지원 페이지의 탭 콘텐츠를 관리하는 컴포넌트입니다.
  * 기능:

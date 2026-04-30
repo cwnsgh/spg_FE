@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * 마케팅 페이지의 글로벌 네트워크 섹션(해외·국내 탭 전환).
+ * 사용처: `marketing/components/MainTabs.tsx` → `marketing/page.tsx` (`/marketing`).
+ */
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import styles from "./GlobalNetwork.module.css";

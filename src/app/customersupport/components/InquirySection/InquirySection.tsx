@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 제품문의 탭(게시판 목록·글쓰기·비밀글 등). 사용처: `SupportTabs.tsx`, 문의 작성 페이지에서 일부 재사용 가능.
+ */
 import {
   ApiError,
   BoardInfo,

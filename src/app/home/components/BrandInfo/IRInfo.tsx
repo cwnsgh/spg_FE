@@ -1,5 +1,5 @@
 /**
- * IR 정보 컴포넌트
+ * IR 정보 컴포넌트 — 메인 홈 `BrandInfo.tsx` 하위만.
  * - 주가정보: 백엔드 API 없음 → `irData` 표시, 카드는 IR정보 페이지로 이동
  * - 재무제표: `getFinancials`(손익·재무상태표) 최신 연도 요약
  * - IR정보: IR공고(`ir_notice`) 최신 1건

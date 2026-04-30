@@ -1,3 +1,6 @@
+/**
+ * 개인정보 동의서 미리보기 UI. 사용처: `RecruitApplyPreview.tsx`.
+ */
 import styles from "./RecruitPrivacyConsentPreview.module.css";
 
 function norm(v: unknown): string {

@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 채용 공고 상세·모집분야 렌더(공개·어드민 미리보기 공용). 사용처: `RecruitPostEditor.tsx`.
+ */
 import type { RecruitPostDetail, RecruitPositionDetail } from "@/api";
 import type { ReactNode } from "react";
 import modalStyles from "@/app/aboutUs/components/sections/Recruitment.module.css";

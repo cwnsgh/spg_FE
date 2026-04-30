@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * IR 게시판 공통 목록·페이징 UI. 사용처: `IRAnnouncement.tsx`, `IRContent.tsx`, `IREvent.tsx`.
+ */
 import { ApiError, BoardPostItem, getBoardPosts } from "@/api";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";

@@ -1,3 +1,4 @@
+/** IR 공고 상세 page용 래퍼. 사용처: `Irinformation/announcement/[id]/page.tsx`. */
 import IRBoardDetail from "./IRBoardDetail";
 
 interface IRAnnouncementDetailProps {

@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 구버전 모바일 메뉴. 사용처: `Navigation.tsx`만 — Navigation 미사용으로 현재 앱 경로에서는 비활성.
+ */
 import { useState } from "react";
 import Link from "next/link";
 import styles from "./MobileMenu.module.css";

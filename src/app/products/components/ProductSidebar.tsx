@@ -1,5 +1,5 @@
 /**
- * ProductSidebar 컴포넌트
+ * 제품소개 왼쪽 사이드바(레거시 마크업). 현재 `(site)/products/page.tsx`에서 import되지 않음.
  *
  * 제품소개 페이지의 왼쪽 사이드바입니다.
  * 기능:

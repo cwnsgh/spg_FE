@@ -1,3 +1,4 @@
+/** Next.js 페이지: 채용 공고 목록·삭제. URL `/admin/customersupport/recruit-posts` */
 "use client";
 
 import {

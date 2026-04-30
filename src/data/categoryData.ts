@@ -1,5 +1,5 @@
 /**
- * 카테고리 메뉴 데이터
+ * 메인 홈 하단 바로가기 4칸. 사용처: `home/.../CategoryMenu/CategoryMenu.tsx`.
  */
 import { CategoryItem } from "../types";
 

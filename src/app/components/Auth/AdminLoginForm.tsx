@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 관리자 로그인 폼. 사용처: `admin/login/page.tsx`, `AdminLoginModal.tsx`.
+ */
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiError, isUserAdmin } from "@/api";

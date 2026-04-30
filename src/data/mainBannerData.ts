@@ -1,5 +1,5 @@
 /**
- * 메인 배너 슬라이드 데이터
+ * 메인 히어로 슬라이드 문구·이미지. 사용처: `home/.../MainBanner/MainBanner.tsx`.
  */
 import { MainBannerSlide } from '../types';
 

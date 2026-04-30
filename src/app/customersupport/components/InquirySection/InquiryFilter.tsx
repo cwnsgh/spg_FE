@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 문의 필터 UI 스텁. 현재 다른 파일에서 import되지 않음.
+ */
 import { useState } from "react";
 import styles from "./InquiryFilter.module.css";
 

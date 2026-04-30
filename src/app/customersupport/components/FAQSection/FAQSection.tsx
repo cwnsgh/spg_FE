@@ -1,5 +1,6 @@
 "use client";
 
+/** 고객지원 FAQ 탭 본문. 사용처: `SupportTabs.tsx`. */
 import { useCallback, useEffect, useState } from "react";
 import { ApiError, FaqItem, FaqMaster, getFaq } from "@/api";
 import styles from "./FAQSection.module.css";

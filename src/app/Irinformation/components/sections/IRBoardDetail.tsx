@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * IR 게시글 상세(본문·첨부·HeroBanner). 사용처: `IRContentDetail`, `IRAnnouncementDetail`, `IREventDetail`.
+ */
 import {
   ApiError,
   BoardPostDetail,

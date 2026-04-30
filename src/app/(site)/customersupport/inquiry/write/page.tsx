@@ -1,3 +1,4 @@
+/** Next.js 페이지: 문의 작성. URL `/customersupport/inquiry/write` */
 import { Suspense } from "react";
 import InquiryWrite from "@/app/customersupport/components/InquirySection/InquiryWrite";
 

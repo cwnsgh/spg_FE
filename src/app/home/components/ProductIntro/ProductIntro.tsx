@@ -1,5 +1,5 @@
 /**
- * 제품 소개 섹션 컴포넌트
+ * 제품 소개 섹션 — `(site)/page.tsx` 메인 홈.
  * - 데이터: 공개 API 1뎁스(대분류) 카테고리 (`fetchProductCategoryTree` → `tree`)
  * - 제품 정보 텍스트 영역 (A) / 이미지 Swiper (B) / 메뉴 (C)
  * - 메뉴 클릭 및 Swiper 드래그 시 동기화

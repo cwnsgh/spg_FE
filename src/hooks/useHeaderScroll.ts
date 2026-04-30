@@ -1,5 +1,6 @@
 /**
- * 헤더 스크롤 및 호버 상태 관리 훅
+ * 헤더 스크롤·호버 상태 훅.
+ * 사용처: `components/Header/Header.tsx` — 스크롤 시 헤더 스타일 전환.
  */
 'use client';
 

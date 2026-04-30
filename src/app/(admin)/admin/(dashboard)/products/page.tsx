@@ -1,3 +1,4 @@
+/** Next.js 페이지: 관리자 제품(SPG) 목록·편집. URL `/admin/products` */
 "use client";
 
 import {

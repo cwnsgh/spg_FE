@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 헤더에서 관리자 로그인 시 오버레이 모달. 사용처: `Header/Header.tsx`.
+ */
 import { useEffect } from "react";
 import AdminLoginForm from "./AdminLoginForm";
 import styles from "./AdminLoginModal.module.css";

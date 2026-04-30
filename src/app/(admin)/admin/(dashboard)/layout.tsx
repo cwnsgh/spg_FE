@@ -1,3 +1,7 @@
+/**
+ * 관리자 대시보드 셸 — /admin 하위(로그인 제외 대시보드 경로)에 사이드 메뉴·인증 가드 적용.
+ * Next가 (dashboard) 아래 각 page.tsx를 이 레이아웃으로 감쌉니다.
+ */
 "use client";
 
 import Link from "next/link";

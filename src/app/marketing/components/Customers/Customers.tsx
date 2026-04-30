@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * 마케팅 페이지 주요 고객사 로고 그리드.
+ * 사용처: `MainTabs.tsx` 탭 "customers" → `marketing/page.tsx`.
+ */
 import styles from "./Customers.module.css";
 
 interface Client {

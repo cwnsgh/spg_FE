@@ -1,6 +1,7 @@
 .breadcrumb {
   margin-bottom: 0;
-  padding: 10rem var(--layout-side-pc-sub) 0;
+  /* HeroBanner `.heroContentInner` 과 동일한 좌우 비율(데스크톱) */
+  padding: 10rem 9.9% 0 13.5%;
 }
 
 .breadcrumb ol {
@@ -17,10 +18,52 @@
   position: relative;
 }
 
-.breadcrumb ol li * {
+/* 아이콘만: 옆 칸 `.labelKo` + `.labelEn` 두 줄과 비슷한 높이로 맞춤 */
+.homeLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: calc(1.3rem * 1.25 + 1.1rem * 1.25 + 0.15rem);
+}
+
+.homeIcon {
+  flex-shrink: 0;
+  display: block;
+}
+
+.crumbInner {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 0.6rem;
+  column-gap: 0.6rem;
+}
+
+.labelKo {
   font-size: 1.3rem;
   font-weight: 600;
   color: #161616;
+}
+
+.labelEn {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #9aa3b5;
+  font-family: "Outfit", sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.breadcrumb ol li .labelKo {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #161616;
+}
+
+.breadcrumb ol li .labelEn {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #9aa3b5;
 }
 
 .breadcrumb ol li::after {
@@ -59,6 +102,14 @@
   font-weight: 600;
 }
 
+.current .labelKo {
+  color: #161616;
+}
+
+.current .labelEn {
+  color: #9aa3b5;
+}
+
 @media (max-width: 1050px) {
   .breadcrumb {
     width: 100%;
@@ -79,9 +130,15 @@
     flex: 0 1 auto;
     max-width: 100%;
   }
-  .breadcrumb ol li * {
+  .breadcrumb ol li .labelKo {
     font-size: 1.4rem;
     word-break: break-word;
+  }
+  .breadcrumb ol li .labelEn {
+    font-size: 1.05rem;
+  }
+  .homeLink {
+    min-height: calc(1.4rem * 1.25 + 1.05rem * 1.25 + 0.15rem);
   }
   .breadcrumb ol li::after {
     right: -0.9rem;

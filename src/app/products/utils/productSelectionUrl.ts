@@ -1,3 +1,7 @@
+/**
+ * 제품 목록 URL 쿼리(tab, sub, d3)와 트리 선택 동기화.
+ * 사용처: `(site)/products/page.tsx`, `Header/Header.tsx`(제품 링크 빌드).
+ */
 import type { ProductCategoryNode } from "@/api/product";
 
 /** 제품 목록 화면에서 쓰는 탭/서브/3뎁스 선택 상태 */

@@ -1,3 +1,4 @@
+/** Next.js 페이지: Q&A(또는 문의) 폼/노출 설정. URL `/admin/customersupport/qa-config` */
 "use client";
 
 import { ApiError, getAdminQaConfig, updateAdminQaConfig } from "@/api";

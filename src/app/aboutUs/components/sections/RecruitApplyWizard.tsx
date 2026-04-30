@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 채용 지원 다단계 폼·API 저장. 사용처: `RecruitApplyPanel.tsx`.
+ */
 import {
   ApiError,
   getRecruitPostDetail,

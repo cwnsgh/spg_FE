@@ -1,3 +1,4 @@
+/** Next.js 페이지: IR 이벤트 게시글 관리. URL `/admin/ir/event` */
 "use client";
 
 import BoardPostManager from "../components/BoardPostManager";

@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 메인 레이어 팝업(그누 new_win). 사용처: `(site)/page.tsx` 최상단, `fetchSitePopups` API.
+ */
 import React, { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { fetchSitePopups, type SitePopup } from "@/api/popups";

@@ -1,3 +1,6 @@
+/**
+ * 목업 제품 타입·정적 목록(빌드 폴백·데모). 사용처: `(site)/products/[id]/page.tsx` 등 API 실패 시.
+ */
 // 제품 데이터 타입 정의
 export interface ProductFeature {
   korean: string;

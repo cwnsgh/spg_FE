@@ -1,3 +1,4 @@
+/** Next.js 페이지: IR 정보 허브. URL `/Irinformation` */
 "use client";
 
 import { Suspense, useMemo } from "react";

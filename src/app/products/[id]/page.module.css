@@ -1,5 +1,7 @@
+/* 제품 목록 `products/page.module.css` 의 `.main` 과 동일 패턴(히어로·브레드크럼 정렬 통일) */
 .main {
-  padding: 100px 0 0;
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   width: 100%;
   max-width: 100%;
@@ -14,18 +16,14 @@
 }
 
 .breadcrumbArea {
-  margin-bottom: 80px;
-  display: flex;
-  justify-content: flex-start;
   width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
+  background-color: rgb(255, 255, 255);
 }
 
-/* 제품 상세 영역 */
+/* 제품 상세 영역 (이전 breadcrumbArea margin 대체) */
 .productDetail {
   padding: 0 var(--layout-side-pc-sub);
+  margin-top: 8rem;
 }
 
 .productInfo {
@@ -352,21 +350,14 @@
 }
 
 @media (max-width: 1050px) {
-  .main {
-    padding-top: 8rem;
-  }
-
   .loadingMsg {
     padding: 3rem var(--layout-side-mo);
-  }
-
-  .breadcrumbArea {
-    margin-bottom: 2.4rem;
   }
 
   .productDetail {
     padding: 0 var(--layout-side-mo);
     min-width: 0;
+    margin-top: 2.4rem;
   }
 
   .productTitleKorean {

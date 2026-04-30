@@ -1,3 +1,4 @@
+/** Next.js 페이지: 방문자 통계·로그 검색. URL `/admin/analytics/visitors` */
 "use client";
 
 import {

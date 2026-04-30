@@ -1,3 +1,4 @@
+/** Next.js 페이지: 손익계산서(IR) 관리. URL `/admin/ir/income-statement` */
 "use client";
 
 import {

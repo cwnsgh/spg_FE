@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 관리자 SPG 제품 생성·수정 모달. 사용처: `admin/(dashboard)/products/page.tsx`.
+ */
 import {
   ApiError,
   createAdminSpgProduct,

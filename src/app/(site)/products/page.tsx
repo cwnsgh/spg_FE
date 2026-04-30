@@ -1,3 +1,4 @@
+/** Next.js 페이지: 제품 목록·필터. URL `/products` */
 "use client";
 
 import {
@@ -262,13 +263,17 @@ function ProductsContentInner() {
   const breadcrumbItems = useMemo<BreadcrumbItem[]>(() => {
     const baseItems: BreadcrumbItem[] = [
       { label: "홈", href: "/" },
-      { label: "제품소개", href: "/products" },
+      { label: "제품소개", href: "/products", labelEn: "Products" },
     ];
     if (validRoot?.name_ko) {
-      baseItems.push({ label: validRoot.name_ko });
+      const en = validRoot.name_en?.trim();
+      baseItems.push({
+        label: validRoot.name_ko,
+        ...(en ? { labelEn: en } : {}),
+      });
     }
     return baseItems;
-  }, [validRoot?.name_ko]);
+  }, [validRoot?.name_ko, validRoot?.name_en]);
 
   if (catLoading) {
     return (

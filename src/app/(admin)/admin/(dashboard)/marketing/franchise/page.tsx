@@ -1,3 +1,4 @@
+/** Next.js 페이지: 가맹점(프랜차이즈) 정보 관리. URL `/admin/marketing/franchise` */
 "use client";
 
 import Script from "next/script";

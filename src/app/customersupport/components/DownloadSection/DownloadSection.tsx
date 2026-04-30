@@ -1,5 +1,6 @@
 "use client";
 
+/** 고객지원 다운로드 탭(목업·정적 목록). 사용처: `SupportTabs.tsx`. */
 import { useState, useMemo } from "react";
 import Image from "next/image";
 import styles from "./DownloadSection.module.css";

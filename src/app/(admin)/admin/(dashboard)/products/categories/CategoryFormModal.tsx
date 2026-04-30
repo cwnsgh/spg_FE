@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 관리자 제품 카테고리 생성·수정 모달. 사용처: `admin/products/categories/page.tsx`.
+ */
 import {
   ApiError,
   createAdminSpgCategory,

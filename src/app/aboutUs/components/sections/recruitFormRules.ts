@@ -1,4 +1,7 @@
-/** 백엔드 `auth.php` / `apply.php` 와 동일: 6~12자 (문자 종류 제한 없음) */
+/**
+ * 지원 비밀번호·날짜 등 검증 규칙(백엔드 auth·apply와 동일). 사용처: `RecruitApplyPanel.tsx`, `RecruitApplyWizard.tsx`.
+ * 비밀번호: 6~12자(문자 종류 제한 없음).
+ */
 export const RECRUIT_PASSWORD_MIN = 6;
 export const RECRUIT_PASSWORD_MAX = 12;
 

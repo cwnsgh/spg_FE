@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 지원서 미리보기·인쇄용 레이아웃. 사용처: `RecruitApplyWizard.tsx`, `RecruitStatusPanel.tsx`.
+ */
 import { Fragment, useEffect, useState } from "react";
 import {
   recruitProfileImageUrl,

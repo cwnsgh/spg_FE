@@ -1,5 +1,6 @@
 "use client";
 
+/** 제품 목록 그리드·호버 레이아웃. 사용처: `(site)/products/page.tsx`. */
 import { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";

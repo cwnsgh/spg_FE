@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 구버전 검색 토글 UI. 사용처: `Navigation.tsx`만 — Navigation 미사용.
+ */
 import { useState } from "react";
 import styles from "./SearchButton.module.css";
 

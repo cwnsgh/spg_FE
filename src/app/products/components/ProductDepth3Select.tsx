@@ -1,5 +1,6 @@
 "use client";
 
+/** 3뎁스 카테고리 셀렉트. 사용처: `(site)/products/page.tsx`. */
 import styles from "./ProductDepth3Select.module.css";
 
 export interface Depth3Option {

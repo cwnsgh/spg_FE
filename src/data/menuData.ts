@@ -1,6 +1,6 @@
 /**
- * 헤더 메뉴 데이터
- * - `제품소개` 서브메뉴(1뎁스 카테고리명)는 `Header`에서 API로 받아 `subMenu`를 채웁니다.
+ * 헤더·햄버거 정적 메뉴 트리(`gnbMenuData`, `hamburgerMenuData`).
+ * 사용처: `Header/Header.tsx`, `Header/HamburgerMenu.tsx`. 제품 1뎁스는 Header에서 API로 `subMenu` 보강.
  */
 import { MenuItem } from "../types";
 

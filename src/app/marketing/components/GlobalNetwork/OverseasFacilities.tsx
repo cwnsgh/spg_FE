@@ -1,5 +1,6 @@
 "use client";
 
+/** 마케팅 글로벌 네트워크 해외 시설 탭 — `GlobalNetwork.tsx`에서 overseas 탭일 때만 마운트. */
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { ApiError, FranchiseItem, getFranchiseList } from "@/api";

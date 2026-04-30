@@ -1,3 +1,4 @@
+/** Next.js 페이지: IR 이벤트 상세. URL `/Irinformation/event/[id]` */
 import IREventDetail from "@/app/Irinformation/components/sections/IREventDetail";
 import { fetchAllPostIdsForBoard } from "@/lib/staticExportBoardIds";
 import { notFound } from "next/navigation";

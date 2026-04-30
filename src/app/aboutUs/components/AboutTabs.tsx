@@ -1,5 +1,5 @@
 /**
- * AboutTabs 컴포넌트
+ * AboutTabs — `aboutUs/page.tsx` 전용(`/aboutUs`, 쿼리 `tab`).
  *
  * 회사소개 페이지의 탭 콘텐츠를 관리하는 컴포넌트입니다.
  * 기능:

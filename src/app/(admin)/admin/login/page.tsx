@@ -1,3 +1,4 @@
+/** Next.js 페이지: 관리자 로그인. URL `/admin/login` */
 "use client";
 
 import { useEffect } from "react";

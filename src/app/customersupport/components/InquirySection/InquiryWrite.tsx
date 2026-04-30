@@ -1,5 +1,6 @@
 "use client";
 
+/** 문의 글 작성 폼 전체 레이아웃. 사용처: `customersupport/inquiry/write/page.tsx`. */
 import {
   ApiError,
   BoardInfo,

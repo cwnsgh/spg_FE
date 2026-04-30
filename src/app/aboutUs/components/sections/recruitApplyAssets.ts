@@ -1,3 +1,6 @@
+/**
+ * 채용 첨부·프로필 이미지 URL 빌더. 사용처: `RecruitApplyPreview.tsx`, `RecruitApplyWizard.tsx`.
+ */
 import { toBackendAssetUrl } from "@/api/config";
 
 function trimStr(v: unknown): string {

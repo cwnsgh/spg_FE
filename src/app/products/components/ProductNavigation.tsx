@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 제품 목록 상단 카테고리별 첨부 링크·네비. 사용처: `(site)/products/page.tsx`.
+ */
 import type { ProductCategoryFile } from "@/api/product";
 import { toBackendAssetUrl } from "@/api/config";
 import type { ProductSubCategory } from "../data/productData";

@@ -1,3 +1,4 @@
+/** Next.js 페이지: 재무상태표(IR) 관리. URL `/admin/ir/financial-statement` */
 "use client";
 
 import {

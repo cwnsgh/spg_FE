@@ -1,3 +1,6 @@
+/**
+ * 관리자 제품 카테고리 평면 목록 → 트리 변환·정렬. 사용처: `products/categories/page.tsx`, `CategoryFormModal.tsx`.
+ */
 import type { AdminSpgCategoryRow } from "@/api";
 
 export type CategoryTreeNode = AdminSpgCategoryRow & {

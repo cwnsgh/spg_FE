@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 제품 상세 클라이언트 UI. 사용처: `(site)/products/[id]/page.tsx`.
+ */
 import {
   useCallback,
   useEffect,
@@ -467,6 +470,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
     () =>
       categoryTree.map((r) => ({
         label: r.name_ko,
+        titleEn: (r.name_en ?? "").trim() || undefined,
         value: r.ca_id,
       })),
     [categoryTree]
@@ -526,23 +530,34 @@ export default function ProductDetailClient({ id }: { id: string }) {
       const rootId = pathInTree[0].ca_id;
       items.push({
         label: "제품소개",
+        labelEn: "Products",
         href: buildProductsUrl({ rootId, subId: null, d3Id: null }),
       });
       pathInTree.forEach((node, index) => {
+        const en = node.name_en?.trim();
         items.push({
           label: node.name_ko,
+          ...(en ? { labelEn: en } : {}),
           href: buildProductsUrlForTreePath(pathInTree!, index),
         });
       });
     } else {
-      items.push({ label: "제품소개", href: "/products" });
+      items.push({
+        label: "제품소개",
+        labelEn: "Products",
+        href: "/products",
+      });
     }
 
     if (view?.name) {
-      items.push({ label: view.name });
+      const en = view.nameEn?.trim();
+      items.push({
+        label: view.name,
+        ...(en ? { labelEn: en } : {}),
+      });
     }
     return items;
-  }, [view?.name, categoryTree, useApi, apiProduct?.categories]);
+  }, [view?.name, view?.nameEn, categoryTree, useApi, apiProduct?.categories]);
 
   if (useApi && loading) {
     return (
@@ -576,6 +591,7 @@ export default function ProductDetailClient({ id }: { id: string }) {
     <main className={styles.main}>
       <HeroBanner
         title="제품소개"
+        titleEn="Products"
         backgroundImage={productBanner.src}
         tabs={heroTabs.length > 0 ? heroTabs : undefined}
         activeTab={heroTabs.length > 0 ? activeRootTab : undefined}

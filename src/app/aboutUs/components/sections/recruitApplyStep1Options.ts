@@ -1,6 +1,6 @@
 /**
- * 응시구분 드롭다운 옵션 (백엔드 별도 코드테이블 없을 때 공통 라벨)
- * 운영에서 항목을 바꾸려면 이 배열만 수정하면 됩니다.
+ * 응시구분 등 1단계 셀렉트 옵션 상수. 사용처: `RecruitApplyWizard.tsx`.
+ * 백엔드 별도 코드테이블 없을 때 공통 라벨; 운영 변경 시 이 배열만 수정.
  */
 export const RECRUIT_EXAM_CATEGORY_OPTIONS: { value: string; label: string }[] = [
   { value: "신입", label: "신입" },

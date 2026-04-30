@@ -1,3 +1,4 @@
+/** Next.js 페이지: IR 콘텐츠 게시글 관리. URL `/admin/ir/content` */
 "use client";
 
 import BoardPostManager from "../components/BoardPostManager";

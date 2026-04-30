@@ -1,7 +1,7 @@
 /**
- * `output: "export"` 빌드 시 동적 상세 경로를 만들기 위해,
- * 빌드 타임에 공개 게시판 목록 API로 글 ID를 수집합니다.
- * 네트워크 실패 시 빈 배열을 반환할 수 있으며, 그 경우 해당 상세 HTML은 생성되지 않습니다.
+ * `output: "export"` 빌드 시 동적 상세 경로용 글 ID 수집(공개 게시판 API).
+ * 사용처: `customersupport/inquiry/[language]/[id]/page.tsx`, `Irinformation` 하위 상세 page의 generateStaticParams.
+ * 네트워크 실패 시 빈 배열 가능 → 해당 경로 HTML 미생성.
  */
 import { getBoardPosts } from "@/api/board";
 

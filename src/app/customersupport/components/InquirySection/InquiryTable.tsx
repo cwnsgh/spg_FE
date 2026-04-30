@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 문의 목록 테이블 스텁(목업 데이터). 현재 다른 파일에서 import되지 않음.
+ */
 import { useState } from "react";
 import styles from "./InquiryTable.module.css";
 

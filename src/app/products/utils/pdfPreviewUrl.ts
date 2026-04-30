@@ -1,3 +1,6 @@
+/**
+ * PDF·첨부 미리보기용 동일 출처 프록시 URL 계산. 사용처: `ProductDetailClient.tsx`.
+ */
 import { BACKEND_ASSET_PROXY_PREFIX, BACKEND_ORIGIN } from "@/api/config";
 
 const DEFAULT_ASSET_PROXY = "/__backend_asset";

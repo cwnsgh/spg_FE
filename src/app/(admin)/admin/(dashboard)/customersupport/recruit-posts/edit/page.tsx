@@ -1,3 +1,4 @@
+/** Next.js 페이지: 채용 공고 수정(`?wr_id=`). URL `/admin/customersupport/recruit-posts/edit` */
 "use client";
 
 import Link from "next/link";

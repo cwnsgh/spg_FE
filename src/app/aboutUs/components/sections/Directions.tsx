@@ -1,5 +1,6 @@
 "use client";
 
+/** 회사소개 탭 4 오시는 길 — `AboutTabs.tsx`에서만 렌더. */
 import styles from "./Directions.module.css";
 
 export default function Directions() {

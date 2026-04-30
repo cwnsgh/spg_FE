@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 메인 홈 내 지점·네트워크 슬라이더. 사용처: `BrandInfo.tsx` 하위만(마케팅 페이지의 GlobalNetwork와 별개).
+ */
 import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";

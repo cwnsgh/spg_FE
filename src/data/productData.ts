@@ -1,5 +1,5 @@
 /**
- * 제품 데이터
+ * 레거시 제품 소개 정적 배열. 현재 앱 라우트에서는 import되지 않음(제품 데이터는 `app/products/data/productData.ts` 사용).
  */
 import { ProductData } from '../types';
 

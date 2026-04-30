@@ -1,5 +1,6 @@
 "use client";
 
+/** IR 탭 4 재무제표·손익·현금흐름 요약. 사용처: `IRTabs.tsx`. */
 import { useEffect, useMemo, useState } from "react";
 import { ApiError, getFinancials, IrFinancialRow } from "@/api";
 import styles from "./IRLibrary.module.css";

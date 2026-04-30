@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 채용 지원 플로우 진입(공고 선택·비밀번호·마법사 래핑). 사용처: `Recruitment.tsx`.
+ */
 import {
   ApiError,
   getRecruitPosts,

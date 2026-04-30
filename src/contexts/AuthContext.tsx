@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * 로그인 사용자·관리자 여부 전역 컨텍스트.
+ * 사용처: `app/layout.tsx`의 AuthProvider로 전 앱 감쌈. Header, admin 레이아웃·로그인 페이지에서 `useAuth`.
+ */
 import {
   createContext,
   useCallback,

@@ -1,5 +1,5 @@
 /**
- * 관리자 제품 등록 폼용 임시 기본값 (로컬·업로드 작업 편의).
+ * 관리자 제품 등록 폼용 임시 기본값 (로컬·업로드 작업 편의). 사용처: `ProductFormModal.tsx`.
  * 나중에 제거하거나 백엔드 "분류별 템플릿"으로 옮기면 됩니다.
  */
 import type { AdminSpgCategoryRow } from "@/api";

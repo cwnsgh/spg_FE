@@ -1,3 +1,6 @@
+/**
+ * 관리자 채용공고 편집 상태를 공개 상세 DTO 형태로 변환. 사용처: `RecruitPostEditor.tsx` 미리보기.
+ */
 import type { RecruitPostDetail, RecruitPositionDetail } from "@/api";
 import type { AdminRecruitPositionRow } from "@/api/admin/recruitPosts";
 

@@ -1,3 +1,4 @@
+/** Next.js 페이지: 제품 상세. URL `/products/[id]` */
 import { getAllProducts } from "@/app/products/data/productData";
 import ProductDetailClient from "./ProductDetailClient";
 

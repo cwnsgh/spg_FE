@@ -1,3 +1,7 @@
+/**
+ * IR 재무표 행에서 라벨로 셀 값 찾기·포맷 헬퍼.
+ * 사용처: 같은 폴더 `IRInfo.tsx`.
+ */
 import type { IrFinancialRow } from "@/api";
 
 /** IRLibrary와 동일 규칙으로 셀 표기(숫자는 천 단위 구분) */

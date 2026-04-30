@@ -1,3 +1,4 @@
+/** Next.js 페이지: 메인 홈. URL `/` */
 import MainBanner from "../home/components/MainBanner/MainBanner";
 import ProductIntro from "../home/components/ProductIntro/ProductIntro";
 import CategoryMenu from "../home/components/CategoryMenu/CategoryMenu";

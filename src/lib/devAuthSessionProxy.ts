@@ -1,9 +1,7 @@
 /**
- * 로컬 `next dev`에서 `/api/proxy/auth/*` 를 백엔드로 넘길 때 사용합니다.
- * PHP가 내려주는 Set-Cookie 의 Domain/Secure 를 정리해 브라우저가 localhost 에 쿠키를 저장하게 합니다.
- *
- * `next.config.ts` 의 rewrite 목적지(`backendApiOrigin`)와 **동일한 규칙**이어야
- * 로그인 세션 서버와 나머지 `/api/proxy/*` 가 어긋나지 않습니다.
+ * 로컬 `next dev`에서 `/api/proxy/auth/*` 를 백엔드로 넘길 때 Set-Cookie 보정(Domain·Secure 등).
+ * 사용처: `src/middleware.ts` — 인증 응답 헤더만 가공.
+ * `next.config.ts` 의 rewrite 목적지(`backendApiOrigin`)와 동일 규칙을 유지해야 세션이 어긋나지 않음.
  */
 
 function trimTrailingSlashes(s: string): string {

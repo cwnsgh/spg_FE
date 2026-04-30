@@ -1,3 +1,4 @@
+/** Next.js 페이지: 채용 지원서(지원자) 관리·열람. URL `/admin/customersupport/recruit` */
 "use client";
 
 import {

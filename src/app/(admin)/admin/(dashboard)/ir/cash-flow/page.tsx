@@ -1,3 +1,4 @@
+/** Next.js 페이지: 현금흐름표(IR) 관리. URL `/admin/ir/cash-flow` */
 "use client";
 
 import {

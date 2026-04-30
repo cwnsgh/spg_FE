@@ -1,5 +1,6 @@
 "use client";
 
+/** 회사소개 탭 5 윤리규정 — `AboutTabs.tsx`에서만 렌더. */
 import styles from "./Ethics.module.css";
 
 export default function Ethics() {

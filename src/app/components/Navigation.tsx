@@ -1,5 +1,6 @@
 /**
- * Navigation 컴포넌트
+ * Navigation 컴포넌트 — 구버전 상단바(로고·링크·ProductInquiry·Search·MobileMenu).
+ * 현재 실서비스 헤더는 `Header/Header.tsx` 사용. 이 파일은 저장소 내에서 import되지 않음.
  *
  * 전체 사이트의 상단 네비게이션 바를 담당하는 컴포넌트입니다.
  * - 왼쪽: SPG 로고 (홈으로 이동)

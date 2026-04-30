@@ -1,3 +1,6 @@
+/**
+ * 연혁 플레이스홀더 섹션. `AboutTabs`는 `CompanyHistory`를 쓰므로 현재 라우트에서 import되지 않음.
+ */
 import styles from "./History.module.css";
 
 export default function History() {

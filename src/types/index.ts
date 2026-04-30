@@ -1,5 +1,6 @@
 /**
- * 공통 타입 정의
+ * 앱 전역 UI·데이터 타입(MenuItem, 배너 슬라이드, IR 카드 등).
+ * 사용처: `@/data/*`, GNB, IRInfo 등 `@/types` import 모듈.
  */
 
 // 메뉴 아이템 타입

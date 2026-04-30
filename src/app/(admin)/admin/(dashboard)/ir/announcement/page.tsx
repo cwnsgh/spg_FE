@@ -1,3 +1,4 @@
+/** Next.js 페이지: IR 공시 게시글 관리. URL `/admin/ir/announcement` */
 "use client";
 
 import BoardPostManager from "../components/BoardPostManager";

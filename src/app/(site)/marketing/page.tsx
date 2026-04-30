@@ -1,3 +1,4 @@
+/** Next.js 페이지: 마케팅(글로벌 네트워크 등). URL `/marketing` */
 "use client";
 
 import { Suspense, useMemo } from "react";

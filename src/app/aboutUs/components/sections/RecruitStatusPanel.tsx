@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * 지원 상태 조회·이어쓰기·미리보기. 사용처: `Recruitment.tsx`.
+ */
 import {
   ApiError,
   getRecruitPosts,
